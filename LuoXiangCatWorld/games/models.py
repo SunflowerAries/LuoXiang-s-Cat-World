@@ -10,11 +10,11 @@ class Cat(models.Model):
     sex = models.CharField(max_length=10)
     birth = models.DateField(null=True, blank=True)
     age = models.IntegerField()
-    breed = models.CharField(max_length=20)
+    breed = models.CharField(max_length=20, blank=True, null=True)
     intimacy = models.IntegerField()
-    mather = models.CharField(max_length=10)
-    mother = models.CharField(max_length=10)
-    mate = models.CharField(max_length=10)
+    father = models.CharField(max_length=10, blank=True, null=True)
+    mother = models.CharField(max_length=10, blank=True, null=True)
+    mate = models.CharField(max_length=10, blank=True, null=True)
     health_status = (
         ('h', 'Healthy'),
         ('c', 'Cough'),
@@ -51,7 +51,7 @@ class Food(models.Model):
     food_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
     name = models.CharField(max_length=20)
     price = models.IntegerField()
-    effect = models.CharField(max_length=100)
+    effect = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ["-price", "name"]

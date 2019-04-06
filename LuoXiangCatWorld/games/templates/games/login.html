@@ -15,21 +15,14 @@
         } 
     </style>
     <body>
-        <div class="mdc-card my-card">
             {% if master_list %}
-            <ul class="mdc-list">
+
             {% for master in master_list %}
-            <li class="mdc-list-item"><a href="/games/{{ master.id }}/" style="font-family: serif">{{ master.master_name }}</a></li>
+            <li><a href="/games/{{ master.id }}/">{{ master.name }}</a></li>
             {% endfor %}
-            <ul class="mdc-list">
+            <ul>
             {% else %}
                 <p>No polls are available.</p>
             {% endif %}
-        </div>
-
-        <a href="/games/{{ master.id }}/cats/" style="font-family: serif">cats</a>
-        <a href="/games/{{ master.id }}/parks/" style="font-family: serif">parks</a>
-        <a href="/games/{{ master.id }}/sites/" style="font-family: serif">sites</a>
-        <a href="/games/{{ master.id }}/markets/" style="font-family: serif">markets</a>
     </body>
 </html>

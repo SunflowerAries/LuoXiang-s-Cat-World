@@ -15,7 +15,7 @@ def login(request):
 # path('<int:master_id>/', views.detail, name='detail'),
 def detail(request,master_id):
     master = get_object_or_404(Master, pk=master_id)
-    return render(request, 'games/detail.html',master)
+    return render(request, 'games/detail.html',{'master':master})
 
 # path('<int:master_id>/cats/', views.cats, name='cats'),
 def cats(request,master_id):

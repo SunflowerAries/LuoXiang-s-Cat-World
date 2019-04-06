@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404,render
-from .models import Question, Choice
+from .models import Master,Cat,Food,Market
 from django.urls import reverse
 # Create your views here.
 from django.http import Http404
@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 # path('', views.login, name='login'),
 def login(request):
-    master_list = Master.objects.order_by('-pub_date')[:5]
+    master_list = Master.objects.order_by('-name')[:5]
     context = {'master_list': master_list}
     return render(request, 'games/login.html',context)
 
@@ -19,7 +19,7 @@ def detail(request,master_id):
 
 # path('<int:master_id>/cats/', views.cats, name='cats'),
 def cats(request,master_id):
-    cat_list = Cat.objects.order_by('-pub_date')[:5]
+    cat_list = Cat.objects.order_by('-name')[:5]
     master = get_object_or_404(Master, pk=master_id)
     context = {'cat_list': cat_list,'master':master}
     return render(request, 'games/cats.html',context)
@@ -41,7 +41,7 @@ def sites(request,master_id):
 
 # path('<int:master_id>/markets/', views.markets, name='markets'),
 def markets(request,master_id):
-    market_list = Market.objects.order_by('-pub_date')[:5]
+    market_list = Market.objects.order_by('-name')[:5]
     master = get_object_or_404(Master, pk=master_id)
     context = {'market_list': market_list,'master':master}
     return render(request, 'games/markets.html',context)

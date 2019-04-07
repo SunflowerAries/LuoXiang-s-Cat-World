@@ -36,7 +36,7 @@ class Master(models.Model):
     name = models.CharField(max_length=20, help_text="Explore with a lovely name")
     # user_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
     sex = models.CharField(max_length=10)
-    money = models.IntegerField()
+    money = models.IntegerField(default=200)
     password = models.CharField(max_length=20)
     class Meta:
         ordering = ["name"]

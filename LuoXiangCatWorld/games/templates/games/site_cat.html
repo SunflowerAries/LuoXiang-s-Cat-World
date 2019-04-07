@@ -1,0 +1,22 @@
+{% extends "template.html" %}
+{% load static %}
+{% block content %}
+<div>
+    {% if cat_list %}
+    <ul>
+    {% for cat in cat_list %}
+    <li>{{ cat.name }{{ cat.breed }}{{ cat.health }}</li>
+    {% endfor %}
+    <ul>
+    {% else %}
+        <p>No polls are available.</p>
+    {% endif %}
+</div>
+<br>
+<br>
+<a href="/games/{{ master.id }}/">Back</a>
+<a href="/games/{{ master.id }}/cats/" style="font-family: serif">cats</a>
+<a href="/games/{{ master.id }}/parks/" style="font-family: serif">parks</a>
+<a href="/games/{{ master.id }}/sites/" style="font-family: serif">sites</a>
+<a href="/games/{{ master.id }}/markets/" style="font-family: serif">markets</a>
+{% endblock %}

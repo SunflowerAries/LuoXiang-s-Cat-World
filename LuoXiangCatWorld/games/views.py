@@ -66,10 +66,10 @@ def register_func(request):
     username=request.POST['username']
     password=request.POST['password']
     sex=request.POST['sex']
-    Master.objects.create(name=username,password=password,sex=sex)
-    Master.save()
+    master = Master.objects.create(name=username,password=password,sex=sex)
+    master.save()
     print(sex)
-    master = Master.objects.filter(username__exact=username,password__exact=password)
+    master = Master.objects.filter(name__exact=username,password__exact=password)
     return render(request,'games/detail.html',{'master':master})
     
 
@@ -82,8 +82,17 @@ def login_func(request):
     else:
         return render(request,'games/login.html')
 
-def park_cats(request):
+def park_cat(request):
     pass
 
-def cats_detail(request):
+def cat_detail(request):
+    pass
+
+def site_cat(request):
+    pass
+
+def market_food(request):
+    pass
+
+def site_detail(request):
     pass

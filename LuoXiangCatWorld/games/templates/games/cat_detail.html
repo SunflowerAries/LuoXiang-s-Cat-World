@@ -1,0 +1,21 @@
+{% extends "template.html" %}
+{% load static %}
+{% block content %}
+<div>
+    Name:<br>
+    {{cat.name}}<br>
+    Breed:<br>
+    {{cat.breed}}<br>
+    Sex:<br>
+    {{cat.sex}}<br>
+    Age:<br>
+    {{cat.age}}<br>
+    Health:<br>
+    {{cat.health}}<br>
+    <a href="/games/">Log out</a>
+    <a href="/games/{{ master.id }}/cats/">cats</a>
+    <a href="/games/{{ master.id }}/parks/">parks</a>
+    <a href="/games/{{ master.id }}/sites/">sites</a>
+    <a href="/games/{{ master.id }}/markets/">markets</a>
+</div>
+{% endblock %}

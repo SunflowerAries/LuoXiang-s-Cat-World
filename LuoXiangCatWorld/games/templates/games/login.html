@@ -301,7 +301,7 @@
                     <i style="right: 5px">in</i>
                 </div>
                 <span>
-                    <form action="/games/" method="post">
+                    <form action="{% url 'games:login_func' %}" method="post">
                         {% csrf_token %}
                         <p class="form"><input type="text" placeholder="username" name="username"></p> 
                         <p class="form"><input type="password" placeholder="password" name="password"></p>

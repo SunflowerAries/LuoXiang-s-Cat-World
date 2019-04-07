@@ -7,9 +7,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 # path('', views.login, name='login'),
 def login(request):
-    master_list = Master.objects.order_by('-name')[:5]
-    context = {'master_list': master_list}
-    return render(request, 'games/login.html',context)
+    print("inlogin")
+    return render(request, 'games/login.html')
 
 # path('<int:master_id>/', views.detail, name='detail'),
 def detail(request,master_id):
@@ -56,3 +55,35 @@ def markets(request,master_id):
 def sign_up(request):
     #TODO
     return render(request, 'games/sign_up.html')
+
+def register(request):
+    print("inregister")
+    return render(request, 'games/register.html')
+
+
+def register_func(request):
+    print("in register func")
+    username=request.POST['username']
+    password=request.POST['password']
+    sex=request.POST['sex']
+    Master.objects.create(name=username,password=password,sex=sex)
+    Master.save()
+    print(sex)
+    master = Master.objects.filter(username__exact=username,password__exact=password)
+    return render(request,'games/detail.html',{'master':master})
+    
+
+def login_func(request):
+    username=request.POST['username']
+    password=request.POST['password']
+    master = Master.objects.filter(username__exact=username,password__exact=password)
+    if master:
+        return render(request,'games/detail.html',{'master':master})
+    else:
+        return render(request,'games/login.html')
+
+def park_cats(request):
+    pass
+
+def cats_detail(request):
+    pass

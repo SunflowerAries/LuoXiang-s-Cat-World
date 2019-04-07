@@ -4,6 +4,9 @@ from . import views
 app_name = 'games'
 urlpatterns = [
     path('', views.login, name='login'),
+    path('register/', views.register, name='register'),
+    path('register_func/', views.register_func, name='register_func'),
+    path('login_func/', views.register_func, name='register_func'),
     path('<int:master_id>/', views.detail, name='detail'),
     path('<int:master_id>/cats/', views.cats, name='cats'),
     path('<int:master_id>/parks/', views.parks, name='parks'),

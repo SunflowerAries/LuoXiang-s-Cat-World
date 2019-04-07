@@ -296,21 +296,21 @@
         <div id="login_wrap">
             <div id="login"><!-- 登录注册切换动画 -->
                 <div id="status">
-                    <i style="top: 0">Log</i>
-                    <i style="top: 35px">Sign</i>
-                    <i style="right: 5px">in</i>
+                    <!-- <i style="top: 0">Log</i> -->
+                    <!-- <i style="top: 35px">Sign</i> -->
+                    <i>Sign in</i>
                 </div>
                 <span>
-                    <form action="/games/" method="post">
+                    <form action="{% url 'games:register_func' %}" method="post">
                         {% csrf_token %}
                         <p class="form"><input type="text" placeholder="username" name="username"></p> 
                         <p class="form"><input type="password" placeholder="password" name="password"></p>
-                        <input type="submit" value="login_func" class="btn">
+                        <p class="form"><input type="text" placeholder="sex" name="sex"></p>
+                        <input type="submit" value="register" class="btn">
                     </form>
-                    <a href="/games/register">Register</a>
                 </span>
             </div>
-            <div id="login_img"><!-- 图片绘制框 -->
+            <div id="login_img">
                 <span class="circle">
                     <span></span>
                     <span></span>

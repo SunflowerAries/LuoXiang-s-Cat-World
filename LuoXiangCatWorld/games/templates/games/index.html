@@ -301,15 +301,16 @@
                     <i style="right: 5px">in</i>
                 </div>
                 <span>
-                    <form action="/games/" method="post">
-                        {% csrf_token %}
-                        <p class="form"><input type="text" placeholder="username" name="username"></p> 
-                        <p class="form"><input type="password" placeholder="password" name="password"></p>
-                        <input type="submit" value="login_func" class="btn">
+                    <form action="post">
+                        <p class="form"><input type="text" id="user" placeholder="username"></p> 
+                        <p class="form"><input type="password" id="passwd" placeholder="password"></p>
+                        <p class="form confirm"><input type="password" id="confirm-passwd" placeholder="confirm password"></p>
+                        <input type="button" value="Log in" class="btn" onclick="login()" style="margin-right: 20px;">
+                        <input type="button" value="Sign in" class="btn" onclick='signin()' id="btn">
                     </form>
-                    <a href="/games/register">Register</a>
                 </span>
             </div>
+
             <div id="login_img"><!-- 图片绘制框 -->
                 <span class="circle">
                     <span></span>
@@ -355,6 +356,87 @@
         setTimeout("hit.style.opacity = 1", 0)
         setTimeout("hit.style.opacity = 0", 2000)
         setTimeout('hit.style.display = "none"', 3000)
+    }
+    //回调函数
+    /*function submit(callback) {
+        //if (passwd.value == con_pass.value) {
+        let request = new XMLHttpRequest()
+        let url = ""
+        request.open("post", url, true)
+        let data = new FormData()
+        data.append("user", user.value)
+        data.append("passwd", passwd.value)
+        request.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                callback.call(this, this.response)
+                //console.log(this.responseText)
+            }
+        }
+        request.send(data)
+    }*/
+    /*else {
+               hit.innerHTML = "两次密码不同"
+               hitting()
+           }
+       }*/
+    //注册按钮
+    function signin() {
+        let status = document.getElementById("status").getElementsByTagName("i")
+        let hit = document.getElementById("hint").getElementsByTagName("p")[0]
+        if (onoff) {
+            confirm.style.height = 51 + "px"
+            status[0].style.top = 35 + "px"
+            status[1].style.top = 0
+            onoff = !onoff
+        } else {
+            /*if (!/^[A-Za-z0-9]+$/.test(user.value))
+                hit.innerHTML = "账号只能为英文和数字"
+            else if (user.value.length < 6)
+                hit.innerHTML = "账号长度必须大于6位"
+            else if (passwd.value.length < 6)
+                hit.innerHTML = "密码长度必须大于6位"
+            else if (passwd.value != con_pass.value)
+                hit.innerHTML = "两次密码不相等"
+            else if (passwd.value = con_pass.value) {
+                submit(function(res) {
+                    if (res == "exist")
+                        hit.innerHTML = "该账号已存在"
+                    else if (res == true) {
+                        hit.innerHTML = "账号注册成功，两秒后自动刷新页面"
+                        setTimeout("window.location.reload()", 2000)
+                    } else if (res == false)
+                        hit.innerHTML = "账号注册失败"
+                })
+            }
+            hint()*/
+        }
+    }
+
+    //登录按钮
+    function login() {
+        if (onoff) {
+            /*let request = new XMLHttpRequest()
+            let url = ""
+            request.open("post", url, true)
+            let data = new FormData()
+            data.append("user", user.value)
+            data.append("passwd", passwd.value)
+            request.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.responseText == false)
+                        hint()
+                    else
+                        window.location.href = this.responseText;
+                }
+            }
+            request.send(data)*/
+        } else {
+            let status = document.getElementById("status").getElementsByTagName("i")
+            confirm.style.height = 0
+            status[0].style.top = 0
+            status[1].style.top = 35 + "px"
+            onoff = !onoff
+        }
     }
 </script>
 </html>

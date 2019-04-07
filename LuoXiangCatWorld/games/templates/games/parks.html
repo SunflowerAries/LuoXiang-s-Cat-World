@@ -19,7 +19,7 @@
             {% if park_list %}
             <ul class="mdc-list">
             {% for park in park_list %}
-            <li class="mdc-list-item">{{ park.name }}</li>
+            <li class="mdc-list-item"><a href="/games/{{ master.id }}/parks/{{ park.id }}">{{ park.name }}</a></li>
             {% endfor %}
             <ul class="mdc-list">
             {% else %}

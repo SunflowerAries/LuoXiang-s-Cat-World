@@ -19,7 +19,7 @@
             {% if cat_list %}
             <ul class="mdc-list">
             {% for cat in cat_list %}
-            <li class="mdc-list-item">{{ cat.name }}</li>
+            <li class="mdc-list-item"><a href="/games/{{ master.id }}/cats/{{ cat.id }}">{{ cat.name }}</a></li>
             {% endfor %}
             <ul class="mdc-list">
             {% else %}

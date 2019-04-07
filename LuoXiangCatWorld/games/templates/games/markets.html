@@ -19,7 +19,7 @@
             {% if market_list %}
             <ul class="mdc-list">
             {% for market in market_list %}
-            <li class="mdc-list-item">{{ market.name }}</li>
+            <li class="mdc-list-item"><a href="/games/{{ master.id }}/markets/{{ market.id }}">{{ market.name }}</a></li>
             {% endfor %}
             <ul class="mdc-list">
             {% else %}

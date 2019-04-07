@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.http import Http404
 from django.http import HttpResponse, HttpResponseRedirect
 
-
 # path('', views.login, name='login'),
 def login(request):
     master_list = Master.objects.order_by('-name')[:5]
@@ -33,13 +32,19 @@ def parks(request,master_id):
 
 # path('<int:master_id>/parks/<int:park_id>/', views.park_detail, name='park_detail'),
 def park_detail(request,master_id,park_id):
-    #TODO
-    return render(request, 'games/park_detail.html')
+    park = get_object_or_404(Park, pk = park_id)
+    master = get_object_or_404(Master, pk = master_id)
+    master_store = Store.objects.filter(master = master)
+    park_wild = Wild.objects.filter(park = park)
+    context = {'park': park, 'master_store': master_store, 'park_wild': park_wild}
+    return render(request, 'games/park_detail.html', context)
 
 # path('<int:master_id>/sites/', views.sites, name='sites'),
 def sites(request,master_id):
-    #TODO
-    return render(request, 'games/sites.html')
+    site_list = Site.objects.order_by('-name')[:5]
+    master = get_object_or_404(Master, pk=master_id)
+    context = {'site_list': site_list,'master':master}
+    return render(request, 'games/sites.html', context)
 
 # path('<int:master_id>/markets/', views.markets, name='markets'),
 def markets(request,master_id):

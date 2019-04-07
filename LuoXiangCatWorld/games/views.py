@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404,render
-from .models import Master,Cat,Food,Market
+from .models import *
 from django.urls import reverse
 # Create your views here.
 from django.http import Http404
@@ -26,8 +26,10 @@ def cats(request,master_id):
 
 # path('<int:master_id>/parks/', views.parks, name='parks'),
 def parks(request,master_id):
-    #TODO
-    return render(request, 'games/parks.html')
+    park_list = Park.objects.order_by('-name')[:5]
+    master = get_object_or_404(Master, pk=master_id)
+    context = {'park_list': park_list,'master':master}
+    return render(request, 'games/parks.html',context)
 
 # path('<int:master_id>/parks/<int:park_id>/', views.park_detail, name='park_detail'),
 def park_detail(request,master_id,park_id):

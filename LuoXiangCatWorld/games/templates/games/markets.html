@@ -16,10 +16,10 @@
     </style>
     <body>
         <div class="mdc-card my-card">
-            {% if food_list %}
+            {% if market_list %}
             <ul class="mdc-list">
-            {% for food in food_list %}
-            <li class="mdc-list-item">{{ food.name }}</li>
+            {% for market in market_list %}
+            <li class="mdc-list-item">{{ market.name }}</li>
             {% endfor %}
             <ul class="mdc-list">
             {% else %}
@@ -34,7 +34,6 @@
             Your sex:<br>
             {{master.sex}}<br>
         </div>
-        <a href="/games/">Back</a>
         <br>
         <br>
         <a href="/games/{{ master.id }}/">Back</a>

@@ -2,10 +2,10 @@
 {% load static %}
 {% block content %}
 <div>
-    {% if master_store %}
+    {% if park_cat %}
     <ul>
-    {% for store in master_store %}
-    <li>{{ store.food }}{{ store.num }}</li>
+    {% for cat in park_cat %}
+    <li>{{ cat.name }{{ cat.breed }}{{ cat.intimacy }}{{ cat.health }}</li>
     {% endfor %}
     <ul>
     {% else %}

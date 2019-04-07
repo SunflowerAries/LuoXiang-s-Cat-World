@@ -10,4 +10,6 @@ urlpatterns = [
     path('<int:master_id>/parks/<int:park_id>/', views.park_detail, name='park_detail'),
     path('<int:master_id>/sites/', views.sites, name='sites'),
     path('<int:master_id>/markets/', views.markets, name='markets'),
+    path('<int:master_id>/parks/<int:park_id>/<int:cat_id>/', views.park_cats, name='park_cats'),
+    path('<int:master_id>/cats/<int:cat_id>/', views.cats_detail, name='cats_detail'),
 ]

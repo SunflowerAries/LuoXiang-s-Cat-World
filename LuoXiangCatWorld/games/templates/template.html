@@ -1,4 +1,4 @@
-<!-- {% load static %} -->
+{% load static %}
 <!DOCTYPE html>
 <html style="height:100%">
     <head>
@@ -45,7 +45,6 @@
           height: 100%;
           float: right;
           margin: 0;
-          background: #ffcdd2;
         }
         .topbox{
             width: 100%;
@@ -139,6 +138,8 @@
                 </div>
             </aside>
             <div class="rightbox">
+                {% block content %} {% endblock %}
+
             </div>
         </div>
         

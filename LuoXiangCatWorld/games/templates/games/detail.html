@@ -1,32 +1,17 @@
+{% extends "template.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" type="text/css" href="{% static 'games/style.css' %}">
-    </head>
-    <style> 
-        div{    
-            /* border:1px solid red;为了显示居中效果明显为 div 设置了边框         */
-            width:200px;/*定宽*/    
-            margin:20px auto;/* margin-left 与 margin-right 设置为 auto */ 
-        } 
-    </style>
-    <body>
-        <div class="mdc-card my-card">
-            Your Name:<br>
-            {{master.name}}<br>
-            Your money:<br>
-            {{master.money}}<br>
-            Your sex:<br>
-            {{master.sex}}<br>
-            <a href="/games/">Log out</a>
-            <a href="/games/{{ master.id }}/cats/">cats</a>
-            <a href="/games/{{ master.id }}/parks/">parks</a>
-            <a href="/games/{{ master.id }}/sites/">sites</a>
-            <a href="/games/{{ master.id }}/markets/">markets</a>
-        </div>
-    </body>
-</html>
+{% block content %}
+<div>
+    Your Name:<br>
+    {{master.name}}<br>
+    Your money:<br>
+    {{master.money}}<br>
+    Your sex:<br>
+    {{master.sex}}<br>
+    <a href="/games/">Log out</a>
+    <a href="/games/{{ master.id }}/cats/">cats</a>
+    <a href="/games/{{ master.id }}/parks/">parks</a>
+    <a href="/games/{{ master.id }}/sites/">sites</a>
+    <a href="/games/{{ master.id }}/markets/">markets</a>
+</div>
+{% endblock %}

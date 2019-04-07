@@ -11,7 +11,6 @@ class Cat(models.Model):
     birth = models.DateField(null=True, blank=True)
     age = models.IntegerField()
     breed = models.CharField(max_length=20, blank=True, null=True)
-    intimacy = models.IntegerField()
     father = models.CharField(max_length=10, blank=True, null=True)
     mother = models.CharField(max_length=10, blank=True, null=True)
     mate = models.CharField(max_length=10, blank=True, null=True)
@@ -154,7 +153,7 @@ class Enjoy(models.Model):
         return reverse('model-detail-view', args=[str(self.id)])
 
     def __str__(self):
-        return self.cat.name + "'s" + "favorite food"
+        return self.cat.name + "'s favorite food"
 
 class Store(models.Model):
     food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)
@@ -167,7 +166,7 @@ class Store(models.Model):
         return reverse('model-detail-view', args=[str(self.id)])
 
     def __str__(self):
-        return self.master.name + "'s" + "refrigerator"
+        return self.master.name + "'s refrigerator"
 
 class Purchase(models.Model):
     food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)
@@ -182,7 +181,7 @@ class Purchase(models.Model):
         return reverse('model-detail-view', args=[str(self.id)])
 
     def __str__(self):
-        return self.master.name + "'s" + "shopping"
+        return self.master.name + "'s shopping"
 
 class Sell(models.Model):
     food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)
@@ -196,4 +195,17 @@ class Sell(models.Model):
         return reverse('model-detail-view', args=[str(self.id)])
 
     def __str__(self):
-        return self.market.name + "'s" + "cates"
+        return self.market.name + "'s cates"
+
+class Feed(models.Model):
+    cat = models.ForeignKey('Cat', on_delete=models.SET_NULL, null=True)
+    master = models.ForeignKey('Master', on_delete=models.SET_NULL, null=True)
+    intimacy = models.IntegerField()
+    class Meta:
+        ordering = ["master", "cat"]
+
+    def get_absolute_url(self):
+        return reverse('model-detail-view', args=[str(self.id)])
+
+    def __str__(self):
+        return self.master.name + "and" + self.cat.name + "'s interaction"

@@ -6,7 +6,7 @@ import uuid
 class Cat(models.Model):
     #Fields
     # cat_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
-    name = models.CharField(primary_key=True, max_length=20, help_text="Enter this cat's name")
+    name = models.CharField(max_length=20, help_text="Enter this cat's name")
     sex = models.CharField(max_length=10)
     birth = models.DateField(null=True, blank=True)
     age = models.IntegerField()
@@ -34,7 +34,7 @@ class Cat(models.Model):
         return self.name
 
 class Master(models.Model):
-    name = models.CharField(primary_key=True, max_length=20, help_text="Explore with a lovely name")
+    name = models.CharField(max_length=20, help_text="Explore with a lovely name")
     # user_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
     sex = models.CharField(max_length=10)
     money = models.IntegerField()
@@ -50,7 +50,7 @@ class Master(models.Model):
 
 class Food(models.Model):
     # food_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
-    name = models.CharField(primary_key=True, max_length=20)
+    name = models.CharField(max_length=20)
     price = models.IntegerField()
     effect = models.CharField(max_length=100, blank=True, null=True)
 
@@ -65,7 +65,7 @@ class Food(models.Model):
 
 class Market(models.Model):
     # market_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
-    name = models.CharField(primary_key=True, max_length=20)
+    name = models.CharField(max_length=20)
 
     class Meta:
         ordering = ["name"]
@@ -78,7 +78,7 @@ class Market(models.Model):
 
 class Park(models.Model):
     # park_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
-    name = models.CharField(primary_key=True, max_length=20)
+    name = models.CharField(max_length=20)
 
     class Meta:
         ordering = ["name"]
@@ -91,7 +91,7 @@ class Park(models.Model):
 
 class Site(models.Model):
     # site_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
-    name = models.CharField(primary_key=True, max_length=20)
+    name = models.CharField(max_length=20)
 
     class Meta:
         ordering = ["name"]

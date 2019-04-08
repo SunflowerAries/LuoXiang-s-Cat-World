@@ -69,14 +69,15 @@ def register_func(request):
     master = Master.objects.create(name=username,password=password,sex=sex)
     master.save()
     print(sex)
-    master = Master.objects.filter(name__exact=username,password__exact=password)
     return render(request,'games/detail.html',{'master':master})
-    
+
 
 def login_func(request):
     username=request.POST['username']
     password=request.POST['password']
-    master = Master.objects.filter(username__exact=username,password__exact=password)
+    print(username)
+    master = Master.objects.get(name__exact=username,password__exact=password)
+    # print(master.name)
     if master:
         return render(request,'games/detail.html',{'master':master})
     else:

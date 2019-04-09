@@ -33,21 +33,16 @@
                 <div class="mdc-drawer__content info animated bounceIn delay-0.3s">
                     <nav class="mdc-list">
                         <div class="mdc-list-item info_item">
-                            <span class="mdc-list-item__text font_control">
-                                <div>
-                                    Your Name:     {{master.name}}
-                                </div>
-                            </span>
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">face</button>     
+                            <span class="mdc-list-item__text font_control">{{master.name}}</span>
                         </div>
                         <div class="mdc-list-item info_item">
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">star</button>
                             <span class="mdc-list-item__text font_control">Your Cats</span>
                         </div>
                         <div class="mdc-list-item info_item">
-                            <span class="mdc-list-item__text font_control">
-                                <div>
-                                    Money:     {{master.money}}
-                                </div>
-                            </span>
+                                <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">monetization_on</button>
+                            <span class="mdc-list-item__text font_control">{{master.money}}</span>
                         </div>
                     </nav>
                 </div>
@@ -55,18 +50,23 @@
                 <div class="mdc-drawer__content animated bounceIn delay-0.3s">
                     <nav class="mdc-list">
                         <a class="mdc-list-item" href="/games/{{ master.id }}/">
-                          <span class="mdc-list-item__text font_control">Home</span>
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">home</button>
+                            <span class="mdc-list-item__text font_control">Home</span>
                         </a>
                         <a class="mdc-list-item" href="/games/{{ master.id }}/cats/">
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">search</button>
                           <span class="mdc-list-item__text font_control">Cats Wiki</span>
                         </a>
                         <a class="mdc-list-item" href="/games/{{ master.id }}/parks/">
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">map</button>
                           <span class="mdc-list-item__text font_control">Parks</span>
                         </a>
                         <a class="mdc-list-item" href="/games/{{ master.id }}/markets/">
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">shopping_busket</button>
                           <span class="mdc-list-item__text font_control">Markets</span>
                         </a>
                         <a class="mdc-list-item" href="/games/">
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">arrow_back</button>
                           <span class="mdc-list-item__text font_control">Log out</span>
                         </a>
                     </nav>

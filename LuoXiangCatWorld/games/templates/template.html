@@ -15,86 +15,12 @@
             padding:0;
             background-color: #ffebee;
         }
-        .logo{
-            height: 15%;
-            width: 45%;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top:20px;
-            margin-bottom:20px;
-       }
-        .shrine-drawer {
-          width: 100%;
-          margin-left: 0 auto;
-          fill: currentColor;
-          height: 100vh;
-          text-transform: uppercase;
-          background-color: #ffcccb;
-        }
-        .shrine-title {
-          text-align: center;
-          margin: 0px auto;
-        }
-        .leftbox {
-          width: 20%;
-          height: 100%;
-          float: left;
-        }     
-        .rightbox {
-          width: 80%;
-          height: 100%;
-          float: right;
-          margin: 0;
-        }
-        .topbox{
-            width: 100%;
-            height: 20%;
-            float: top;
-        }
-        .bottombox{
-            width: 100%;
-            height: 80%;
-            float: bottom;
-        }
-        .info{
-            height:40%;
-        }
-        .info_item{
-            height:20%;
-        }
-        .shrine-select-item-divider {
-          display: block;
-          border-bottom-color:#ef9a9a;
-          border-bottom-width: 2px;
-          width: 200px;
-          position: relative;
-          top: -8px;
-        }
-        .font_control{
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        }
-        .shrine-drawer .shrine-select-item-divider {
-          margin: 0 auto;
-        }
     </style>
     <script>
         new MDCList(document.querySelector('.mdc-list'));
         const tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
     </script>
     <body>
-        <!-- <div class="mdc-card my-card">
-            Your Name:<br>
-            {{master.name}}<br>
-            Your money:<br>
-            {{master.money}}<br>
-            Your sex:<br>
-            {{master.sex}}<br>
-            <a href="/games/">Log out</a>
-            <a href="/games/{{ master.id }}/cats/">cats</a>
-            <a href="/games/{{ master.id }}/parks/">parks</a>
-            <a href="/games/{{ master.id }}/sites/">sites</a>
-            <a href="/games/{{ master.id }}/markets/">markets</a>
-        </div> -->
         <div>
             <aside class="mdc-drawer shrine-drawer leftbox" style="height: 100vh">
                 <div class="logo">

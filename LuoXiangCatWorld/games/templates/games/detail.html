@@ -2,16 +2,31 @@
 {% load static %}
 {% block content %}
 <div>
-    Your Name:<br>
-    {{master.name}}<br>
-    Your money:<br>
-    {{master.money}}<br>
-    Your sex:<br>
-    {{master.sex}}<br>
-    <a href="/games/">Log out</a>
-    <a href="/games/{{ master.id }}/cats/">cats</a>
-    <a href="/games/{{ master.id }}/parks/">parks</a>
-    <a href="/games/{{ master.id }}/sites/">sites</a>
-    <a href="/games/{{ master.id }}/markets/">markets</a>
+    <div class="mdc-card animation-target" style="height:300px;width: 500px;margin-top: 40px;margin-left: auto;margin-right: auto">
+        <div class="mdc-card__primary-action">
+          <div class="mdc-card__media mdc-card__media--square">
+            <div class="mdc-card__media-content" style="margin-top:40px;margin-left: 30px;">
+                <div style="font-size:50px">Bonjor!</div><br>
+                <div style="font-size:40px">Master:</div><br>
+                <div style="font-size:30px">{{master.name}}</div><br>
+            </div>
+          </div>      
+        </div>
+        <div class="mdc-card__actions">
+          <div class="mdc-card__action-buttons">
+            <button class="mdc-button mdc-card__action mdc-card__action--button">
+              <span class="mdc-button__label">Action 1</span>
+            </button>
+            <button class="mdc-button mdc-card__action mdc-card__action--button">
+              <span class="mdc-button__label">Action 2</span>
+            </button>
+          </div>
+          <div class="mdc-card__action-icons">
+            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Share">share</button>
+            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="More options">more_vert</button>
+          </div>
+        </div>
+    </div>
+   
 </div>
 {% endblock %}

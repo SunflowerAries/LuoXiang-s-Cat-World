@@ -1,13 +1,40 @@
 {% extends "template.html" %}
 {% load static %}
 {% block content %}
+<script>
+    
+</script>
 <div>
     <div class="rightbox-small">
-    <div class="search-box mdc-card animated bounceIn delay-0.7s">
-       
+        <div class="search-box mdc-card animated fadeInDown delay-0.7s">
+                <div class="mdc-select">
+                        <i class="mdc-select__dropdown-icon"></i>
+                        <select class="mdc-select__native-control">
+                          <option value="" disabled selected></option>
+                          <option value="grains">
+                            Bread, Cereal, Rice, and Pasta
+                          </option>
+                          <option value="vegetables">
+                            Vegetables
+                          </option>
+                          <option value="fruit">
+                            Fruit
+                          </option>
+                        </select>
+                        <label class="mdc-floating-label">Pick a Food Group</label>
+                        <div class="mdc-line-ripple"></div>
+                      </div>
+        </div>
     </div>
     <div class="leftbox-large">
-
+        
     </div>
 </div>
+<script>
+    const select = new MDCSelect(document.querySelector('.mdc-select'));
+
+select.listen('MDCSelect:change', () => {
+  alert(`Selected option at index ${select.selectedIndex} with value "${select.value}"`);
+});
+</script>
 {% endblock %}}

@@ -2,27 +2,18 @@
 {% load static %}
 {% block content %}
 <div>
-    {% if cat_list %}
-    <ul>
-    {% for cat in cat_list %}
-    <li><a href="/games/{{ master.id }}/cats/{{ cat.id }}">{{ cat.name }}</a></li>
-    {% endfor %}
-    <ul>
-    {% else %}
-        <p>No polls are available.</p>
-    {% endif %}
+    <div class="rightbox-small">
+    <div class="mdc-card animated bounceIn delay-0.7s" style="background-color: #faf9f9;height:800px; width: auto; margin-top: 30px; margin-left: 0px; margin-right: 20px">
+        <div class="mdc-card__primary-action">
+          <div class="mdc-card__media mdc-card__media--square">
+            <div class="mdc-card__media-content" style="margin-top:40px;margin-left: 30px;">
+                
+            </div>
+          </div>      
+        </div>
+    </div>
+    <div class="leftbox-large">
+
+    </div>
 </div>
-<div>
-    Your Name:<br>
-    {{master.name}}<br>
-    Your money:<br>
-    {{master.money}}<br>
-    Your sex:<br>
-    {{master.sex}}<br>
-</div>
-<a href="/games/{{ master.id }}/">Back</a>
-<a href="/games/{{ master.id }}/cats/" style="font-family: serif">cats</a>
-<a href="/games/{{ master.id }}/parks/" style="font-family: serif">parks</a>
-<a href="/games/{{ master.id }}/sites/" style="font-family: serif">sites</a>
-<a href="/games/{{ master.id }}/markets/" style="font-family: serif">markets</a>
 {% endblock %}}

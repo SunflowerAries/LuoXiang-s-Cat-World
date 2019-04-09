@@ -8,6 +8,7 @@
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" type="text/css" href="{% static 'games/style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'games/Animate.css' %}">
     </head>
     <style>
         body{
@@ -23,13 +24,13 @@
     <body>
         <div>
             <aside class="mdc-drawer shrine-drawer leftbox" style="height: 100vh">
-                <div class="logo">
+                <div class="logo  animated bounceIn delay-0.2s">
                     <img src="https://nbviewer.jupyter.org/github/Josep-h/LuoXiang-s-Cat-World/blob/master/LuoXiangCatWorld/games/logo.png" style="height:100% ;width:100%; zoom:60%">
                 </div>
                 <div class="mdc-drawer__header font_control">
-                    <h1 class="shrine-title">Luo Xiang's Cat World</h1>
+                    <h1 class="shrine-title animated bounceIn delay-0.3s">Luo Xiang's Cat World</h1>
                 </div>
-                <div class="mdc-drawer__content info">
+                <div class="mdc-drawer__content info animated bounceIn delay-0.3s">
                     <nav class="mdc-list">
                         <div class="mdc-list-item info_item">
                             <span class="mdc-list-item__text font_control">
@@ -50,8 +51,8 @@
                         </div>
                     </nav>
                 </div>
-                <div class="shrine-select-item-divider mdc-list-divider" role="separator"></div>
-                <div class="mdc-drawer__content">
+                <div class="shrine-select-item-divider mdc-list-divider animated bounceIn delay-0.3s" role="separator"></div>
+                <div class="mdc-drawer__content animated bounceIn delay-0.3s">
                     <nav class="mdc-list">
                         <a class="mdc-list-item" href="/games/{{ master.id }}/">
                           <span class="mdc-list-item__text font_control">Home</span>

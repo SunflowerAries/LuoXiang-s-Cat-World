@@ -50,11 +50,10 @@ class Master(models.Model):
 class Food(models.Model):
     # food_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
     name = models.CharField(max_length=20)
-    price = models.IntegerField()
     effect = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        ordering = ["-price", "name"]
+        ordering = ["name"]
 
     def get_absolute_url(self):
         return reverse('model-detail-view', args=[str(self.id)])
@@ -187,9 +186,9 @@ class Sell(models.Model):
     food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)
     market = models.ForeignKey('Market', on_delete=models.SET_NULL, null=True)
     num = models.IntegerField()
-
+    price = models.IntegerField()
     class Meta:
-        ordering = ["-num"]
+        ordering = ["price", "-num"]
 
     def get_absolute_url(self):
         return reverse('model-detail-view', args=[str(self.id)])

@@ -35,20 +35,20 @@ def park_detail(request,master_id,park_id):
     master = get_object_or_404(Master, pk = master_id)
     master_store = Store.objects.filter(master = master)
     park_wild = Wild.objects.filter(park = park)
-    context = {'park': park, 'master_store': master_store, 'park_wild': park_wild}
+    context = {'park': park, 'master': master,'master_store': master_store, 'park_wild': park_wild}
     return render(request, 'games/park_detail.html', context)
 
 # path('<int:master_id>/sites/', views.sites, name='sites'),
-def sites(request,master_id):
-    site_list = Site.objects.order_by('-name')[:5]
-    master = get_object_or_404(Master, pk=master_id)
-    context = {'site_list': site_list,'master':master}
-    return render(request, 'games/sites.html', context)
+#def sites(request,master_id):
+#    site_list = Site.objects.order_by('-name')[:5]
+#    master = get_object_or_404(Master, pk=master_id)
+#    context = {'site_list': site_list,'master':master}
+#    return render(request, 'games/sites.html', context)
 
 # path('<int:master_id>/markets/', views.markets, name='markets'),
 def markets(request,master_id):
     market_list = Market.objects.order_by('-name')[:5]
-    master = get_object_or_404(Master, pk=master_id)
+    master = get_object_or_404(Master, pk = master_id)
     context = {'market_list': market_list,'master':master}
     return render(request, 'games/markets.html',context)
 
@@ -83,17 +83,32 @@ def login_func(request):
     else:
         return render(request,'games/login.html')
 
-def park_cat(request):
-    pass
+def park_cat(request, master_id, park_id, cat_id):
+    park = get_object_or_404(Park, pk = park_id)
+    master = get_object_or_404(Master, pk = master_id)
+    park_cat = get_object_or_404(Cat, pk = cat_id)
+    context={'park': park, 'master': master, 'park_cat': park_cat}
+    return render(request, 'games/park_cat.html', context)
 
-def cat_detail(request):
-    pass
+def cat_detail(request, master_id, cat_id):
+    master = get_object_or_404(Master, pk = master_id)
+    cat = get_object_or_404(Cat, pk = cat_id)
+    context={'master': master, 'cat': cat}
+    return render(request, 'games/cat_detail.html', context)
 
-def site_cat(request):
-    pass
+def site_cat(request, master_id, site_id, cat_id):
+    master = get_object_or_404(Master, pk = master_id)
+    cat_list = get_object_or_404(Cat, pk = cat_id)
+    site = get_object_or_404(Site, pk = site_id)
+    context={'master': master, 'cat_list': cat_list, 'site': site}
+    return render(request, 'games/site_cat.html', context)
 
-def market_food(request):
-    pass
+def market_detail(request, master_id, market_id):
+    master = get_object_or_404(Master, pk = master_id)
+    market = get_object_or_404(Market, pk = market_id)
+    market_food = Sell.objects.filter(market = market)
+    context={'master': master, 'market': market, 'market_food': market_food}
+    return render(request, 'games/market_detail.html', context)
 
-def site_detail(request):
-    pass
+#def site_detail(request, master_id, site_id):
+#    pass

@@ -30,7 +30,7 @@ class CatAdmin(admin.ModelAdmin):
     list_filter = ('health', 'birth')
 
 class FoodAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'effect')
+    list_display = ('name', 'effect')
 
 admin.site.register(Food, FoodAdmin)
 

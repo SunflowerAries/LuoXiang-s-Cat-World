@@ -2,16 +2,15 @@
 {% load static %}
 {% block content %}
 <div>
-    {% if market_list %}
+    {% if market_food %}
     <ul>
-    {% for market in market_list %}
-    <li><a href="/games/{{ master.id }}/markets/{{ market.id }}">{{ market.name }}</a></li>
+    {% for food in market_food %}
+    <li>{{ food.name }}{{ cat.price }}</li>
     {% endfor %}
     <ul>
     {% else %}
         <p>No polls are available.</p>
     {% endif %}
 </div>
-<br>
-<br>
+<a href="/games/{{ master.id }}/markets">Back</a>
 {% endblock %}

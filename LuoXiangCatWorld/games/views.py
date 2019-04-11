@@ -87,12 +87,14 @@ def park_cat(request, master_id, park_id, cat_id):
     park = get_object_or_404(Park, pk = park_id)
     master = get_object_or_404(Master, pk = master_id)
     park_cat = get_object_or_404(Cat, pk = cat_id)
-    context={'park': park, 'master': master, 'park_cat': park_cat}
+    store = Store.objects.filter(master = master)
+    context={'park': park, 'master': master, 'park_cat': park_cat, 'store': store}
     return render(request, 'games/park_cat.html', context)
 
 def cat_detail(request, master_id, cat_id):
     master = get_object_or_404(Master, pk = master_id)
     cat = get_object_or_404(Cat, pk = cat_id)
+
     context={'master': master, 'cat': cat}
     return render(request, 'games/cat_detail.html', context)
 
@@ -110,5 +112,22 @@ def market_detail(request, master_id, market_id):
     context={'master': master, 'market': market, 'market_food': market_food}
     return render(request, 'games/market_detail.html', context)
 
+def feed(request, master_id, park_id):
+    print("in feed")
+    food=request.POST['food']
+    cat=request.POST['cat']
+    print(food, cat)
+    master = get_object_or_404(Master, pk = master_id)
+    feed = Feed.objects.get_or_create(master = master, cat = cat)
+    store = Store.objects.filter(master = master, food = food)
+    if store.num == 1:
+        store.delete()
+    else:
+        store.update(num = store.num - 1)
+
+    feed.intimacy += 1
+    feed.save()
+    context={''}
+    return
 #def site_detail(request, master_id, site_id):
 #    pass

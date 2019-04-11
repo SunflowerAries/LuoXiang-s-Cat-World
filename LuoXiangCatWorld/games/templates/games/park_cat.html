@@ -1,11 +1,30 @@
 {% extends "template.html" %}
 {% load static %}
 {% block content %}
+<script type="text/javascript">
+    function change(obj) {
+        var value = $(obj).find('option:selected').text()
+        $('#datashow').val(value)
+    }
+</script>
 <div>
     {% if park_cat %}
     <ul>
-    {% for cat in park_cat %}
-    <li>{{ cat.name }{{ cat.breed }}{{ cat.health }}</li>
+    {% for parkcat in park_cat %}
+    <li><a href="">{{ cat.name }}</a> {{ cat.breed }}{{ cat.health }}</li>
+    <form action="% url 'games:feed' {{master.id}} {{ park.id }} %}" method="post">
+        {% csrf_token %}
+        {% if store %}
+        <ul>
+        <select onchange="change(this)">
+            {% for mystore in store %}
+                <option>{{ mystore.food }}</option>
+            {% endfor %}
+            <input id="datashow" style="width:128px;height: 26px;margin-left: -150px;border:none;" type="text" value>
+        </select>
+        <input type="submit">
+        {% endif %}
+    </form>
     {% endfor %}
     <ul>
     {% else %}
@@ -15,8 +34,4 @@
 <br>
 <br>
 <a href="/games/{{ master.id }}/">Back</a>
-<a href="/games/{{ master.id }}/cats/" style="font-family: serif">cats</a>
-<a href="/games/{{ master.id }}/parks/" style="font-family: serif">parks</a>
-<a href="/games/{{ master.id }}/sites/" style="font-family: serif">sites</a>
-<a href="/games/{{ master.id }}/markets/" style="font-family: serif">markets</a>
 {% endblock %}

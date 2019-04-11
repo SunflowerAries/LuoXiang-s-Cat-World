@@ -11,7 +11,7 @@
     {% if park_list %}
     <ul>
     {% for park in park_list %}
-        <div class="mdc-card">
+        <a href="/games/{{ master.id }}/parks/{{ park.id }}/" class="mdc-card">
             <div class="mdc-card__primary-action">
                 <div class="mdc-card__media mdc-card__media--16-9 demo-card__media" style="background-image: url(../../../media/{{ park.picture }});"></div>
                 <div class="demo-card__primary">
@@ -19,7 +19,7 @@
                 </div>
                 <!-- ... additional primary action content ... -->
             </div>
-        </div>
+        </a>
     {% endfor %}
     <ul>
     {% else %}

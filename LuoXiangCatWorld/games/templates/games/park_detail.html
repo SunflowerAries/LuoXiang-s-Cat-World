@@ -1,24 +1,26 @@
 {% extends "template.html" %}
 {% load static %}
 {% block content %}
+<script>
+    function change(val) {
+        $('#myForm').submit();
+    }
+</script>
 <div>
-    {% if master_store %}
-    <ul>
-    {% for store in master_store %}
-    <li>{{ store.food }}{{ store.num }}</li>
-    {% endfor %}
-    <ul>
-    {% else %}
-        <p>You have nothing to feed these lovely cats.</p>
-    {% endif %}
-</div>
-<div>
-    Park's Name:<br>
-    {{park.name}}<br>
     {% if park_wild %}
     <ul>
-    {% for wild in park_wild %}
-    <li><a href="/games/{{ master.id }}/parks/{{ park.id }}/{{ wild.cat.id }}">{{ wild.cat }}</a></li>
+    {% for parkcat in park_wild %}
+    <li>{{ parkcat.cat.name }}{{ parkcat.cat.breed }}{{ parkcat.cat.health }}</li>
+    <form id="myForm" action="{% url 'games:feed' master.id park.id %}" method="post">
+        {% csrf_token %}
+        {% if master_store %}
+        <select onchange="change(this.value)">
+            {% for mystore in master_store %}
+                <option value="food">{{ mystore.food }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+    </form>
     {% endfor %}
     <ul>
     {% else %}

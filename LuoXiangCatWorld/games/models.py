@@ -77,7 +77,7 @@ class Market(models.Model):
 class Park(models.Model):
     # park_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
     name = models.CharField(max_length=20)
-
+    picture = models.ImageField(upload_to='Park')
     class Meta:
         ordering = ["name"]
 

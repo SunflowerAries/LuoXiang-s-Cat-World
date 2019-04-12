@@ -2,8 +2,8 @@
 {% load static %}
 {% block content %}
 <script>
-    function change(val) {
-        $('#myForm').submit();
+    function change(obj) {
+        $(obj).parents('form').submit();
     }
 </script>
 <div>
@@ -11,12 +11,14 @@
     <ul>
     {% for parkcat in park_wild %}
     <li>{{ parkcat.cat.name }}{{ parkcat.cat.breed }}{{ parkcat.cat.health }}</li>
-    <form id="myForm" action="{% url 'games:feed' master.id park.id %}" method="post">
+    <form id="myForm" action="{% url 'games:park_detail' master.id park.id %}" method="post">
         {% csrf_token %}
+        <input type="hidden" name="cat" value={{ parkcat.cat.id }}>
         {% if master_store %}
-        <select onchange="change(this.value)">
+        <select onchange="change(this)" type="text" name="food">
+            <option value={{mystore.food}}>---</option>
             {% for mystore in master_store %}
-                <option value="food">{{ mystore.food }}</option>
+                <option value={{ mystore.food }}>{{ mystore.food }}</option>
             {% endfor %}
         </select>
         {% endif %}

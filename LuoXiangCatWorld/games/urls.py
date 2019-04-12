@@ -18,5 +18,5 @@ urlpatterns = [
     path('<int:master_id>/sites/<int:site_id>/<int:cat_id>/', views.site_cat, name='site_cat'),
     path('<int:master_id>/markets/<int:market_id>/', views.market_detail, name='market_detail'),
     #path('<int:master_id>/sites/<int:site_id>/', views.site_detail, name='site_detail'),
-    path('feed/<int:master_id>/<int:park_id>', views.feed, name='feed'),
+    #path('feed/<int:master_id>/<int:park_id>/<int:cat_id>/', views.feed, name='feed'),
 ]

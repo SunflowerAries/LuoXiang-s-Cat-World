@@ -1,12 +1,29 @@
 {% extends "template.html" %}
 {% load static %}
 {% block content %}
+<script type="text/javascript">
+    function submitfun(act) {
+        myForm.action.value = act;
+        myForm.submit();
+    }
+</script>
 <div>
     {% if market_food %}
     <ul>
-    {% for food in market_food %}
-    <li>{{ food.name }}{{ cat.price }}</li>
-    {% endfor %}
+    <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post">
+        {% for sell in market_food %}
+        <li>{{ sell.food }}--{{ sell.price }}--{{ sell.num }}</li>
+        {% csrf_token %}
+        <input type="hidden" name="food" value={{ sell.food.id }}>
+        <input type="number" placeholder="please choose what we can offer" name="num" min="0" style="width:250px"><br>
+        {% endfor %}
+        <input type="hidden" name="action" value="edit">
+        <input type="button" name="buy" value="buy" onclick="submitfun('buy')">
+        <input type="button" name="sell" value="sell" onclick="submitfun('sell')">
+    </form>
+    {% if msg %}
+    {{ msg }}
+    {% endif %}
     <ul>
     {% else %}
         <p>No polls are available.</p>

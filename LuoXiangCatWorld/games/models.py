@@ -157,7 +157,7 @@ class Enjoy(models.Model):
 class Store(models.Model):
     food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)
     master = models.ForeignKey('Master', on_delete=models.SET_NULL, null=True)
-    num = models.IntegerField()
+    num = models.IntegerField(default=0)
     class Meta:
         ordering = ["master"]
 
@@ -199,7 +199,7 @@ class Sell(models.Model):
 class Feed(models.Model):
     cat = models.ForeignKey('Cat', on_delete=models.SET_NULL, null=True)
     master = models.ForeignKey('Master', on_delete=models.SET_NULL, null=True)
-    intimacy = models.IntegerField()
+    intimacy = models.IntegerField(default=50)
     class Meta:
         ordering = ["master", "cat"]
 

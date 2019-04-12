@@ -31,8 +31,28 @@ def parks(request,master_id):
 
 # path('<int:master_id>/parks/<int:park_id>/', views.park_detail, name='park_detail'),
 def park_detail(request,master_id,park_id):
-    park = get_object_or_404(Park, pk = park_id)
     master = get_object_or_404(Master, pk = master_id)
+
+    food = request.POST.get('food')
+    cat = request.POST.get('cat')
+
+    print(food, cat)
+    if cat and food:
+        #print(cat, food)
+        food = Food.objects.get(name = food)
+        cat = Cat.objects.get(id = cat)
+        feed, created = Feed.objects.get_or_create(master = master, cat = cat)
+        store = Store.objects.get(master = master, food = food)
+        if store.num == 1:
+            store.delete()
+        else:
+            store.num = store.num - 1
+            store.save()
+
+        feed.intimacy += 1
+        feed.save()
+
+    park = get_object_or_404(Park, pk = park_id)
     master_store = Store.objects.filter(master = master)
     park_wild = Wild.objects.filter(park = park)
     context = {'park': park, 'master': master,'master_store': master_store, 'park_wild': park_wild}
@@ -108,26 +128,70 @@ def site_cat(request, master_id, site_id, cat_id):
 def market_detail(request, master_id, market_id):
     master = get_object_or_404(Master, pk = master_id)
     market = get_object_or_404(Market, pk = market_id)
+    act = request.POST.get('action')
+    food = request.POST.getlist('food')
+    num = request.POST.getlist('num')
+    print(food, num)
+    if act and food and num:
+        if act == 'buy':#buy
+            for i in range(len(food)):
+                if food[i] and num[i]:
+                    myfood = Food.objects.get(id = int(food[i]))
+                    buy = Sell.objects.get(market = market, food = myfood)
+                    Num = int(num[i])
+                    if Num > buy.num:
+                        market_food = Sell.objects.filter(market = market)
+                        myfood = myfood.name
+                        context={'master': master, 'market': market, 'market_food': market_food, 'msg': "We can't offer so much " + myfood}
+                        return render(request, 'games/market_detail.html', context)
+                    elif master.money < Num * buy.price:
+                        market_food = Sell.objects.filter(market = market)
+                        context={'master': master, 'market': market, 'market_food': market_food, 'msg': "You don't have enough money"}
+                        return render(request, 'games/market_detail.html', context)
+                    else:
+                        store, created = Store.objects.get_or_create(master = master, food = myfood)
+                        master.money -= Num * buy.price
+                        master.save()
+                        if buy.num == Num:
+                            buy.delete()
+                        else:
+                            buy.num -= Num
+                            buy.save()
+                        store.num += Num
+                        store.save()
+        else:#sell
+            for i in range(len(food)):
+                if food[i] and num[i]:
+                    myfood = Food.objects.get(id = int(food[i]))
+                    sell = Store.objects.get(master = master, food = myfood)
+                    Num = int(num[i])
+                    offer = Sell.objects.get(market = market, food = myfood)
+                    if offer:
+                        if Num > sell.num:
+                            market_food = Sell.objects.filter(market = market)
+                            myfood = myfood.name
+                            context={'master': master, 'market': market, 'market_food': market_food, 'msg': "You don't have enough " + myfood}
+                            return render(request, 'games/market_detail.html', context)
+                        else:
+                            master.money += Num * offer.price
+                            master.save()
+                            if sell.num == Num:
+                                sell.delete()
+                            else:
+                                sell.num -= Num
+                                sell.save()
+                            offer.num += Num
+                            offer.save()
+                    else:
+                        market_food = Sell.objects.filter(market = market)
+                        myfood = myfood.name
+                        context={'master': master, 'market': market, 'market_food': market_food, 'msg': "Sorry, We don't buy" + myfood}
+                        return render(request, 'games/market_detail.html', context)
+
+
     market_food = Sell.objects.filter(market = market)
     context={'master': master, 'market': market, 'market_food': market_food}
     return render(request, 'games/market_detail.html', context)
 
-def feed(request, master_id, park_id):
-    print("in feed")
-    food=request.POST['food']
-    cat=request.POST['cat']
-    print(food, cat)
-    master = get_object_or_404(Master, pk = master_id)
-    feed = Feed.objects.get_or_create(master = master, cat = cat)
-    store = Store.objects.filter(master = master, food = food)
-    if store.num == 1:
-        store.delete()
-    else:
-        store.update(num = store.num - 1)
-
-    feed.intimacy += 1
-    feed.save()
-    context={''}
-    return
 #def site_detail(request, master_id, site_id):
 #    pass

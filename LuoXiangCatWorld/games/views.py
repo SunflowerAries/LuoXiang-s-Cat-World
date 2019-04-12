@@ -13,13 +13,64 @@ def login(request):
 # path('<int:master_id>/', views.detail, name='detail'),
 def detail(request,master_id):
     master = get_object_or_404(Master, pk=master_id)
-    return render(request, 'games/detail.html',{'master':master})
+    catname=request.POST.get('catname')
+    catsex=request.POST.get('catsex')
+    cathealth=request.POST.get('cathealth')
+    catage=request.POST.get('catage')
+    cat_list=Adopt.objects.filter(master__name=master.name)
+    food_list=Store.objects.filter(master__name=master.name)
+    print("yes!")
+    for cat_all in cat_list:
+        print(cat_all.cat.name)
+    
+    if catname:
+        print("in catname")
+        cat_list = cat_list.filter(cat__name=catname)
+    
+    if catname and catsex!='All':
+        print("in catsex")
+        cat_list = cat_list.filter(cat__sex=catsex)
+    
+    if cathealth and cathealth!='All':
+        print("in cathealth")
+        cat_list = cat_list.filter(cat__health=cathealth)
+
+    if catage:
+        print("in catage")
+        cat_list = cat_list.filter(cat__age=catage)
+    
+    cat_list_in=[]
+
+    for cat_all in cat_list:
+        print(cat_all.cat.name)
+        cat_list_in.append(cat_all.cat)
+
+    context={'master':master,'cat_list':cat_list_in,'food_list':food_list}
+    return render(request, 'games/detail.html',context)
 
 # path('<int:master_id>/cats/', views.cats, name='cats'),
 def cats(request,master_id):
-    cat_list = Cat.objects.order_by('-name')[:5]
+    catname=request.POST.get('catname')
+    catsex=request.POST.get('catsex')
+    cathealth=request.POST.get('cathealth')
+    catage=request.POST.get('catage')
+    if catname:
+        cat_list = Cat.objects.filter(name=catname)
+    else:
+        cat_list = Cat.objects.order_by('-name')
+    
+    if catsex and catsex!='All':
+        cat_list = cat_list.filter(sex=catsex)
+    
+    if cathealth and cathealth!='All':
+        cat_list = cat_list.filter(health=cathealth)
+
+    if catage:
+        cat_list = cat_list.filter(age=catage)
     master = get_object_or_404(Master, pk=master_id)
-    context = {'cat_list': cat_list,'master':master}
+
+    food_list=Store.objects.filter(master__id=master_id)
+    context = {'cat_list': cat_list,'master':master,'food_list':food_list}
     return render(request, 'games/cats.html',context)
 
 # path('<int:master_id>/parks/', views.parks, name='parks'),
@@ -72,10 +123,6 @@ def markets(request,master_id):
     context = {'market_list': market_list,'master':master}
     return render(request, 'games/markets.html',context)
 
-def sign_up(request):
-    #TODO
-    return render(request, 'games/sign_up.html')
-
 def register(request):
     print("inregister")
     return render(request, 'games/register.html')
@@ -95,13 +142,52 @@ def register_func(request):
 def login_func(request):
     username=request.POST['username']
     password=request.POST['password']
-    print(username)
     master = Master.objects.get(name__exact=username,password__exact=password)
-    # print(master.name)
+
+    catname=request.POST.get('catname')
+    catsex=request.POST.get('catsex')
+    cathealth=request.POST.get('cathealth')
+    catage=request.POST.get('catage')
+    
+    cat_list=Adopt.objects.filter(master__name=master.name)
+    food_list=Store.objects.filter(master__name=master.name)
+
+    for cat_all in cat_list:
+        print(cat_all.cat.name)
+    
+    if catname:
+        print("in catname")
+        cat_list = cat_list.filter(cat__name=catname)
+    
+    if catname and catsex!='All':
+        print("in catsex")
+        cat_list = cat_list.filter(cat__sex=catsex)
+    
+    if cathealth and cathealth!='All':
+        print("in cathealth")
+        cat_list = cat_list.filter(cat__health=cathealth)
+
+    if catage:
+        print("in catage")
+        cat_list = cat_list.filter(cat__age=catage)
+    
+    cat_list_in=[]
+    food_list_in=[]
+
+    for cat_all in cat_list:
+        print(cat_all.cat.name)
+        cat_list_in.append(cat_all.cat)
+    
+    for food_all in food_list:
+        print(food_all.food.name)
+        food_list_in.append(food_all.food)
+    
+    context={'master':master,'cat_list':cat_list_in,'food_list':food_list_in}
     if master:
-        return render(request,'games/detail.html',{'master':master})
+        return render(request,'games/detail.html',context)
     else:
         return render(request,'games/login.html')
+
 
 def park_cat(request, master_id, park_id, cat_id):
     park = get_object_or_404(Park, pk = park_id)

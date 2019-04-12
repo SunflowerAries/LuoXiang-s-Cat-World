@@ -1,32 +1,106 @@
 {% extends "template.html" %}
 {% load static %}
 {% block content %}
+<style>
+  .labelstyle{
+  display: inline-block;
+  margin-top:3px;
+  margin-bottom:3px;
+  margin-left:3px;
+  margin-right:3px;
+}
+</style>
 <div>
-    <div class="mdc-card animated fadeIn delay-0.7s" style="height:300px;width: 500px;margin-top: 40px;margin-left: auto;margin-right: auto;">
-        <div class="mdc-card__primary-action">
-          <div class="mdc-card__media mdc-card__media--square">
-            <div class="mdc-card__media-content" style="margin-top:40px;margin-left: 30px;">
-                <div style="font-size:50px">Bonjor!</div><br>
-                <div style="font-size:40px">Master:</div><br>
-                <div style="font-size:30px">{{master.name}}</div><br>
-            </div>
-          </div>      
-        </div>
-        <div class="mdc-card__actions">
-          <div class="mdc-card__action-buttons">
-            <button class="mdc-button mdc-card__action mdc-card__action--button">
-              <span class="mdc-button__label">Action 1</span>
-            </button>
-            <button class="mdc-button mdc-card__action mdc-card__action--button">
-              <span class="mdc-button__label">Action 2</span>
-            </button>
-          </div>
-          <div class="mdc-card__action-icons">
-            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Share">share</button>
-            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="More options">more_vert</button>
-          </div>
-        </div>
-    </div>
-   
+<div class="rightbox-small">
+  <div class="search-box mdc-card animated bounceIn delay-0.7s">             
+    <form action="{% url 'games:detail' master.id %}" method="post">
+    {% csrf_token %}
+    <h1 class="filter">Cat Filter</h1>
+    <div class="filter">
+      <input type="text" id="my-text-field" type="text" placeholder="Name?" name="catname" method="post">
+    </div> 
+    <div class="filter">
+      <input type="text" id="my-text-field" type="text" placeholder="Age?" name="catage" method="post">
+    </div> 
+    <div class="filter">
+      <label>Sex</label>
+      <select id="sexselect" name="catsex">
+        <option value="All">All</option>
+        <option value="male">Male Cat</option>
+        <option value="female">Female Cat</option>
+      </select>
+    </div><br>
+    <div class="filter">
+      <label>Health</label>
+      <select id="healthselect" name="cathealth">
+        <option value="All">All</option>
+        <option value="h">Healthy</option>
+        <option value="c">Cough</option>
+        <option value="p">Pregnant</option>
+        <option value="t">Thirsty</option>
+      </select>
+    </div><br>
+    <input type="submit" class="button submit_button is-secondary is-small" value="Go!">
+    <!-- <input type="submit" class="mdc-button--outlined submit_button mdc-theme-primary" value="Go!"> -->
+    </form>
+  </div>
+
+  <div class="search-box mdc-card animated bounceIn delay-0.7s">             
+      <table class="filter" style="width:80%">
+          <thead>
+              <tr>
+                  <th>Your Food</th>
+                  <th>Count</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% if food_list %}
+              {% for food in food_list %}
+              <tr>
+                <td>{{food.food.name}}</td>
+                <td>{{food.num}}</td>
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                  <td>...</td>
+              </tr>
+              {% endif %}
+          </tbody>
+      </table>
+  </div>
 </div>
+
+          <!-- food  list -->
+<div class="leftbox-large">
+  <div class="animated fadeIn delay-0.7s" style="height:150px;width: 500px;margin-top: 40px;margin-left: 10%">
+    <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
+    <div style="font-size:50px;margin:auto"> 欢迎来到[罗祥猫世界]</div>
+  </div>
+  <div class="mdc-layout-grid">
+      <div class="mdc-layout-grid__inner">
+          {% if cat_list %}
+          {% for cat in cat_list %}
+          <div class=" mdc-layout-grid__cell--span-3 mdc-card animated bounceIn delay-0.7s" style="width:100%;">
+              <div  class="mdc-card__media mdc-card__media--square" >
+
+              </div>
+              <div  style="margin-left:6px;margin-bottom:6px">
+              <div><div class="labelstyle"><button class="label is-focus">Name</button></div> <div style="display: inline-block">{{ cat.name }}</div></div>
+              <div><div class="labelstyle"><button class="label is-success">Status</button></div> <div style="display: inline-block">{{ cat.health }}</div></div>
+              <div><div class="labelstyle"><button class="label is-warning">Gender</button></div> <div style="display: inline-block">{{ cat.sex }}</div></div>
+              </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <div class="mdc-layout-grid__cell mdc-card mdc-layout-grid__cell--align-center animated bounceIn delay-0.7s" style="width:100%;height:175px">
+          <p>Ahhhhhhhh! PLEASE CHECK YOUR INPUT!!!</p>
+          </div>
+          {% endif %}
+      </div>
+  </div>
+                
+</div>
+</div>
+
 {% endblock %}

@@ -131,10 +131,24 @@
   
 .search-box{
   background-color: #ffffff;
-  height: 800px; 
+  height: auto; 
   width: auto; 
-  margin-top: 30px; 
+  margin-top: 25px; 
   margin-bottom: 20px; 
   margin-left: 0px; 
   margin-right: 30px;
+}
+
+.filter{
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  /* width: 70%; */
+  height: 50px;
+}
+
+.submit_button{
+  width:100px;
+  margin-left:10%;
 }

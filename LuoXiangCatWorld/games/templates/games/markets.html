@@ -2,15 +2,56 @@
 {% load static %}
 {% block content %}
 <div>
-    {% if market_list %}
-    <ul>
-    {% for market in market_list %}
-    <li><a href="/games/{{ master.id }}/markets/{{ market.id }}">{{ market.name }}</a></li>
-    {% endfor %}
-    <ul>
-    {% else %}
-        <p>No polls are available.</p>
-    {% endif %}
+    <div class="leftbox-large">
+            <div class="animated fadeIn delay-0.7s" style="height:150px;width: 500px;margin-top: 40px;margin-left: 10%">
+                    <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
+                    <div style="font-size:50px;margin:auto"> 快去买点牛奶，猫饿了</div>
+            </div>
+            <div class="mdc-layout-grid ">
+                    <div class="mdc-layout-grid__inner">
+                        {% if market_list %}
+                        {% for market in market_list %}
+                        <a href="/games/{{ master.id }}/markets/{{ market.id }}/" class="mdc-layout-grid__cell--span-4 mdc-card animated bounceIn delay-0.7s">
+                            <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../media/{{ market.picture }});"></div>
+                            <div  style="margin-left:6px;margin-bottom:6px">
+                                <h2 class="demo-card__title mdc-typography mdc-typography--headline6">{{ market.name }}</h2>
+                            </div>
+                        </a>
+                        {% endfor %}
+                        {% else %}
+                        <div class="mdc-layout-grid__cell mdc-card mdc-layout-grid__cell--align-center animated bounceIn delay-0.7s" style="width:100%;height:175px">
+                        <p>Ahhhhhhhh! PLEASE CHECK YOUR INPUT!!!</p>
+                        </div>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+        <div class="rightbox-small">
+            <div class="search-box mdc-card animated bounceIn delay-0.7s">             
+                    <table class="filter" style="width:80%">
+                        <thead>
+                            <tr>
+                                <th>Your Food</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if food_list %}
+                            {% for food in food_list %}
+                            <tr>
+                              <td>{{food.food.name}}</td>
+                              <td>{{food.num}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td>...</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
 </div>
 <br>
 <br>

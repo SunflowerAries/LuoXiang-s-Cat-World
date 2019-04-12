@@ -7,21 +7,22 @@ class Cat(models.Model):
     #Fields
     # cat_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
     name = models.CharField(max_length=20, help_text="Enter this cat's name")
-    sex = models.CharField(max_length=10)
+    sex_option = (
+        ('♂', '♂'),
+        ('♀', '♀'),
+    )
+    sex = models.CharField(max_length=1, choices=sex_option, blank=True)
     birth = models.DateField(null=True, blank=True)
     age = models.IntegerField()
     breed = models.CharField(max_length=20, blank=True, null=True)
-    father = models.CharField(max_length=10, blank=True, null=True)
-    mother = models.CharField(max_length=10, blank=True, null=True)
-    mate = models.CharField(max_length=10, blank=True, null=True)
-    health_status = (
-        ('c', 'Cough'),
-        ('p', 'Pregnant'),
+    hunger_status = (
+        ('s', 'I\'m Starving!'),
+        ('p', 'Pretty Hungry'),
         ('h', 'Hungry'),
-        ('t', 'thirsty'),
     )
 
-    health = models.CharField(max_length=1, choices=health_status, blank=True, default='h')
+    hunger = models.CharField(max_length=1, choices=hunger_status, blank=True, default='h')
+    picture = models.ImageField(upload_to='Cat')
 
     class Meta:
         ordering = ["name"]
@@ -35,7 +36,11 @@ class Cat(models.Model):
 class Master(models.Model):
     name = models.CharField(max_length=20, help_text="Explore with a lovely name")
     # user_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
-    sex = models.CharField(max_length=10)
+    sex_option = (
+        ('♂', '♂'),
+        ('♀', '♀'),
+    )
+    sex = models.CharField(max_length=1, choices=sex_option, blank=True)
     money = models.IntegerField(default=200)
     password = models.CharField(max_length=20)
     class Meta:
@@ -50,7 +55,9 @@ class Master(models.Model):
 class Food(models.Model):
     # food_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
     name = models.CharField(max_length=20)
-    effect = models.CharField(max_length=100, blank=True, null=True)
+    CHOICES = [(i,i) for i in range(1, 6)]
+    effect = models.IntegerField(choices=CHOICES)
+    picture = models.ImageField(upload_to='Food')
 
     class Meta:
         ordering = ["name"]
@@ -64,6 +71,7 @@ class Food(models.Model):
 class Market(models.Model):
     # market_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
     name = models.CharField(max_length=20)
+    picture = models.ImageField(upload_to='Market')
 
     class Meta:
         ordering = ["name"]
@@ -86,32 +94,6 @@ class Park(models.Model):
 
     def __str__(self):
         return self.name
-
-class Site(models.Model):
-    # site_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
-    name = models.CharField(max_length=20)
-
-    class Meta:
-        ordering = ["name"]
-
-    def get_absolute_url(self):
-        return reverse('model-detail-view', args=[str(self.id)])
-
-    def __str__(self):
-        return self.name
-
-class Stay(models.Model):
-    cat = models.ForeignKey('Cat', on_delete=models.SET_NULL, null=True)
-    site = models.ForeignKey('Site', on_delete=models.SET_NULL, null=True)
-
-    class Meta:
-        ordering = ["site", "cat"]
-
-    def get_absolute_url(self):
-        return reverse('model-detail-view', args=[str(self.id)])
-
-    def __str__(self):
-        return self.cat.name + "'s" + "favorite place"
 
 class Adopt(models.Model):
     cat = models.ForeignKey('Cat', on_delete=models.SET_NULL, null=True)
@@ -141,19 +123,6 @@ class Wild(models.Model):
     def __str__(self):
         return self.cat.name + "'s old home"
 
-class Enjoy(models.Model):
-    cat = models.ForeignKey('Cat', on_delete=models.SET_NULL, null=True)
-    food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)
-
-    class Meta:
-        ordering = ["cat"]
-
-    def get_absolute_url(self):
-        return reverse('model-detail-view', args=[str(self.id)])
-
-    def __str__(self):
-        return self.cat.name + "'s favorite food"
-
 class Store(models.Model):
     food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)
     master = models.ForeignKey('Master', on_delete=models.SET_NULL, null=True)
@@ -166,21 +135,6 @@ class Store(models.Model):
 
     def __str__(self):
         return self.master.name + "'s refrigerator"
-
-class Purchase(models.Model):
-    food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)
-    master = models.ForeignKey('Master', on_delete=models.SET_NULL, null=True)
-    market = models.ForeignKey('Market', on_delete=models.SET_NULL, null=True)
-    num = models.IntegerField()
-
-    class Meta:
-        ordering = ["-num", "master"]
-
-    def get_absolute_url(self):
-        return reverse('model-detail-view', args=[str(self.id)])
-
-    def __str__(self):
-        return self.master.name + "'s shopping"
 
 class Sell(models.Model):
     food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)

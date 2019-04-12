@@ -8,13 +8,9 @@ from .models import *
 #admin.site.register(Food)
 admin.site.register(Market)
 admin.site.register(Park)
-admin.site.register(Site)
-admin.site.register(Stay)
 admin.site.register(Adopt)
 admin.site.register(Wild)
-admin.site.register(Enjoy)
 admin.site.register(Store)
-admin.site.register(Purchase)
 admin.site.register(Sell)
 admin.site.register(Feed)
 
@@ -25,9 +21,9 @@ admin.site.register(Master, MasterAdmin)
 
 @admin.register(Cat)
 class CatAdmin(admin.ModelAdmin):
-    list_display = ('name', 'breed', 'sex', 'age', 'health')
-    fields = ['name', 'breed', 'sex', 'age', 'birth', ('father', 'mother'), 'mate', 'health']
-    list_filter = ('health', 'birth')
+    list_display = ('name', 'breed', 'sex', 'age', 'hunger')
+    #fields = ['name', 'breed', 'sex', 'age', 'birth', 'hunger']
+    list_filter = ('hunger', 'birth')
 
 class FoodAdmin(admin.ModelAdmin):
     list_display = ('name', 'effect')

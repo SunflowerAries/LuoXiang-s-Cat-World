@@ -20,12 +20,10 @@
                 {% if cat_list %}
                 {% for cat in cat_list %}
                 <div class="mdc-layout-grid__cell--span-3 mdc-card animated bounceIn delay-0.7s" style="width:100%;">
-                    <div  class="mdc-card__media mdc-card__media--square" >
-
-                    </div>
+                    <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../media/{{ cat.picture }});"></div>
                     <div  style="margin-left:6px;margin-bottom:6px">
                     <div><div class="labelstyle"><button class="label is-focus">Name</button></div> <div style="display: inline-block">{{ cat.name }}</div></div>
-                    <div><div class="labelstyle"><button class="label is-success">Status</button></div> <div style="display: inline-block">{{ cat.health }}</div></div>
+                    <div><div class="labelstyle"><button class="label is-success">Status</button></div> <div style="display: inline-block">{{ cat.get_hunger_display }}</div></div>
                     <div><div class="labelstyle"><button class="label is-warning">Gender</button></div> <div style="display: inline-block">{{ cat.sex }}</div></div>
                     </div>
                 </div>

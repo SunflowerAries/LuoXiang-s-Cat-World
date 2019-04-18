@@ -25,32 +25,51 @@
                 {% if cat_list %}
                 {% for parkcat in cat_list %}
                 <div class="mdc-layout-grid__cell--span-3 mdc-card animated bounceIn delay-0.7s" style="width:100%;">
-                    <div  class="mdc-card__media mdc-card__media--square" >
-
+                    <div  class="mdc-card__media mdc-card__media--16-9">
+                        <div style="background-color:salmon;margin-bottom:0px; opacity: 0.6;height:100%">
+                            <h2 style="margin-left: 87px;margin-bottom: 6px;color: honeydew">{{parkcat.cat.name}}  {{parkcat.cat.sex}}</h2>
+                        </div>
                     </div>
-                    <div  style="margin-left:6px;margin-bottom:6px">
-                        <h3 class="labelstyle">{{parkcat.cat.name}}</h3>
-                        <div>
-                            <div class="labelstyle"><button class="label is-warning">Gender</button></div> 
-                            <div style="display:inline-block">
-                                {{parkcat.cat.sex}}
-                            </div>
-                        </div>
+                    {% ifequal parkcat.cat.sex '♂' %}
+                    <div style="background: #e5ffff">
+                    {% endifequal %}
+                    
+                    {% ifequal parkcat.cat.sex '♀' %}
+                    <div style="background: #ffffcf">
+                    {% endifequal %}
+                        <div  style="margin-left:6px;margin-bottom:6px;margin-top: 6px">                         
+                            {% ifequal parkcat.cat.hunger 'p' %}
+                            <h6 class="labelstyle">
+                                Pretty Hungry Now!
+                            </h6>
+                            {% endifequal %}
 
-                        <form id="myForm" action="{% url 'games:park_detail' master.id park.id %}" method="post">
-                        {% csrf_token %}
-                        {% if master_store %}
-                        <div >
-                            <select onchange="change(this)" type="text" name="food" class="feedselect">
-                            <option value={{mystore.food}}>I like this cat!</option>
-                            {% for mystore in master_store %}
-                            <option value={{ mystore.food }}>{{ mystore.food }}</option>
-                            {% endfor %}
-                            </select>
+                            {% ifequal parkcat.cat.hunger 's' %}
+                            <h6 class="labelstyle">
+                                Starving to Death!
+                            </h6>
+                            {% endifequal %}
+
+                            {% ifequal parkcat.cat.hunger 'h' %}
+                            <h6 class="labelstyle">
+                                A little hungry
+                            </h6>
+                            {% endifequal %}
+                            <form id="myForm" action="{% url 'games:park_detail' master.id park.id %}" method="post">
+                            {% csrf_token %}
+                            {% if master_store %}
+                            <div>
+                                <select onchange="change(this)" type="text" name="food" class="feedselect">
+                                <option value={{mystore.food}}>I like this cat!</option>
+                                {% for mystore in master_store %}
+                                <option value={{ mystore.food }}>{{ mystore.food }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                            <input type="hidden" name="cat" value='{{parkcat.cat.id}}'  style="display: inline-block">
+                            {% endif %}
+                            </form>
                         </div>
-                        <input type="hidden" name="cat" value='{{parkcat.cat.id}}'  style="display: inline-block">
-                        {% endif %}
-                        </form>
                     </div>
                 </div>
                 {% endfor %}

@@ -19,26 +19,31 @@
         <div class="mdc-layout-grid__inner">
         {% if market_food %}
         {% for sell in market_food %}
-            <div class="mdc-layout-grid__cell--span-3 mdc-card animated bounceIn delay-0.7s" style="width:100%;">
-                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ sell.food.picture }});"></div>
-                <div  style="margin-left:6px;margin-bottom:6px">
-                    <div><div class="labelstyle"><button class="label is-focus">Name</button></div> <div style="display: inline-block">{{ sell.food.name }}</div></div>
-                    <div><div class="labelstyle"><button class="label is-focus">Price</button></div> <div style="display: inline-block">{{ sell.price }}</div></div>
-                    <div><div class="labelstyle"><button class="label is-focus">Num</button></div> <div style="display: inline-block">{{ sell.num }}</div></div>
+            <div class="mdc-layout-grid__cell--span-4 mdc-card animated bounceIn delay-0.7s" style="width:100%;">
+                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ sell.food.picture }});">
+                    <div style="background-color:peru;margin-bottom:0px; opacity: 0.7;height:100%">
+                        <h1 style="margin-left: 160px;margin-bottom: 6px;color: honeydew">{{ sell.food.name }}</h1>
+                    </div>
                 </div>
-                <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post">
-                <input type="hidden" name="food" value={{ sell.food.id }}>
-                <input type="number" placeholder="please choose what we can offer" name="num" min="0"><br>
-                {% csrf_token %}
-                    <div class="mdc-card__actions">
-                        <button type="submit" name="buy" value = "buy" class="mdc-button mdc-card__action mdc-card__action--button" name="buy" value="buy">
+                <div  style="margin-left:14px;margin-top: 14px">
+                    <div><div class="labelstyle"><button class="label is-warning">Price</button></div> <div style="display: inline-block">{{ sell.price }}</div></div>
+                    <div><div class="labelstyle"><button class="label is-success">Num</button></div> <div style="display: inline-block">{{ sell.num }}</div></div>
+                </div>
+                <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post" style="margin-bottom: 0px;margin-top: 0px">
+                    <input type="hidden" name="food" value={{ sell.food.id }}>
+                    
+                    {% csrf_token %}
+                    <div class="mdc-card__actions" style="margin-top:0px;margin-bottom:0px">
+                        <button type="submit" name="buy" value = "buy" class="mdc-button" name="buy" value="buy" style="width: 20px">
                                 <span class="mdc-button__label">Buy</span>
-                            </button>
-                        <button type="submit" name="sell" value="sell" class="mdc-button mdc-card__action mdc-card__action--button" name = "sell" value = "sell">
+                        </button>
+                        <button type="submit" name="sell" value="sell" class="mdc-button" name = "sell" value = "sell">
                             <span class="mdc-button__label">Sell</span>
                         </button>
+                        <input type="number" placeholder="How Many?" name="num" min="0" style="height:22px;font-size: 12px">
                     </div>
                 </form>
+            </div>
         {% endfor %}
         </div>
     </div>
@@ -50,68 +55,31 @@
             <p>Ahhhhhhhh! PLEASE CHECK YOUR INPUT!!!</p>
         </div>
     {% endif %}
-    </div>
-    </div>
-
 </div>
 <div class="rightbox-small">
-    <!--<div class="search-box mdc-card animated bounceIn delay-0.7s">
-        <form action="{% url 'games:cats' master.id %}" method="post">
-          {% csrf_token %}
-          <h1 class="filter">Cat Filter</h1>
-          <div class="filter">
-              <input type="text" id="my-text-field" type="text" placeholder="catname" name="catname" method="post">
-            </div>
-          <div class="filter">
-              <input type="text" id="my-text-field" type="text" placeholder="catage" name="catage" method="post">
-          </div> <br>
-          <div class="filter">
-              <label>Sex</label>
-              <select id="sexselect" name="catsex">
-                <option value="All">All</option>
-                <option value="male">Male Cat</option>
-                <option value="female">Female Cat</option>
-              </select>
-          </div><br>
-
-          <div class="filter">
-              <label>Health</label>
-              <select id="healthselect" name="cathealth">
-                <option value="All">All</option>
-                <option value="h">Healthy</option>
-                <option value="c">Cough</option>
-                <option value="p">Pregnant</option>
-                <option value="t">Thirsty</option>
-              </select>
-            </div><br>
-
-            <input type="submit" class="btn submit_button button is-secondary" value="Go!">
-        </form>
-    </div>-->
     <div class="search-box mdc-card animated bounceIn delay-0.7s">
-            <table class="filter" style="width:80%">
-                <thead>
-                    <tr>
-                        <th>Your Food</th>
-                        <th>Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if food_list %}
-                    {% for food in food_list %}
-                    <tr>
-                      <td>{{food.food.name}}</td>
-                      <td>{{food.num}}</td>
-                    </tr>
-                    {% endfor %}
-                    {% else %}
-                    <tr>
-                        <td>...</td>
-                    </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        </div>
+        <table class="filter" style="width:80%">
+            <thead>
+                <tr>
+                    <th>Your Food</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if food_list %}
+                {% for food in food_list %}
+                <tr>
+                  <td>{{food.food.name}}</td>
+                  <td>{{food.num}}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td>...</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
 </div>
-<a href="/games/{{ master.id }}/markets">Back</a>
 {% endblock %}

@@ -1,12 +1,6 @@
 {% extends "template.html" %}
 {% load static %}
 {% block content %}
-<script type="text/javascript">
-    function submitfun(act) {
-        myForm.action.value = act;
-        myForm.submit();
-    }
-</script>
 <style>
     .labelstyle{
         display: inline-block;
@@ -24,7 +18,6 @@
     <div class="mdc-layout-grid ">
         <div class="mdc-layout-grid__inner">
         {% if market_food %}
-        {% csrf_token %}
         {% for sell in market_food %}
             <div class="mdc-layout-grid__cell--span-3 mdc-card animated bounceIn delay-0.7s" style="width:100%;">
                 <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ sell.food.picture }});"></div>
@@ -33,26 +26,25 @@
                     <div><div class="labelstyle"><button class="label is-focus">Price</button></div> <div style="display: inline-block">{{ sell.price }}</div></div>
                     <div><div class="labelstyle"><button class="label is-focus">Num</button></div> <div style="display: inline-block">{{ sell.num }}</div></div>
                 </div>
+                <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post">
                 <input type="hidden" name="food" value={{ sell.food.id }}>
                 <input type="number" placeholder="please choose what we can offer" name="num" min="0"><br>
-                <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post">
-                    <input type = "hidden" name = "action" value = "edit">
+                {% csrf_token %}
                     <div class="mdc-card__actions">
-                        <button class="mdc-button mdc-card__action mdc-card__action--button" name="buy" value="buy" onclick="submitfun('buy')">
+                        <button type="submit" name="buy" value = "buy" class="mdc-button mdc-card__action mdc-card__action--button" name="buy" value="buy">
                                 <span class="mdc-button__label">Buy</span>
                             </button>
-                        <button class="mdc-button mdc-card__action mdc-card__action--button" name = "sell" value = "sell" onclick = "submitfun('sell')">
+                        <button type="submit" name="sell" value="sell" class="mdc-button mdc-card__action mdc-card__action--button" name = "sell" value = "sell">
                             <span class="mdc-button__label">Sell</span>
                         </button>
+                    </div>
                 </form>
-            </div>
         {% endfor %}
         </div>
     </div>
     {% if msg %}
     {{ msg }}
     {% endif %}
-    <ul>
     {% else %}
         <div class="mdc-layout-grid__cell mdc-card mdc-layout-grid__cell--align-center animated bounceIn delay-0.7s" style="width:100%;height:175px">
             <p>Ahhhhhhhh! PLEASE CHECK YOUR INPUT!!!</p>
@@ -63,9 +55,8 @@
 
 </div>
 <div class="rightbox-small">
-    <div class="search-box mdc-card animated bounceIn delay-0.7s">
+    <!--<div class="search-box mdc-card animated bounceIn delay-0.7s">
         <form action="{% url 'games:cats' master.id %}" method="post">
-
           {% csrf_token %}
           <h1 class="filter">Cat Filter</h1>
           <div class="filter">
@@ -96,7 +87,7 @@
 
             <input type="submit" class="btn submit_button button is-secondary" value="Go!">
         </form>
-    </div>
+    </div>-->
     <div class="search-box mdc-card animated bounceIn delay-0.7s">
             <table class="filter" style="width:80%">
                 <thead>

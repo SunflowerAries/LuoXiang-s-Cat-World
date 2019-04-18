@@ -248,13 +248,15 @@ def cat_detail(request, master_id, cat_id):
 def market_detail(request, master_id, market_id):
     master = get_object_or_404(Master, pk = master_id)
     market = get_object_or_404(Market, pk = market_id)
-    act = request.POST.get('action')
+    buy = request.POST.get('buy')
+    sell = request.POST.get('sell')
     food = request.POST.getlist('food')
     num = request.POST.getlist('num')
+    print(buy , sell)
     #food_list =
     print(food, num)
-    if act and food and num:
-        if act == 'buy':#buy
+    if (buy or sell) and food and num:
+        if buy:#buy
             for i in range(len(food)):
                 if food[i] and num[i]:
                     myfood = Food.objects.get(id = int(food[i]))
@@ -263,11 +265,13 @@ def market_detail(request, master_id, market_id):
                     if Num > buy.num:
                         market_food = Sell.objects.filter(market = market)
                         myfood = myfood.name
-                        context={'master': master, 'market': market, 'market_food': market_food, 'msg': "We can't offer so much " + myfood}
+                        mystore = Store.objects.filter(master = master)
+                        context={'master': master, 'market': market, 'food_list': mystore, 'market_food': market_food, 'msg': "We can't offer so much " + myfood}
                         return render(request, 'games/market_detail.html', context)
                     elif master.money < Num * buy.price:
                         market_food = Sell.objects.filter(market = market)
-                        context={'master': master, 'market': market, 'market_food': market_food, 'msg': "You don't have enough money"}
+                        mystore = Store.objects.filter(master = master)
+                        context={'master': master, 'market': market, 'food_list': mystore, 'market_food': market_food, 'msg': "You don't have enough money"}
                         return render(request, 'games/market_detail.html', context)
                     else:
                         store, created = Store.objects.get_or_create(master = master, food = myfood)
@@ -291,7 +295,8 @@ def market_detail(request, master_id, market_id):
                         if Num > sell.num:
                             market_food = Sell.objects.filter(market = market)
                             myfood = myfood.name
-                            context={'master': master, 'market': market, 'market_food': market_food, 'msg': "You don't have enough " + myfood}
+                            mystore = Store.objects.filter(master = master)
+                            context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food, 'msg': "You don't have enough " + myfood}
                             return render(request, 'games/market_detail.html', context)
                         else:
                             master.money += Num * offer.price
@@ -306,10 +311,11 @@ def market_detail(request, master_id, market_id):
                     else:
                         market_food = Sell.objects.filter(market = market)
                         myfood = myfood.name
-                        context={'master': master, 'market': market, 'market_food': market_food, 'msg': "Sorry, We don't buy" + myfood}
+                        mystore = Store.objects.filter(master = master)
+                        context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food, 'msg': "Sorry, We don't buy" + myfood}
                         return render(request, 'games/market_detail.html', context)
 
-
+    mystore = Store.objects.filter(master = master)
     market_food = Sell.objects.filter(market = market)
-    context={'master': master, 'market': market, 'market_food': market_food}
+    context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food}
     return render(request, 'games/market_detail.html', context)

@@ -6,6 +6,7 @@
         <link rel="shortcut icon" href="https://material.io/favicon.ico">
         <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" type="text/css" href="https://csshake.surge.sh/csshake.min.css">
         <link rel="stylesheet" type="text/css" href="{% static 'games/css/kube.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'games/js/kube.min.js' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'games/Animate.css' %}">
@@ -19,32 +20,29 @@
         }
         </style>
     <script>
-        //new MDCList(document.querySelector('.mdc-list'));
-        //const select = new MDCSelect(document.querySelector('.mdc-select'));
-        //select.listen('MDCSelect:change', () => {alert(`Selected option at index ${select.selectedIndex} with value "${select.value}"`);});
         </script>
         <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js"></script>
     <body>
         <div>
             <aside class="mdc-drawer shrine-drawer leftbox" style="height: 100vh;position: fixed;">
                     <div class="logo  animated bounceIn delay-0.7s">
-                    <img src="https://nbviewer.jupyter.org/github/Josep-h/LuoXiang-s-Cat-World/blob/master/LuoXiangCatWorld/games/logo.png" style="height:100% ;width:100%; zoom:60%">
+                    <img src="https://nbviewer.jupyter.org/github/Josep-h/LuoXiang-s-Cat-World/blob/master/LuoXiangCatWorld/games/logo.png" style="height:100% ;width:100%; zoom:60%" class="shake-slow shake-freeze shake-freeze--hover">
                 </div>
-                <div class="mdc-drawer__header font_control">
+                <div class="mdc-drawer__header font_control shake-slow shake-freeze shake-freeze--hover">
                     <h1 class="shrine-title animated bounceIn delay-0.3s">Luo Xiang's Cat World</h1>
                 </div>
                 <div class="mdc-drawer__content info animated bounceIn delay-0.3s">
                     <nav class="mdc-list">
                         <div class="mdc-list-item info_item">
-                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">face</button>     
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" title="Attach Money">face</button>     
                             <span class="mdc-list-item__text font_control">{{master.name}}</span>
                         </div>
                         <div class="mdc-list-item info_item">
-                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">star</button>
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" title="Attach Money">star</button>
                             <span class="mdc-list-item__text font_control">Your Cats</span>
                         </div>
                         <div class="mdc-list-item info_item">
-                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">monetization_on</button>
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" title="Attach Money">monetization_on</button>
                             <span class="mdc-list-item__text font_control">{{master.money}}</span>
                         </div>
                     </nav>
@@ -53,15 +51,15 @@
                 <div class="mdc-drawer__content animated bounceIn delay-0.3s">
                     <nav class="mdc-list">
                         <a class="mdc-list-item" href="/games/{{ master.id }}/">
-                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">home</button>
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" title="Attach Money">home</button>
                             <span class="mdc-list-item__text font_control">Home</span>
                         </a>
                         <a class="mdc-list-item" href="/games/{{ master.id }}/cats/">
-                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">search</button>
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" title="Attach Money">search</button>
                             <span class="mdc-list-item__text font_control">Cats Wiki</span>
                         </a>
                         <a class="mdc-list-item" href="/games/{{ master.id }}/parks/">
-                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">map</button>
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" title="Attach Money">map</button>
                             <span class="mdc-list-item__text font_control">Parks</span>
                         </a>
                         <a class="mdc-list-item" href="/games/{{ master.id }}/markets/">
@@ -69,7 +67,7 @@
                             <span class="mdc-list-item__text font_control">Markets</span>
                         </a>
                         <a class="mdc-list-item" href="/games/">
-                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Attach Money">arrow_back</button>
+                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" title="Attach Money">arrow_back</button>
                             <span class="mdc-list-item__text font_control">Log out</span>
                         </a>
                     </nav>

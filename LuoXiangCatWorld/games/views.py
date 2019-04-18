@@ -184,7 +184,8 @@ def park_detail(request,master_id,park_id):
 def markets(request,master_id):
     market_list = Market.objects.order_by('-name')[:5]
     master = get_object_or_404(Master, pk = master_id)
-    context = {'market_list': market_list,'master':master}
+    food_list = Store.objects.filter(master = master)
+    context = {'market_list': market_list,'master':master,'food_list':food_list}
     return render(request, 'games/markets.html',context)
 
 def register(request):

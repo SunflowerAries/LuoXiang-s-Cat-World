@@ -272,7 +272,24 @@ def market_detail(request, master_id, market_id):
     sell = request.POST.get('sell')
     food = request.POST.getlist('food')
     num = request.POST.getlist('num')
-    print(buy , sell)
+    time_now1 = int(time.time()*10000)
+    epoch = time_now1 % 3
+    delicious = Food.objects.order_by('-name')
+    lenth = len(delicious)
+    print(delicious)
+    for i in range(epoch):
+        time_now2 = int(time.time()*10000)
+        type = time_now2 % lenth
+        stock, created = Sell.objects.get_or_create(market = market, food = delicious[type])
+        time_now3 = int(time.time()*10000)
+        takein = time_now3 % 4
+        print(delicious[type], takein)
+        if stock.num + takein < 100:
+            stock.num += takein
+        else:
+            stock.num = 100
+        stock.save()
+
     #food_list =
     print(food, num)
     if (buy or sell) and food and num:

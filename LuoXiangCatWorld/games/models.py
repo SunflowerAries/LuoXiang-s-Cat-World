@@ -96,9 +96,9 @@ class Park(models.Model):
         return self.name
 
 class Adopt(models.Model):
-    cat = models.ForeignKey('Cat', on_delete=models.SET_NULL, null=True)
-    master = models.ForeignKey('Master', on_delete=models.SET_NULL, null=True)
-    park = models.ForeignKey('Park', on_delete=models.SET_NULL, null=True)
+    cat = models.ForeignKey('Cat', on_delete=models.CASCADE)
+    master = models.ForeignKey('Master', on_delete=models.CASCADE)
+    park = models.ForeignKey('Park', on_delete=models.CASCADE)
     time = models.DateField(null=True, blank=True)
 
     class Meta:
@@ -126,8 +126,8 @@ class Wild(models.Model):
         return self.cat.name + "'s old home"
 
 class Store(models.Model):
-    food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)
-    master = models.ForeignKey('Master', on_delete=models.SET_NULL, null=True)
+    food = models.ForeignKey('Food', on_delete=models.CASCADE)
+    master = models.ForeignKey('Master', on_delete=models.CASCADE)
     num = models.IntegerField(default=0)
     class Meta:
         ordering = ["master"]
@@ -139,8 +139,8 @@ class Store(models.Model):
         return self.master.name + "'s refrigerator"
 
 class Sell(models.Model):
-    food = models.ForeignKey('Food', on_delete=models.SET_NULL, null=True)
-    market = models.ForeignKey('Market', on_delete=models.SET_NULL, null=True)
+    food = models.ForeignKey('Food', on_delete=models.CASCADE)
+    market = models.ForeignKey('Market', on_delete=models.CASCADE)
     num = models.IntegerField()
     price = models.IntegerField()
     class Meta:
@@ -153,8 +153,8 @@ class Sell(models.Model):
         return self.market.name + "'s cates"
 
 class Feed(models.Model):
-    cat = models.ForeignKey('Cat', on_delete=models.SET_NULL, null=True)
-    master = models.ForeignKey('Master', on_delete=models.SET_NULL, null=True)
+    cat = models.ForeignKey('Cat', on_delete=models.CASCADE)
+    master = models.ForeignKey('Master', on_delete=models.CASCADE)
     intimacy = models.IntegerField(default=50)
     class Meta:
         ordering = ["master", "cat"]

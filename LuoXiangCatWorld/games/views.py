@@ -82,6 +82,7 @@ def parks(request,master_id):
 
 # path('<int:master_id>/parks/<int:park_id>/', views.park_detail, name='park_detail'),
 def park_detail(request,master_id,park_id):
+    
     master = get_object_or_404(Master, pk = master_id)
     food = request.POST.get('food')
     cat = request.POST.get('cat')
@@ -154,8 +155,27 @@ def park_detail(request,master_id,park_id):
             store.num = store.num - 1
             store.save()
 
-        feed.intimacy += 1
+        if cat.hunger=='s':
+            feed.intimacy += food.effect*3
+            cat.hunger='p'
+            cat.save()        
+        elif cat.hunger=='p':
+            feed.intimacy += food.effect*2
+            cat.hunger='h'
+            cat.save()
+        else:
+            feed.intimacy += food.effect
+
         feed.save()
+        print(feed.intimacy)
+        if feed.intimacy>=100:
+            adopt_new=Adopt.objects.create(master=master,cat=cat)
+            wild_delete=Wild.objects.get(park=park,cat=cat)
+            wild_delete.delete()
+            adopt_new.save()
+            feed.delete()
+
+        print('Feed Success')
 
     master_store = Store.objects.filter(master = master)
     context = {'park': park, 'master': master,'master_store': master_store, 'cat_list': cat_list}

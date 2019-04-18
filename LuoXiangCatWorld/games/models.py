@@ -22,7 +22,7 @@ class Cat(models.Model):
     )
 
     hunger = models.CharField(max_length=1, choices=hunger_status, blank=True, default='h')
-    picture = models.ImageField(upload_to='Cat')
+    picture = models.ImageField(upload_to='Cat',blank=True)
 
     class Meta:
         ordering = ["name"]
@@ -111,8 +111,10 @@ class Adopt(models.Model):
         return self.cat.name + " and " + self.master.name + "'s first encounter"
 
 class Wild(models.Model):
-    cat = models.ForeignKey('Cat', on_delete=models.SET_NULL, null=True)
-    park = models.ForeignKey('Park', on_delete=models.SET_NULL, null=True)
+    # cat = models.ForeignKey('Cat', on_delete=models.SET_NULL, null=True)
+    # park = models.ForeignKey('Park', on_delete=models.SET_NULL, null=True)
+    cat = models.ForeignKey('Cat',on_delete=models.CASCADE)
+    park = models.ForeignKey('Park',on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["park"]

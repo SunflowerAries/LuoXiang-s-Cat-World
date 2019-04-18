@@ -4,7 +4,7 @@ from django.urls import reverse
 # Create your views here.
 from django.http import Http404
 from django.http import HttpResponse, HttpResponseRedirect
-
+import time
 # path('', views.login, name='login'),
 def login(request):
     print("inlogin")
@@ -92,34 +92,53 @@ def park_detail(request,master_id,park_id):
     catage=request.POST.get('catage')
     
     park = get_object_or_404(Park, pk = park_id)
-
-    cat_list = Wild.objects.filter(id = park_id)
+    # print(time.time())
+    cat_list = Wild.objects.filter(park__id= park_id)
+    time_now=int(time.time()*10000)
+    print(time_now)
+    now_time=time_now%4
+    name_list=['小乖','香香','靓靓','小奇','MM', '安安','小兜','臭臭','凶凶','咪咪','猫咪','豆豆','恺撒','道格','查理','威廉王子','馒头','豆儿','小白','公爵','王子','乐乐','球球','圆圆','花花','胡豆','叮叮','当当','爱米','豆豆','爱贝','狗蛋','大款']
+    name_length=len(name_list)
     
-    if len(cat_list)<30:
-        update=int(random.random()*10)
-        for i in random(0,update):
-            sex_ran=random.random()
-            if sex_ran<0.5:
-                sex_create='male'
-            else:
-                sex_create='female'
+    # print(now_time)
+    if park:
+        print('Park is ready')
+    else:
+        print('park is not ready')
 
-            cat_create = Cat.objects.create(name='LuoXiang',sex=sex_create)
+    if park and len(cat_list)<30:
+        for i in range(0,now_time):
+            sex_ran=(time_now%37+i)%2
+            if sex_ran==0:
+                sex_create='♂'
+            else:
+                sex_create='♀'
+            # age=1
+            hunger_ran=(time_now%131+i)%3
+            if hunger_ran==0:
+                hunger_new='s'
+            elif hunger_ran==1:
+                hunger_new='p'
+            else:
+                hunger_new='h'
+            
+            cat_create = Cat.objects.create(name=name_list[((i+1)*(time_now+i))%name_length],sex=sex_create,hunger=hunger_new,age=1)
             cat_create.save()
-            wild_create = Wild.objects.create(park=park,cat=cat)
+            wild_create = Wild.objects.create(park=park,cat=cat_create)
             wild_create.save()
+            print('finished!')
 
     if catname:
-        cat_list = cat_list.filter(name=catname)
+        cat_list = cat_list.filter(cat__name=catname)
     
     if catsex and catsex!='All':
-        cat_list = cat_list.filter(sex=catsex)
+        cat_list = cat_list.filter(cat__sex=catsex)
     
     if cathealth and cathealth!='All':
-        cat_list = cat_list.filter(health=cathealth)
+        cat_list = cat_list.filter(cat__hunger=cathealth)
 
     if catage:
-        cat_list = cat_list.filter(age=catage)
+        cat_list = cat_list.filter(cat__age=catage)
     
     master = get_object_or_404(Master, pk=master_id)
 

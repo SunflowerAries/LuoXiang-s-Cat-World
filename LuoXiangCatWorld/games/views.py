@@ -83,11 +83,46 @@ def parks(request,master_id):
 # path('<int:master_id>/parks/<int:park_id>/', views.park_detail, name='park_detail'),
 def park_detail(request,master_id,park_id):
     master = get_object_or_404(Master, pk = master_id)
-
     food = request.POST.get('food')
     cat = request.POST.get('cat')
+    
+    catname=request.POST.get('catname')
+    catsex=request.POST.get('catsex')
+    cathealth=request.POST.get('cathealth')
+    catage=request.POST.get('catage')
+    
+    park = get_object_or_404(Park, pk = park_id)
 
-    print(food, cat)
+    cat_list = Wild.objects.filter(id = park_id)
+    
+    if len(cat_list)<30:
+        update=int(random.random()*10)
+        for i in random(0,update):
+            sex_ran=random.random()
+            if sex_ran<0.5:
+                sex_create='male'
+            else:
+                sex_create='female'
+
+            cat_create = Cat.objects.create(name='LuoXiang',sex=sex_create)
+            cat_create.save()
+            wild_create = Wild.objects.create(park=park,cat=cat)
+            wild_create.save()
+
+    if catname:
+        cat_list = cat_list.filter(name=catname)
+    
+    if catsex and catsex!='All':
+        cat_list = cat_list.filter(sex=catsex)
+    
+    if cathealth and cathealth!='All':
+        cat_list = cat_list.filter(health=cathealth)
+
+    if catage:
+        cat_list = cat_list.filter(age=catage)
+    
+    master = get_object_or_404(Master, pk=master_id)
+
     if cat and food:
         #print(cat, food)
         food = Food.objects.get(name = food)
@@ -103,10 +138,8 @@ def park_detail(request,master_id,park_id):
         feed.intimacy += 1
         feed.save()
 
-    park = get_object_or_404(Park, pk = park_id)
     master_store = Store.objects.filter(master = master)
-    park_wild = Wild.objects.filter(park = park)
-    context = {'park': park, 'master': master,'master_store': master_store, 'park_wild': park_wild}
+    context = {'park': park, 'master': master,'master_store': master_store, 'cat_list': cat_list}
     return render(request, 'games/park_detail.html', context)
 
 def markets(request,master_id):

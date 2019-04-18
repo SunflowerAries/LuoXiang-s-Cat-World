@@ -356,3 +356,16 @@ def market_detail(request, master_id, market_id):
     market_food = Sell.objects.filter(market = market)
     context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food}
     return render(request, 'games/market_detail.html', context)
+
+def adopt(request, master_id, park_id, cat_id):
+    master = get_object_or_404(Master, pk = master_id)
+    park = get_object_or_404(Park, pk = park_id)
+    cat = get_object_or_404(Cat, pk = cat_id)
+    wild = Wild.objects.get(park = park, cat = cat)
+    wild.delete()
+    newpet = Adopt.objects.create(master = master, cat = cat)
+    newpet.save()
+    cat_list = Wild.objects.filter(park__id= park_id)
+    master_store = Store.objects.filter(master = master)
+    context = {'park': park, 'master': master,'master_store': master_store, 'cat_list': cat_list}
+    return render(request, 'games/park_detail.html', context)

@@ -15,63 +15,59 @@
             <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
             <div style="font-size:50px;margin:auto"> 来看看我们有哪些猫</div>
     </div>
+    {% if cat_list %}
     <div class="mdc-layout-grid  animated bounceIn delay-0.7s">
-            <div class="mdc-layout-grid__inner">
-                {% if cat_list %}
-                {% for cat in cat_list %}
-                <div class="mdc-layout-grid__cell--span-3 mdc-card shake-slow shake-freeze shake-freeze--hover" style="width:100%;">
-                    <div  class="mdc-card__media mdc-card__media--16-9">
-                        <div style="background-color:salmon;margin-bottom:0px; opacity: 0.5;height:100%">
-                            <h2 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{cat.name}}  {{cat.sex}} 
-                              
-                            </h2>
-                        </div>
+        <div class="mdc-layout-grid__inner">
+            {% for cat in cat_list %}
+            <div class="mdc-layout-grid__cell--span-3 mdc-card shake-slow shake-freeze shake-freeze--hover" style="width:100%;">
+                <div  class="mdc-card__media mdc-card__media--16-9">
+                    <div style="background-color:salmon;margin-bottom:0px; opacity: 0.5;height:100%">
+                        <h2 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{cat.name}}  {{cat.sex}} 
+                          
+                        </h2>
                     </div>
-                    {% ifequal cat.sex '♂' %}
-                    <div style="background: #e5ffff">
-                    {% endifequal %}
-                    
-                    {% ifequal cat.sex '♀' %}
-                    <div style="background: #ffffcf">
-                    {% endifequal %}
-                        <div  style="margin-left:6px;margin-bottom:6px;margin-top: 6px">                         
-                            {% if cat.master %}
-                                {% ifequal cat.master.name 'Admin' %}
-                                Master:  Wild yet!
-                                {% else %}
-                                    Master:  {{cat.master.name}}
-                                {% endifequal %}
-                            {% else %}
+                </div>
+                {% ifequal cat.sex '♂' %}
+                <div style="background: #e5ffff">
+                {% endifequal %}
+                
+                {% ifequal cat.sex '♀' %}
+                <div style="background: #ffffcf">
+                {% endifequal %}
+                    <div  style="margin-left:6px;margin-bottom:6px;margin-top: 6px">                         
+                        {% if cat.master %}
+                            {% ifequal cat.master.name 'Admin' %}
                             Master:  Wild yet!
-                            {% endif %}  
-                            {% ifequal cat.hunger 'p' %}
-                            <h6 class="labelstyle">
-                                Pretty Hungry Now!
-                            </h6>
+                            {% else %}
+                                Master:  {{cat.master.name}}
                             {% endifequal %}
-
-                            {% ifequal cat.hunger 's' %}
-                            <h6 class="labelstyle">
-                                Starving to Death!
-                            </h6>
-                            {% endifequal %}
-
-                            {% ifequal cat.hunger 'h' %}
-                            <h6 class="labelstyle">
-                                A little hungry
-                            </h6>
-                            {% endifequal %}
-                        </div>
+                        {% else %}
+                        Master:  Wild yet!
+                        {% endif %}  
+                        {% ifequal cat.hunger 'p' %}
+                        <h6 class="labelstyle">
+                            Pretty Hungry Now!
+                        </h6>
+                        {% endifequal %}
+                        {% ifequal cat.hunger 's' %}
+                        <h6 class="labelstyle">
+                            Starving to Death!
+                        </h6>
+                        {% endifequal %}
+                        {% ifequal cat.hunger 'h' %}
+                        <h6 class="labelstyle">
+                            A little hungry
+                        </h6>
+                        {% endifequal %}
                     </div>
                 </div>
-                {% endfor %}
-                {% else %}
-                <div class="mdc-layout-grid__cell mdc-card mdc-layout-grid__cell--align-center animated bounceIn delay-0.7s" style="width:100%;height:175px">
-                <p>Ahhhhhhhh! PLEASE CHECK YOUR INPUT!!!</p>
-                </div>
-                {% endif %}
             </div>
+            {% endfor %}            
+        </div>
     </div>
+    {% else %}
+        <h3 style="margin-left: 90px;font-size: 35px;color: crimson">OOOOPS! <br> It seems that no cat is here; <br> Or no cat fits your request!</h3>
+    {% endif %}
 </div>
 <div class="rightbox-small">
     <div class="search-box-contain  animated bounceIn delay-0.7s" style="position: fixed;right: 0px;left:80%">
@@ -93,7 +89,7 @@
                         {% for master in master_list %}
                             {% ifequal master.name 'Admin' %}
                             {% else %}
-                            <option value={{ master }}>{{ master.name }}</option>
+                            <option value={{ master.name }}>{{ master.name }}</option>
                             {% endifequal %}
                         {% endfor %}
                         {% endif %}

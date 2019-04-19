@@ -111,10 +111,7 @@ def cats(request,master_id):
     master = get_object_or_404(Master, pk=master_id)
 
     if catmaster and catmaster!='All':
-        cat_list=Adopt.objects.filter(master__name=catmaster)
-        cat_list = cat_list.values('cat')
-        cat_list = Cat.objects.filter(id__in = cat_list)
-        print(catmaster, cat_list)
+        cat_list = cat_list.filter(master__name=catmaster)
 
     master_list = Master.objects.order_by('-name')
     food_list=Store.objects.filter(master__id=master_id)

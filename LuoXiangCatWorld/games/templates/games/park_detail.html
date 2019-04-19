@@ -20,9 +20,9 @@
             <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
             <div style="font-size:45px;margin:auto">哇！{{park.name}}有好多猫！</div><br>
         </div>
+        {% if cat_list %}
         <div class="mdc-layout-grid">
             <div class="mdc-layout-grid__inner">
-                {% if cat_list %}
                 {% for parkcat in cat_list %}
                 <div class="mdc-layout-grid__cell--span-3 mdc-card  animated bounceIn delay-0.7s" style="width:100%;">
                     <div  class="mdc-card__media mdc-card__media--16-9">
@@ -73,11 +73,11 @@
                     </div>
                 </div>
                 {% endfor %}
-                {% else %}
-                    <h3 style="margin: auto;font-size: 100px;color: crimson">OOOOPS! NO CAT HERE NOW</h3>
-                {% endif %}
-            </div>
+            </div>        
         </div>
+        {% else %}
+            <h3 style="margin-left: 90px;font-size: 35px;color: crimson">OOOOPS! <br> It seems that no cat is here; <br> Or no cat fits your request!</h3>
+        {% endif %}
     </div>
 
     <div class="rightbox-small">

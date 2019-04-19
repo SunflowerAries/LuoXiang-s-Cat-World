@@ -91,7 +91,10 @@
                         <option value="All">All</option>
                         {% if master_list %}
                         {% for master in master_list %}
+                            {% ifequal master.name 'Admin' %}
+                            {% else %}
                             <option value={{ master }}>{{ master.name }}</option>
+                            {% endifequal %}
                         {% endfor %}
                         {% endif %}
                     </select>

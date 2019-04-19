@@ -22,7 +22,9 @@
                 <div class="mdc-layout-grid__cell--span-3 mdc-card shake-slow shake-freeze shake-freeze--hover" style="width:100%;">
                     <div  class="mdc-card__media mdc-card__media--16-9">
                         <div style="background-color:salmon;margin-bottom:0px; opacity: 0.5;height:100%">
-                            <h2 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{cat.name}}  {{cat.sex}}</h2>
+                            <h2 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{cat.name}}  {{cat.sex}} 
+                              
+                            </h2>
                         </div>
                     </div>
                     {% ifequal cat.sex '♂' %}
@@ -33,6 +35,11 @@
                     <div style="background: #ffffcf">
                     {% endifequal %}
                         <div  style="margin-left:6px;margin-bottom:6px;margin-top: 6px">                         
+                            {% if cat.master %}
+                            Master:  {{cat.master.name}}
+                            {% else %}
+                            Master:  Wild yet!
+                            {% endif %}  
                             {% ifequal cat.hunger 'p' %}
                             <h6 class="labelstyle">
                                 Pretty Hungry Now!

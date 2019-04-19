@@ -15,45 +15,46 @@
             <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
             <div style="font-size:50px;margin:auto"> 看看我们有哪些好吃的</div>
     </div>
+    <div>
+    {% if msg %}
+        <h1 style="margin: auto;font-size:20px;color: crimson; margin-left: 10%">{{ msg }}</h1>
+    {% endif %}
+    </div>
+    {% if market_food %}
     <div class="mdc-layout-grid ">
         <div class="mdc-layout-grid__inner">
-        {% if market_food %}
         {% for sell in market_food %}
             <div class="mdc-layout-grid__cell--span-4 mdc-card animated bounceIn delay-0.7s" style="width:100%;">
                 <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ sell.food.picture }});">
                     <div style="background-color:peru;margin-bottom:0px; opacity: 0.7;height:100%">
-                        <h1 style="margin-left: 160px;margin-bottom: 6px;color: honeydew">{{ sell.food.name }}</h1>
+                        <h1 style="margin-left: 6px;margin-bottom: 6px;color: honeydew;">{{ sell.food.name }}</h1>
                     </div>
                 </div>
                 <div  style="margin-left:14px;margin-top: 14px">
                     <div><div class="labelstyle"><button class="label is-warning">Price</button></div> <div style="display: inline-block">{{ sell.price }}</div></div>
                     <div><div class="labelstyle"><button class="label is-success">Num</button></div> <div style="display: inline-block">{{ sell.num }}</div></div>
                 </div>
-                <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post" style="margin-bottom: 0px;margin-top: 0px">
+                <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post" style="margin-bottom: 0px;margin-top: 0px;">
                     <input type="hidden" name="food" value={{ sell.food.id }}>
                     
                     {% csrf_token %}
                     <div class="mdc-card__actions" style="margin-top:0px;margin-bottom:0px">
-                        <button type="submit" name="buy" value = "buy" class="mdc-button" name="buy" value="buy" style="width: 20px">
-                                <span class="mdc-button__label">Buy</span>
-                            </button>
-                            <button type="submit" name="sell" value="sell" class="mdc-button" name = "sell" value = "sell">
-                                <span class="mdc-button__label">Sell</span>
+                        <input type="number" placeholder="How Many?" name="num" min="0" style="height:35px;font-size: 15px;margin-right: 24px">
+                        <button type="submit" name="buy" value = "buy" class="mdc-icon-button material-icons" name="buy" value="buy" title="Buy It!">
+                            add_shopping_cart
                         </button>
-                        <input type="number" placeholder="How Many?" name="num" min="0" style="height:22px;font-size: 12px">
+                        <button type="submit" name="sell" value="sell" class="mdc-icon-button material-icons" name = "sell" value = "sell" title="Sell It!">
+                            attach_money
+                        </button>
                     </div>
                 </form>
             </div>
         {% endfor %}
         </div>
     </div>
-    {% if msg %}
-    {{ msg }}
-    {% endif %}
+        
     {% else %}
-        <div class="mdc-layout-grid__cell mdc-card mdc-layout-grid__cell--align-center animated bounceIn delay-0.7s" style="width:100%;height:175px">
-            <p>Ahhhhhhhh! PLEASE CHECK YOUR INPUT!!!</p>
-        </div>
+        <h1 style="margin: auto;font-size: 100px;color: crimson">SELL OUT</h1>
     {% endif %}
 </div>
 <div class="rightbox-small">

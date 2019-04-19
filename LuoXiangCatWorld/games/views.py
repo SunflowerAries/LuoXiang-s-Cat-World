@@ -6,6 +6,7 @@ from django.http import Http404
 from django.http import HttpResponse, HttpResponseRedirect
 import time
 # path('', views.login, name='login'),
+
 def login(request):
     print("inlogin")
     return render(request, 'games/login.html')
@@ -38,14 +39,8 @@ def detail(request,master_id):
     if catage:
         print("in catage")
         cat_list = cat_list.filter(cat__age=catage)
-    
-    cat_list_in=[]
 
-    for cat_all in cat_list:
-        print(cat_all.cat.name)
-        cat_list_in.append(cat_all.cat)
-
-    context={'master':master,'cat_list':cat_list_in,'food_list':food_list}
+    context={'master':master,'cat_list':cat_list,'food_list':food_list}
     return render(request, 'games/detail.html',context)
 
 # path('<int:master_id>/cats/', views.cats, name='cats'),
@@ -70,6 +65,7 @@ def cats(request,master_id):
     master = get_object_or_404(Master, pk=master_id)
 
     food_list=Store.objects.filter(master__id=master_id)
+    adopt_list=Adopt.objects.all()
     context = {'cat_list': cat_list,'master':master,'food_list':food_list}
     return render(request, 'games/cats.html',context)
 
@@ -98,6 +94,7 @@ def park_detail(request,master_id,park_id):
     time_now=int(time.time()*10000)
     print(time_now)
     now_time=time_now%4
+
     name_list=['小乖','香香','靓靓','小奇','MM', '安安','小兜','臭臭','凶凶','咪咪','猫咪','豆豆','恺撒','道格','查理','威廉王子','馒头','豆儿','小白','公爵','王子','乐乐','球球','圆圆','花花','胡豆','叮叮','当当','爱米','豆豆','爱贝','狗蛋','大款']
     name_length=len(name_list)
     
@@ -107,27 +104,26 @@ def park_detail(request,master_id,park_id):
     else:
         print('park is not ready')
 
-    if park and len(cat_list)<30:
-        for i in range(0,now_time):
-            sex_ran=(time_now%37+i)%2
-            if sex_ran==0:
-                sex_create='♂'
-            else:
-                sex_create='♀'
-            # age=1
-            hunger_ran=(time_now%131+i)%3
-            if hunger_ran==0:
-                hunger_new='s'
-            elif hunger_ran==1:
-                hunger_new='p'
-            else:
-                hunger_new='h'
-            
-            cat_create = Cat.objects.create(name=name_list[((i+1)*(time_now+i))%name_length],sex=sex_create,hunger=hunger_new,age=1)
-            cat_create.save()
-            wild_create = Wild.objects.create(park=park,cat=cat_create)
-            wild_create.save()
-            print('finished!')
+    if park and len(cat_list)<30 and now_time<1:
+        sex_ran=(time_now%37)%2
+        if sex_ran==0:
+            sex_create='♂'
+        else:
+            sex_create='♀'
+        # age=1
+        hunger_ran=(time_now%131)%3
+        if hunger_ran==0:
+            hunger_new='s'
+        elif hunger_ran==1:
+            hunger_new='p'
+        else:
+            hunger_new='h'
+        
+        cat_create = Cat.objects.create(name=name_list[time_now%name_length],sex=sex_create,hunger=hunger_new,age=1)
+        cat_create.save()
+        wild_create = Wild.objects.create(park=park,cat=cat_create)
+        wild_create.save()
+        print('finished!')
 
     if catname:
         cat_list = cat_list.filter(cat__name=catname)
@@ -169,10 +165,14 @@ def park_detail(request,master_id,park_id):
         feed.save()
         print(feed.intimacy)
         if feed.intimacy>=100:
-            adopt_new=Adopt.objects.create(master=master,cat=cat)
+            adopt_new=Adopt.objects.create(master=master,cat=cat,park=park)
+            adopt_new.save()
+            
             wild_delete=Wild.objects.get(park=park,cat=cat)
             wild_delete.delete()
-            adopt_new.save()
+            
+            cat.master=master
+            cat.save()
             feed.delete()
 
         print('Feed Success')
@@ -234,18 +234,13 @@ def login_func(request):
         print("in catage")
         cat_list = cat_list.filter(cat__age=catage)
     
-    cat_list_in=[]
     food_list_in=[]
-
-    for cat_all in cat_list:
-        print(cat_all.cat.name)
-        cat_list_in.append(cat_all.cat)
     
     for food_all in food_list:
         print(food_all.food.name)
         food_list_in.append(food_all.food)
     
-    context={'master':master,'cat_list':cat_list_in,'food_list':food_list_in}
+    context={'master':master,'cat_list':cat_list,'food_list':food_list_in}
     if master:
         return render(request,'games/detail.html',context)
     else:
@@ -273,85 +268,113 @@ def market_detail(request, master_id, market_id):
     sell = request.POST.get('sell')
     food = request.POST.getlist('food')
     num = request.POST.getlist('num')
+    
     time_now1 = int(time.time()*10000)
-    epoch = time_now1 % 3
+    epoch = time_now1 % 5
     delicious = Food.objects.order_by('-name')
     lenth = len(delicious)
-    print(delicious)
+    # print(delicious)
     for i in range(epoch):
         time_now2 = int(time.time()*10000)
         type = time_now2 % lenth
-        stock, created = Sell.objects.get_or_create(market = market, food = delicious[type])
+        stock_list=Sell.objects.filter(market = market, food = delicious[type])
+        
+        if stock_list:
+            stock=stock_list[0]
+        else:
+            stock = Sell.objects.create(market = market, food = delicious[type],price=delicious[type].baseprice)
+        
         time_now3 = int(time.time()*10000)
         takein = time_now3 % 4
-        print(delicious[type], takein)
+        # print(delicious[type], takein)
         if stock.num + takein < 100:
             stock.num += takein
         else:
             stock.num = 100
+        
+        if stock.price>300:
+            stock.price-=20
+        elif stock.price<30:
+            stock.price+=5
+        else:
+            print(int(time.time()*1000)%13-6)
+            
+            stock.price+=(int(time.time()*1000)%13-6)
+        
         stock.save()
 
     #food_list =
     print(food, num)
     if (buy or sell) and food and num:
+        print('I\'m in buying/selling process')
         if buy:#buy
             for i in range(len(food)):
+                print('I\m buying!')
+                if not num[i]:
+                    num[i]=1
                 if food[i] and num[i]:
                     myfood = Food.objects.get(id = int(food[i]))
-                    buy = Sell.objects.get(market = market, food = myfood)
-                    Num = int(num[i])
-                    if Num > buy.num:
-                        market_food = Sell.objects.filter(market = market)
-                        myfood = myfood.name
-                        mystore = Store.objects.filter(master = master)
-                        context={'master': master, 'market': market, 'food_list': mystore, 'market_food': market_food, 'msg': "We can't offer so much " + myfood}
-                        return render(request, 'games/market_detail.html', context)
-                    elif master.money < Num * buy.price:
-                        market_food = Sell.objects.filter(market = market)
-                        mystore = Store.objects.filter(master = master)
-                        context={'master': master, 'market': market, 'food_list': mystore, 'market_food': market_food, 'msg': "You don't have enough money"}
-                        return render(request, 'games/market_detail.html', context)
-                    else:
-                        store, created = Store.objects.get_or_create(master = master, food = myfood)
-                        master.money -= Num * buy.price
-                        master.save()
-                        if buy.num == Num:
-                            buy.delete()
-                        else:
-                            buy.num -= Num
-                            buy.save()
-                        store.num += Num
-                        store.save()
-        else:#sell
-            for i in range(len(food)):
-                if food[i] and num[i]:
-                    myfood = Food.objects.get(id = int(food[i]))
-                    sell = Store.objects.get(master = master, food = myfood)
-                    Num = int(num[i])
-                    offer = Sell.objects.get(market = market, food = myfood)
-                    if offer:
-                        if Num > sell.num:
+                    if Sell.objects.filter(market = market, food = myfood):
+                        buy = Sell.objects.get(market = market, food = myfood)
+                        Num = int(num[i])
+                        if Num > buy.num:
                             market_food = Sell.objects.filter(market = market)
                             myfood = myfood.name
                             mystore = Store.objects.filter(master = master)
-                            context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food, 'msg': "You don't have enough " + myfood}
+                            context={'master': master, 'market': market, 'food_list': mystore, 'market_food': market_food, 'msg': "WE CANNOT OFFER SO MUCH " + myfood}
+                            return render(request, 'games/market_detail.html', context)
+                        elif master.money < Num * buy.price:
+                            market_food = Sell.objects.filter(market = market)
+                            mystore = Store.objects.filter(master = master)
+                            context={'master': master, 'market': market, 'food_list': mystore, 'market_food': market_food, 'msg': "YOU DONOT HAVE ENOUGH MONEY"}
                             return render(request, 'games/market_detail.html', context)
                         else:
-                            master.money += Num * offer.price
+                            store, created = Store.objects.get_or_create(master = master, food = myfood)
+                            master.money -= Num * buy.price
                             master.save()
-                            if sell.num == Num:
-                                sell.delete()
+                            if buy.num == Num:
+                                buy.delete()
                             else:
-                                sell.num -= Num
-                                sell.save()
-                            offer.num += Num
-                            offer.save()
-                    else:
-                        market_food = Sell.objects.filter(market = market)
-                        myfood = myfood.name
-                        mystore = Store.objects.filter(master = master)
-                        context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food, 'msg': "Sorry, We don't buy" + myfood}
-                        return render(request, 'games/market_detail.html', context)
+                                buy.num -= Num
+                                buy.save()
+                            store.num += Num
+                            store.save()
+        else:#sell
+            for i in range(len(food)):
+                if not num[i]:
+                    num[i]=1
+                if food[i] and num[i]:
+                    myfood = Food.objects.get(id = int(food[i]))
+                    if Store.objects.filter(master = master, food = myfood):
+                        sell = Store.objects.get(master = master, food = myfood)
+                        Num = int(num[i])
+                        offer = Sell.objects.get(market = market, food = myfood)
+                        if offer:
+                            if Num > sell.num:
+                                market_food = Sell.objects.filter(market = market)
+                                myfood = myfood.name
+                                mystore = Store.objects.filter(master = master)
+                                context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food, 'msg': "You don't have enough " + myfood}
+                                return render(request, 'games/market_detail.html', context)
+                            else:
+                                master.money += Num * offer.price
+                                master.save()
+                                if sell.num == Num:
+                                    sell.delete()
+                                else:
+                                    sell.num -= Num
+                                    sell.save()
+                                offer.num += Num
+                                offer.save()
+                        else:
+                            market_food = Sell.objects.filter(market = market)
+                            myfood = myfood.name
+                            mystore = Store.objects.filter(master = master)
+                            context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food, 'msg': "Sorry, We don't buy" + myfood}
+                            return render(request, 'games/market_detail.html', context)
+    else:
+        print('not in here')
+        pass
 
     mystore = Store.objects.filter(master = master)
     market_food = Sell.objects.filter(market = market)

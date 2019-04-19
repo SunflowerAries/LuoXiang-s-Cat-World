@@ -20,7 +20,7 @@ class Cat(models.Model):
         ('p', 'Pretty Hungry'),
         ('h', 'Hungry'),
     )
-
+    master = models.ForeignKey('Master',null=True,blank=True,on_delete=models.CASCADE)
     hunger = models.CharField(max_length=1, choices=hunger_status, blank=True, default='h')
     picture = models.ImageField(upload_to='Cat',blank=True)
 
@@ -55,9 +55,10 @@ class Master(models.Model):
 class Food(models.Model):
     # food_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
     name = models.CharField(max_length=20)
-    CHOICES = [(i,i) for i in range(1, 6)]
+    CHOICES = [(i,i) for i in range(1, 20)]
     effect = models.IntegerField(choices=CHOICES)
     picture = models.ImageField(upload_to='Food')
+    baseprice = models.IntegerField(default=30)
 
     class Meta:
         ordering = ["name"]
@@ -141,8 +142,8 @@ class Store(models.Model):
 class Sell(models.Model):
     food = models.ForeignKey('Food', on_delete=models.CASCADE)
     market = models.ForeignKey('Market', on_delete=models.CASCADE)
-    num = models.IntegerField()
-    price = models.IntegerField()
+    num = models.IntegerField(default=1)
+    price = models.IntegerField(default=1)
     class Meta:
         ordering = ["price", "-num"]
 

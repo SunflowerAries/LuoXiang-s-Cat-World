@@ -82,6 +82,17 @@
                     <input type="text" id="my-text-field" type="text" placeholder="catage" name="catage" method="post">
                 </div> <br>
                 <div class="filter">
+                    <label>Master</label>
+                    <select id="catmaster" name="catmaster">
+                        <option value="All">All</option>
+                        {% if master_list %}
+                        {% for master in master_list %}
+                            <option value={{ master }}>{{ master.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                </div><br>
+                <div class="filter">
                     <label>Sex</label>
                     <select id="sexselect" name="catsex">
                         <option value="All">All</option>

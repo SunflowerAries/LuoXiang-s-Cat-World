@@ -23,30 +23,33 @@ def detail(request,master_id):
     print("yes!")
     for cat_all in cat_list:
         print(cat_all.cat.name)
-    
+    print(catsex, cathealth, catage)
     if catname:
         print("in catname")
         cat_list = cat_list.filter(cat__name=catname)
     
-    if catname and catsex!='All':
+    if catsex and catsex!='All':
         print("in catsex")
+        print(catsex)
         cat_list = cat_list.filter(cat__sex=catsex)
     
     if cathealth and cathealth!='All':
         print("in cathealth")
-        cat_list = cat_list.filter(cat__health=cathealth)
+        cat_list = cat_list.filter(cat__hunger=cathealth)
 
     if catage:
         print("in catage")
         cat_list = cat_list.filter(cat__age=catage)
 
-    context={'master':master,'cat_list':cat_list,'food_list':food_list}
+    master_store = Store.objects.filter(master = master)
+    context={'master':master,'cat_list':cat_list,'food_list':food_list, 'master_store':master_store}
     return render(request, 'games/detail.html',context)
 
 # path('<int:master_id>/cats/', views.cats, name='cats'),
 def cats(request,master_id):
     catname=request.POST.get('catname')
     catsex=request.POST.get('catsex')
+    catmaster = request.POST.get('catmaster')
     cathealth=request.POST.get('cathealth')
     catage=request.POST.get('catage')
     if catname:
@@ -58,15 +61,24 @@ def cats(request,master_id):
         cat_list = cat_list.filter(sex=catsex)
     
     if cathealth and cathealth!='All':
-        cat_list = cat_list.filter(health=cathealth)
+        cat_list = cat_list.filter(hunger=cathealth)
+        print(cat_list)
 
     if catage:
         cat_list = cat_list.filter(age=catage)
+
     master = get_object_or_404(Master, pk=master_id)
 
+    if catmaster and catmaster!='All':
+        cat_list=Adopt.objects.filter(master__name=catmaster)
+        cat_list = cat_list.values('cat')
+        cat_list = Cat.objects.filter(id__in = cat_list)
+        print(catmaster, cat_list)
+
+    master_list = Master.objects.order_by('-name')
     food_list=Store.objects.filter(master__id=master_id)
-    adopt_list=Adopt.objects.all()
-    context = {'cat_list': cat_list,'master':master,'food_list':food_list}
+    master_store = Store.objects.filter(master = master)
+    context = {'cat_list': cat_list,'master':master,'food_list':food_list, 'master_list': master_list, 'master_store':master_store}
     return render(request, 'games/cats.html',context)
 
 # path('<int:master_id>/parks/', views.parks, name='parks'),
@@ -197,6 +209,10 @@ def register_func(request):
     username=request.POST['username']
     password=request.POST['password']
     sex=request.POST['sex']
+    if sex == "Male":
+        sex = "♂"
+    else:
+        sex = "♀"
     master = Master.objects.create(name=username,password=password,sex=sex)
     master.save()
     print(sex)

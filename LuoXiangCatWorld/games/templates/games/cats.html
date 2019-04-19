@@ -36,7 +36,11 @@
                     {% endifequal %}
                         <div  style="margin-left:6px;margin-bottom:6px;margin-top: 6px">                         
                             {% if cat.master %}
-                            Master:  {{cat.master.name}}
+                                {% ifequal cat.master.name 'Admin' %}
+                                Master:  Wild yet!
+                                {% else %}
+                                    Master:  {{cat.master.name}}
+                                {% endifequal %}
                             {% else %}
                             Master:  Wild yet!
                             {% endif %}  

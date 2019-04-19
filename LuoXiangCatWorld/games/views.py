@@ -20,10 +20,29 @@ def detail(request,master_id):
     catage=request.POST.get('catage')
     cat_list=Adopt.objects.filter(master__name=master.name)
     food_list=Store.objects.filter(master__name=master.name)
-    print("yes!")
-    for cat_all in cat_list:
-        print(cat_all.cat.name)
-    print(catsex, cathealth, catage)
+    
+    for mastercat in cat_list:
+        hunger_ran=int(time.time()*10000*mastercat.id)
+        cat_now=mastercat.cat
+        if hunger_ran%11==0:
+            if cat_now.hunger=='h':
+                cat_now.hunger='p'
+                cat_now.save()
+            elif cat_now.hunger=='p':
+                cat_now.hunger='s'
+                cat_now.save()
+            else:
+                print("in this call")
+                length=len(Park.objects.all())
+                wild_ran=int(time.time()*10000*cat_now.id)%length+1
+                wildpark=Park.objects.get(id=wild_ran)
+                wild_new=Wild.objects.create(park=wildpark,cat=cat_now)
+                wild_new.save()
+                admin=Master.objects.get(name__exact='Admin')
+                cat_now.master=admin
+                cat_now.save()
+                mastercat.delete()
+
     if catname:
         print("in catname")
         cat_list = cat_list.filter(cat__name=catname)
@@ -40,6 +59,28 @@ def detail(request,master_id):
     if catage:
         print("in catage")
         cat_list = cat_list.filter(cat__age=catage)
+    
+    # for the feed control
+    food = request.POST.get('food')
+    cat = request.POST.get('cat')
+    if cat and food:
+        print(cat, food)
+        food = Food.objects.get(name = food)
+        cat = Cat.objects.get(id = cat)
+        if Store.objects.filter(master = master, food = food):
+            store = Store.objects.get(master = master, food = food)
+            if store.num == 1:
+                store.delete()
+            else:
+                store.num = store.num - 1
+                store.save()
+
+            if cat.hunger=='s':
+                cat.hunger='p'
+                cat.save()        
+            elif cat.hunger=='p':
+                cat.hunger='h'
+                cat.save()
 
     master_store = Store.objects.filter(master = master)
     context={'master':master,'cat_list':cat_list,'food_list':food_list, 'master_store':master_store}
@@ -104,17 +145,11 @@ def park_detail(request,master_id,park_id):
     # print(time.time())
     cat_list = Wild.objects.filter(park__id= park_id)
     time_now=int(time.time()*10000)
-    print(time_now)
+    # print(time_now)
     now_time=time_now%4
 
     name_list=['小乖','香香','靓靓','小奇','MM', '安安','小兜','臭臭','凶凶','咪咪','猫咪','豆豆','恺撒','道格','查理','威廉王子','馒头','豆儿','小白','公爵','王子','乐乐','球球','圆圆','花花','胡豆','叮叮','当当','爱米','豆豆','爱贝','狗蛋','大款']
     name_length=len(name_list)
-    
-    # print(now_time)
-    if park:
-        print('Park is ready')
-    else:
-        print('park is not ready')
 
     if park and len(cat_list)<30 and now_time<1:
         sex_ran=(time_now%37)%2
@@ -136,6 +171,20 @@ def park_detail(request,master_id,park_id):
         wild_create = Wild.objects.create(park=park,cat=cat_create)
         wild_create.save()
         print('finished!')
+    
+    for parkcat in cat_list:
+        hunger_ran=int(time.time()*10000*parkcat.id)
+        if hunger_ran%5==0:
+            if parkcat.cat.hunger=='h':
+                parkcat.cat.hunger='p'
+            else:
+                parkcat.cat.hunger='s'
+        if hunger_ran%7==0:
+            if parkcat.cat.hunger=='s':
+                parkcat.cat.hunger='p'
+            else:
+                parkcat.cat.hunger='h'
+        parkcat.cat.save()
 
     if catname:
         cat_list = cat_list.filter(cat__name=catname)
@@ -155,39 +204,41 @@ def park_detail(request,master_id,park_id):
         #print(cat, food)
         food = Food.objects.get(name = food)
         cat = Cat.objects.get(id = cat)
-        feed, created = Feed.objects.get_or_create(master = master, cat = cat)
-        store = Store.objects.get(master = master, food = food)
-        if store.num == 1:
-            store.delete()
-        else:
-            store.num = store.num - 1
-            store.save()
+        if not cat.master or cat.master.name=='Admin':
+            feed,created = Feed.objects.get_or_create(master = master, cat = cat)
+            print(feed)
+            if Store.objects.filter(master = master, food = food):
+                store = Store.objects.get(master = master, food = food)
+                if store.num == 1:
+                    store.delete()
+                else:
+                    store.num = store.num - 1
+                    store.save()
 
-        if cat.hunger=='s':
-            feed.intimacy += food.effect*3
-            cat.hunger='p'
-            cat.save()        
-        elif cat.hunger=='p':
-            feed.intimacy += food.effect*2
-            cat.hunger='h'
-            cat.save()
-        else:
-            feed.intimacy += food.effect
+                if cat.hunger=='s':
+                    feed.intimacy += food.effect*3
+                    cat.hunger='p'
+                    cat.save()        
+                elif cat.hunger=='p':
+                    feed.intimacy += food.effect*2
+                    cat.hunger='h'
+                    cat.save()
+                else:
+                    feed.intimacy += food.effect
+            feed.save()
+            # adopt
+            if feed.intimacy>=100:
+                adopt_new=Adopt.objects.create(master=master,cat=cat,park=park)
+                adopt_new.save()
 
-        feed.save()
-        print(feed.intimacy)
-        if feed.intimacy>=100:
-            adopt_new=Adopt.objects.create(master=master,cat=cat,park=park)
-            adopt_new.save()
-            
-            wild_delete=Wild.objects.get(park=park,cat=cat)
-            wild_delete.delete()
-            
-            cat.master=master
-            cat.save()
-            feed.delete()
+                wild_delete=Wild.objects.get(park=park,cat=cat)
+                print(wild_delete.cat.name)
+                wild_delete.delete()
+                cat.master=master
+                cat.save()
+                feed.delete()
 
-        print('Feed Success')
+            print('Feed Success')
 
     master_store = Store.objects.filter(master = master)
     context = {'park': park, 'master': master,'master_store': master_store, 'cat_list': cat_list}

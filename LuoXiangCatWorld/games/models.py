@@ -20,7 +20,7 @@ class Cat(models.Model):
         ('p', 'Pretty Hungry'),
         ('h', 'Hungry'),
     )
-    master = models.ForeignKey('Master',null=True,blank=True,on_delete=models.CASCADE)
+    master = models.ForeignKey('Master',on_delete=models.CASCADE,null=True)
     hunger = models.CharField(max_length=1, choices=hunger_status, blank=True, default='h')
     picture = models.ImageField(upload_to='Cat',blank=True)
 

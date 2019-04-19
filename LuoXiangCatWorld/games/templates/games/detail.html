@@ -10,6 +10,11 @@
   margin-right:3px;
 }
 </style>
+<script>
+    function change(obj) {
+        $(obj).parents('form').submit();
+    }
+</script>
 <div>
   <div class="rightbox-small">
     <div class="search-box-contain" style="position: fixed;right: 0px;left:80%">
@@ -114,6 +119,20 @@
                         A little hungry
                     </h6>
                     {% endifequal %}
+                    <form id="myForm" action="{% url 'games:detail' master.id %}" method="post">
+                    {% csrf_token %}
+                      {% if master_store %}
+                        <div>
+                            <select onchange="change(this)" type="text" name="food" class="feedselect">
+                            <option value={{mystore.food}}>I like this cat!</option>
+                            {% for mystore in master_store %}
+                            <option value={{ mystore.food }}>{{ mystore.food }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <input type="hidden" name="cat" value='{{parkcat.cat.id}}'  style="display: inline-block">
+                      {% endif %}
+                    </form>
                 </div>
             </div>
         </div>

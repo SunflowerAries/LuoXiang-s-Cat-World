@@ -209,58 +209,55 @@ def register_func(request):
     username=request.POST['username']
     password=request.POST['password']
     sex=request.POST['sex']
-    if sex == "Male":
-        sex = "♂"
+    if not Master.objects.filter(name__exact=username):
+        if sex == "Male":
+            sex = "♂"
+        else:
+            sex = "♀"
+        master = Master.objects.create(name=username,password=password,sex=sex)
+        master.save()
+        print(sex)
+        return render(request,'games/detail.html',{'master':master})
     else:
-        sex = "♀"
-    master = Master.objects.create(name=username,password=password,sex=sex)
-    master.save()
-    print(sex)
-    return render(request,'games/detail.html',{'master':master})
+        msg='Oh, sorry. Someone else has taken this name.'
+        context={'msg':msg}
+        return render(request,'games/register.html',context)
 
 def login_func(request):
     username=request.POST['username']
     password=request.POST['password']
-    master = Master.objects.get(name__exact=username,password__exact=password)
-
-    catname=request.POST.get('catname')
-    catsex=request.POST.get('catsex')
-    cathealth=request.POST.get('cathealth')
-    catage=request.POST.get('catage')
-    
-    cat_list=Adopt.objects.filter(master__name=master.name)
-    food_list=Store.objects.filter(master__name=master.name)
-
-    for cat_all in cat_list:
-        print(cat_all.cat.name)
-    
-    if catname:
-        print("in catname")
-        cat_list = cat_list.filter(cat__name=catname)
-    
-    if catname and catsex!='All':
-        print("in catsex")
-        cat_list = cat_list.filter(cat__sex=catsex)
-    
-    if cathealth and cathealth!='All':
-        print("in cathealth")
-        cat_list = cat_list.filter(cat__health=cathealth)
-
-    if catage:
-        print("in catage")
-        cat_list = cat_list.filter(cat__age=catage)
-    
-    food_list_in=[]
-    
-    for food_all in food_list:
-        print(food_all.food.name)
-        food_list_in.append(food_all.food)
-    
-    context={'master':master,'cat_list':cat_list,'food_list':food_list_in}
-    if master:
+    if Master.objects.filter(name__exact=username,password__exact=password):
+        master = Master.objects.get(name__exact=username,password__exact=password)
+        catname=request.POST.get('catname')
+        catsex=request.POST.get('catsex')
+        cathealth=request.POST.get('cathealth')
+        catage=request.POST.get('catage')
+        cat_list=Adopt.objects.filter(master__name=master.name)
+        food_list=Store.objects.filter(master__name=master.name)
+        for cat_all in cat_list:
+            print(cat_all.cat.name)
+        if catname:
+            print("in catname")
+            cat_list = cat_list.filter(cat__name=catname)
+        if catname and catsex!='All':
+            print("in catsex")
+            cat_list = cat_list.filter(cat__sex=catsex)
+        if cathealth and cathealth!='All':
+            print("in cathealth")
+            cat_list = cat_list.filter(cat__health=cathealth)
+        if catage:
+            print("in catage")
+            cat_list = cat_list.filter(cat__age=catage)
+        food_list_in=[]
+        for food_all in food_list:
+            print(food_all.food.name)
+            food_list_in.append(food_all.food)
+        context={'master':master,'cat_list':cat_list,'food_list':food_list_in}
         return render(request,'games/detail.html',context)
     else:
-        return render(request,'games/login.html')
+        msg='No such id. Please sign up first!'
+        context={'msg':msg}
+        return render(request,'games/register.html',context)
 
 def park_cat(request, master_id, park_id, cat_id):
     park = get_object_or_404(Park, pk = park_id)

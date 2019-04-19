@@ -301,6 +301,13 @@
                     <i>Sign in</i>
                 </div>
                 <span>
+                    {% if msg %}
+                    <div style="color:ghostwhite;font-size: 20px">
+                        <h5>{{msg}}</h5>
+                    </div>
+                    <br>
+                    <br>
+                    {% endif %}
                     <form action="{% url 'games:register_func' %}" method="post">
                         {% csrf_token %}
                         <p class="form"><input type="text" placeholder="username" name="username"></p> 
@@ -309,6 +316,7 @@
                         <input type="submit" value="register" class="btn">
                     </form>
                 </span>
+                
             </div>
             <div id="login_img">
                 <span class="circle">

@@ -24,7 +24,7 @@ def detail(request,master_id):
     for mastercat in cat_list:
         hunger_ran=int(time.time()*10000*mastercat.id)
         cat_now=mastercat.cat
-        if hunger_ran%11==0:
+        if hunger_ran%17==0:
             if cat_now.hunger=='h':
                 cat_now.hunger='p'
                 cat_now.save()

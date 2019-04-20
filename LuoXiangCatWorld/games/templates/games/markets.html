@@ -3,7 +3,7 @@
 {% block content %}
 <div>
     <div class="leftbox-large">
-            <div class="animated fadeIn delay-0.7s" style="height:150px;width: 500px;margin-top: 40px;margin-left: 10%">
+            <div class="animated bounceInDown" style="height:150px;width: 500px;margin-top: 40px;margin-left: 10%">
                     <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
                     <div style="font-size:50px;margin:auto"> 快去买点牛奶，猫饿了</div>
             </div>
@@ -11,7 +11,7 @@
                     <div class="mdc-layout-grid__inner">
                         {% if market_list %}
                         {% for market in market_list %}
-                        <a href="/games/{{ master.id }}/markets/{{ market.id }}/" class="mdc-layout-grid__cell--span-4 mdc-card animated bounceIn delay-0.7s">
+                        <a href="/games/{{ master.id }}/markets/{{ market.id }}/" class="mdc-layout-grid__cell--span-5 mdc-card animated bounceInUp">
                             <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../media/{{ market.picture }});"></div>
                             <div  style="margin-left:6px;margin-bottom:6px">
                                 <h2 class="demo-card__title mdc-typography mdc-typography--headline6">{{ market.name }}</h2>
@@ -27,7 +27,8 @@
             </div>
         </div>
         <div class="rightbox-small">
-            <div class="search-box mdc-card animated bounceIn delay-0.7s">             
+            <div class="search-box-contain " style="position: fixed;right: 15px;left:80%">
+                <div class="search-box mdc-card animated bounceInRight">             
                     <table class="filter" style="width:80%">
                         <thead>
                             <tr>
@@ -51,6 +52,7 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
         </div>
 </div>
 <br>

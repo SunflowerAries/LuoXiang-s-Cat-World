@@ -11,7 +11,7 @@
     }
 </style>
 <div class="leftbox-large">
-    <div class="animated fadeIn delay-0.7s" style="height:150px;width: 500px;margin-top: 40px;margin-left: 10%">
+    <div class="animated bounceInDown" style="height:150px;width: 500px;margin-top: 40px;margin-left: 10%">
             <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
             <div style="font-size:50px;margin:auto"> 看看我们有哪些好吃的</div>
     </div>
@@ -24,7 +24,7 @@
     <div class="mdc-layout-grid ">
         <div class="mdc-layout-grid__inner">
         {% for sell in market_food %}
-            <div class="mdc-layout-grid__cell--span-4 mdc-card animated bounceIn delay-0.7s" style="width:100%;">
+            <div class="mdc-layout-grid__cell--span-4 mdc-card animated bounceInUp" style="width:100%;">
                 <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ sell.food.picture }});">
                     <div style="background-color:peru;margin-bottom:0px; opacity: 0.7;height:100%">
                         <h1 style="margin-left: 6px;margin-bottom: 6px;color: honeydew;">{{ sell.food.name }}</h1>
@@ -58,7 +58,7 @@
     {% endif %}
 </div>
 <div class="rightbox-small">
-    <div class="search-box mdc-card animated bounceIn delay-0.7s">
+    <div class="search-box mdc-card animated bounceInRight">
         <table class="filter" style="width:80%">
             <thead>
                 <tr>

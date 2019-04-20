@@ -132,13 +132,29 @@ def park_detail(request,master_id,park_id):
     master = get_object_or_404(Master, pk = master_id)
     food = request.POST.get('food')
     cat = request.POST.get('cat')
-    
+    id = request.POST.get('id')
+    park = get_object_or_404(Park, pk = park_id)
+    if id:
+        id = int(id)
+        print(id)
+        cat = Cat.objects.get(id = id)
+        adopt_new=Adopt.objects.create(master=master,cat = cat,park=park)
+        adopt_new.save()
+
+        wild_delete=Wild.objects.get(park=park,cat=cat)
+        print(wild_delete.cat.name)
+        wild_delete.delete()
+        cat.master=master
+        cat.save()
+        feed = Feed.objects.get(master = master, cat = cat)
+        feed.delete()
+    # adopt
+
     catname=request.POST.get('catname')
     catsex=request.POST.get('catsex')
     cathealth=request.POST.get('cathealth')
     catage=request.POST.get('catage')
-    
-    park = get_object_or_404(Park, pk = park_id)
+
     # print(time.time())
     cat_list = Wild.objects.filter(park__id= park_id)
     time_now=int(time.time()*10000)
@@ -223,22 +239,13 @@ def park_detail(request,master_id,park_id):
                 else:
                     feed.intimacy += food.effect
             feed.save()
-            # adopt
-            if feed.intimacy>=100:
-                adopt_new=Adopt.objects.create(master=master,cat=cat,park=park)
-                adopt_new.save()
-
-                wild_delete=Wild.objects.get(park=park,cat=cat)
-                print(wild_delete.cat.name)
-                wild_delete.delete()
-                cat.master=master
-                cat.save()
-                feed.delete()
 
             print('Feed Success')
-
+    feed_list = Feed.objects.filter(master = master)
+    feed_list_cat = Cat.objects.filter(id__in = feed_list.values('cat'))
+    print(feed_list_cat)
     master_store = Store.objects.filter(master = master)
-    context = {'park': park, 'master': master,'master_store': master_store, 'cat_list': cat_list}
+    context = {'park': park, 'master': master,'master_store': master_store, 'cat_list': cat_list, 'feed_list':feed_list, 'feed_list_cat': feed_list_cat}
     return render(request, 'games/park_detail.html', context)
 
 def markets(request,master_id):

@@ -97,7 +97,7 @@
       </div>
       <form style="margin: 0" action="{% url 'games:park_detail' master.id  park.id%}" method="post">
               {% csrf_token %}
-      <input type="text" placeholder="Give the name, please" name="adoptname" min="0" style="height:35px;font-size: 15px;margin-right: 24px; margin-left: 20px; width: 60%">
+      <input type="text" placeholder="Give the name, please" name="adoptname" min="0" style="height:35px;font-size: 15px;margin-right: 24px; margin-left: 22px; width: 60%">
       <footer class="mdc-dialog__actions">
         <button onclick="closeModal()" type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
           <span class="mdc-button__label">Sorry, I can't afford you</span>

@@ -18,10 +18,10 @@ from django.urls import path
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-#from django.views.generic import RedirectView
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('games/', include('games.urls')),
     path('admin/', admin.site.urls),
-    #path('',RedirectView.as_view(url='/games/')),
+    path('',RedirectView.as_view(url='/games/')),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

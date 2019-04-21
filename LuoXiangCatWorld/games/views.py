@@ -271,7 +271,13 @@ def register_func(request):
     username=request.POST['username']
     password=request.POST['password']
     sex=request.POST['sex']
-    if not Master.objects.filter(name__exact=username):
+    if username == "":
+        msg = 'Please do not leave the name empty.'
+    elif password == "":
+        msg = 'Please do not leave the password empty.'
+    elif sex == "":
+        msg = 'Please do not leave the sex empty.'
+    elif not Master.objects.filter(name__exact=username):
         if sex == "Male":
             sex = "♂"
         else:
@@ -282,8 +288,8 @@ def register_func(request):
         return render(request,'games/detail.html',{'master':master})
     else:
         msg='Oh, sorry. Someone else has taken this name.'
-        context={'msg':msg}
-        return render(request,'games/register.html',context)
+    context={'msg':msg}
+    return render(request,'games/register.html',context)
 
 def login_func(request):
     username=request.POST['username']

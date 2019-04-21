@@ -41,7 +41,7 @@ class Master(models.Model):
         ('♀', '♀'),
     )
     sex = models.CharField(max_length=1, choices=sex_option, blank=True)
-    money = models.IntegerField(default=200)
+    money = models.IntegerField(default=500)
     password = models.CharField(max_length=20)
     class Meta:
         ordering = ["name"]

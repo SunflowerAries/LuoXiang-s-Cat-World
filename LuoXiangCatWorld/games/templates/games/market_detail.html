@@ -1,0 +1,86 @@
+{% extends "template.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .labelstyle{
+        display: inline-block;
+        margin-top:3px;
+        margin-bottom:3px;
+        margin-left:3px;
+        margin-right:3px;
+    }
+</style>
+<div class="leftbox-large">
+    <div class="animated bounceInDown" style="height:150px;width: 500px;margin-top: 40px;margin-left: 10%">
+            <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
+            <div style="font-size:50px;margin:auto"> 看看我们有哪些好吃的</div>
+    </div>
+    <div>
+    {% if msg %}
+        <h1 style="margin: auto;font-size:20px;color: crimson; margin-left: 10%">{{ msg }}</h1>
+    {% endif %}
+    </div>
+    {% if market_food %}
+    <div class="mdc-layout-grid ">
+        <div class="mdc-layout-grid__inner">
+        {% for sell in market_food %}
+            <div class="mdc-layout-grid__cell--span-4 mdc-card animated bounceInUp" style="width:100%;">
+                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ sell.food.picture }});">
+                    <div style="background-color:peru;margin-bottom:0px; opacity: 0.7;height:100%">
+                        <h1 style="margin-left: 6px;margin-bottom: 6px;color: honeydew;">{{ sell.food.name }}</h1>
+                    </div>
+                </div>
+                <div  style="margin-left:14px;margin-top: 14px">
+                    <div><div class="labelstyle"><button class="label is-warning">Price</button></div> <div style="display: inline-block">{{ sell.price }}</div></div>
+                    <div><div class="labelstyle"><button class="label is-success">Num</button></div> <div style="display: inline-block">{{ sell.num }}</div></div>
+                </div>
+                <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post" style="margin-bottom: 0px;margin-top: 0px;">
+                    <input type="hidden" name="food" value={{ sell.food.id }}>
+                    
+                    {% csrf_token %}
+                    <div class="mdc-card__actions" style="margin-top:0px;margin-bottom:0px">
+                        <input type="number" placeholder="How Many?" name="num" min="0" style="height:35px;font-size: 15px;margin-right: 24px">
+                        <button type="submit" name="buy" value = "buy" class="mdc-icon-button material-icons" name="buy" value="buy" title="Buy It!">
+                            add_shopping_cart
+                        </button>
+                        <button type="submit" name="sell" value="sell" class="mdc-icon-button material-icons" name = "sell" value = "sell" title="Sell It!">
+                            attach_money
+                        </button>
+                    </div>
+                </form>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+        
+    {% else %}
+        <h1 style="margin: auto;font-size: 100px;color: crimson">SELL OUT</h1>
+    {% endif %}
+</div>
+<div class="rightbox-small">
+    <div class="search-box mdc-card animated bounceInRight">
+        <table class="filter" style="width:80%">
+            <thead>
+                <tr>
+                    <th>Your Food</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if food_list %}
+                {% for food in food_list %}
+                <tr>
+                  <td>{{food.food.name}}</td>
+                  <td>{{food.num}}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td>...</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

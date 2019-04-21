@@ -1,18 +1,149 @@
+{% extends "template.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-    <head>
-
-    </head>
-    <body>
-        <div>
-            Your Name:<br>
-            {{master.name}}<br>
-            Your money:<br>
-            {{master.money}}<br>
-            Your sex:<br>
-            {{master.sex}}<br>
-            <a href="/games/{{ master.id }}/">Back</a>
+{% block content %}
+<style>
+  .labelstyle{
+  display: inline-block;
+  margin-top:3px;
+  margin-bottom:3px;
+  margin-left:3px;
+  margin-right:3px;
+}
+</style>
+<script>
+    function change(obj) {
+        $(obj).parents('form').submit();
+    }
+</script>
+<div>
+  <div class="rightbox-small">
+    <div class="search-box-contain" style="position: fixed;right: 15px;left:80%">
+        <div class="search-box mdc-card animated bounceInRight">             
+            <form action="{% url 'games:detail' master.id %}" method="post">
+            
+              {% csrf_token %}
+              <h1 class="filter shake-slow">Cat Filter</h1>
+              <div class="filter">
+                  <input type="text" id="my-text-field" type="text" placeholder="catname" name="catname" method="post">
+                </div> 
+              <div class="filter">
+                  <input type="text" id="my-text-field" type="text" placeholder="catage" name="catage" method="post">
+              </div> <br>
+              <div class="filter">
+                  <label>Sex</label>
+                  <select id="sexselect" name="catsex">
+                    <option value="All">All</option>
+                    <option value="♂">Male</option>
+                    <option value="♀">Female</option>
+                  </select>
+              </div><br>
+          
+              <div class="filter">
+                  <label>Status</label>
+                  <select id="healthselect" name="cathealth">
+                    <option value="All">All</option>
+                    <option value="s">Starving</option>
+                    <option value="p">Pretty Hungry</option>
+                    <option value="h">Hungry</option>
+                  </select>
+                </div><br>
+            
+                <input type="submit" class="btn submit_button button is-secondary" value="Go!">
+            </form>
         </div>
-    </body>
-</html>
+        <div class="search-box mdc-card animated bounceInRight">             
+            <table class="filter" style="width:80%">
+                <thead>
+                    <tr>
+                        <th>Your Food</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if master_store %}
+                    {% for food in master_store %}
+                    <tr>
+                      <td>{{food.food.name}}</td>
+                      <td>{{food.num}}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td>...</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+          <!-- food  list -->
+<div class="leftbox-large">
+  <div class="animated bounceInDown" style="height:150px;width: 500px;margin-top: 40px;margin-left: 10%">
+    <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
+    <div style="font-size:50px;margin:auto"> 欢迎来到[罗祥猫世界]</div>
+  </div>
+  {% if cat_list %}
+  <div class="mdc-layout-grid">
+      <div class="mdc-layout-grid__inner">
+        {% for parkcat in cat_list %}          
+          <div class="mdc-layout-grid__cell--span-3 mdc-card  animated bounceInUp" style="width:100%;">
+            <div  class="mdc-card__media mdc-card__media--16-9">
+                <div style="background-color:salmon;margin-bottom:0px; opacity: 0.5;height:100%">
+                    <h2 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{parkcat.cat.name}}  {{parkcat.cat.sex}}</h2>
+                </div>
+            </div>
+            {% ifequal parkcat.cat.sex '♂' %}
+            <div style="background: #e5ffff">
+            {% endifequal %}
+            
+            {% ifequal parkcat.cat.sex '♀' %}
+            <div style="background: #ffffcf">
+            {% endifequal %}
+                <div  style="margin-left:6px;margin-bottom:6px;margin-top: 6px">                         
+                    {% ifequal parkcat.cat.hunger 'p' %}
+                    <h6 class="labelstyle">
+                        Pretty Hungry Now!
+                    </h6>
+                    {% endifequal %}
+
+                    {% ifequal parkcat.cat.hunger 's' %}
+                    <h6 class="labelstyle">
+                        Starving to Death!
+                    </h6>
+                    {% endifequal %}
+
+                    {% ifequal parkcat.cat.hunger 'h' %}
+                    <h6 class="labelstyle">
+                        A little hungry
+                    </h6>
+                    {% endifequal %}
+                    <form id="myForm" action="{% url 'games:detail' master.id %}" method="post">
+                    {% csrf_token %}
+                      {% if master_store %}
+                        <div>
+                            <select onchange="change(this)" type="text" name="food" class="feedselect">
+                            <option value={{mystore.food}}>I like this cat!</option>
+                            {% for mystore in master_store %}
+                            <option value={{ mystore.food }}>{{ mystore.food }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <input type="hidden" name="cat" value='{{parkcat.cat.id}}'  style="display: inline-block">
+                      {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+          {% endfor %}
+      </div>
+      {% else %}
+      <h3 style="margin-left: 90px;font-size: 50px;color: crimson">NO CAT HOME T_T</h3>
+      {% endif %}
+  </div>
+                
+</div>
+</div>
+
+{% endblock %}

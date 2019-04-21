@@ -106,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -114,7 +114,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+HERE = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+MEDIA_ROOT = os.path.join(HERE, "..//LuoXiang-s-Cat-World/LuoXiangCatWorld/games/templates").replace('\\', '/')
+MEDIA_URL = '/media/'
+#MEDIA_ROOT = '/static/'
+#MEDIA_URL = '/static/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 

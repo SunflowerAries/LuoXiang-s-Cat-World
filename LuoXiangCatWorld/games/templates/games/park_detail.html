@@ -1,9 +1,262 @@
-<!DOCTYPE html>
-<html>
-    <head>
+{% extends "template.html" %}
+{% load static %}
+{% block content %}
+<style>
+      .labelstyle{
+      display: inline-block;
+      margin-top:3px;
+      margin-bottom:3px;
+      margin-left:3px;
+      margin-right:3px;
+    }
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
 
-    </head>
-    <body>
-        
-    </body>
-</html>
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 50%;
+      height: 40%;
+    }
+</style>
+<script>
+    function change(obj, id) {
+        $(obj).parents('form').submit();
+        localStorage.setItem("id", parseInt(id, 10));
+    }
+
+    // When the user clicks the button, open the modal
+    function openModal(modal) {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    function closeModal() {
+      // Get the modal
+        var modal = document.getElementById('myModal');
+        localStorage.setItem("id", null);
+        modal.style.display = "none";
+    }
+
+    function Adopt(obj) {
+      // Get the modal
+        var modal = document.getElementById('myModal');
+        modal.style.display = "none";
+        $('input[name=id]').val(localStorage.getItem("id"));
+        localStorage.setItem("id", null);
+        $(obj).parents('form').submit();
+        $('input[name=id]').val(localStorage.getItem("id"));
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        // Get the modal
+        var modal = document.getElementById('myModal');
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    window.onload=function() {
+        // Get the modal
+        id = localStorage.getItem("id");
+        id = document.getElementById(id)
+        if (id) {
+           intimacy = parseInt(id.innerHTML, 10);
+           var modal = document.getElementById('myModal');
+           if (intimacy >= 100){
+               openModal(modal);
+        }
+        }
+    }
+</script>
+    <div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div>
+      <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+      <h2 class="mdc-dialog__title" id="my-dialog-title"><!--
+     -->Your Master:<!--
+   --></h2>
+      <div class="mdc-dialog__content" id="my-dialog-content">
+        Please adopt me.
+      </div>
+      <form style="margin: 0" action="{% url 'games:park_detail' master.id  park.id%}" method="post">
+              {% csrf_token %}
+      <input type="text" placeholder="Give the name, please" name="adoptname" min="0" style="height:35px;font-size: 15px;margin-right: 24px; margin-left: 20px; width: 60%">
+      <footer class="mdc-dialog__actions">
+        <button onclick="closeModal()" type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
+          <span class="mdc-button__label">Sorry, I can't afford you</span>
+        </button>
+            <button onclick="Adopt(this)" type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes">
+            <span class="mdc-button__label">Adopt and give me the name</span>
+            </button>
+            <input type="hidden" name="id" value="edit">
+      </footer>
+      </form>
+    </div>
+</div>
+</div>
+    <div class="leftbox-large">
+        <div class="animated animated bounceInDown" style="height:150px;width: auto;margin-top: 40px;margin-left: 10%">
+            <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
+            <div style="font-size:45px;margin:auto">哇！{{park.name}}有好多猫！</div><br>
+        </div>
+        {% if cat_list %}
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                {% for parkcat in cat_list %}
+                <div class="mdc-layout-grid__cell--span-3 mdc-card  animated bounceInUp" style="width:100%;">
+                    <div  class="mdc-card__media mdc-card__media--16-9">
+                        <div style="background-color:salmon;margin-bottom:0px; opacity: 0.5;height:100%">
+                            <h2 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{parkcat.cat.name}}  {{parkcat.cat.sex}}</h2>
+                            {% if feed_list %}
+                            {% for feed in feed_list %}
+                            {% ifequal feed.cat parkcat.cat %}
+                            <div id={{parkcat.cat.id}} hidden>{{feed.intimacy}}</div>
+                            {% endifequal %}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% ifequal parkcat.cat.sex '♂' %}
+                    <div style="background: #e5ffff">
+                    {% endifequal %}
+                    
+                    {% ifequal parkcat.cat.sex '♀' %}
+                    <div style="background: #ffffcf">
+                    {% endifequal %}
+                        <div  style="margin-left:6px;margin-bottom:6px;margin-top: 6px">                         
+                            {% ifequal parkcat.cat.hunger 'p' %}
+                            <h6 class="labelstyle">
+                                Pretty Hungry Now!
+                            </h6>
+                            {% endifequal %}
+
+                            {% ifequal parkcat.cat.hunger 's' %}
+                            <h6 class="labelstyle">
+                                Starving to Death!
+                            </h6>
+                            {% endifequal %}
+
+                            {% ifequal parkcat.cat.hunger 'h' %}
+                            <h6 class="labelstyle">
+                                A little hungry
+                            </h6>
+                            {% endifequal %}
+                            <form id="myForm" action="{% url 'games:park_detail' master.id park.id %}" method="post">
+                            {% csrf_token %}
+                            {% if master_store %}
+                            {% if parkcat.cat in feed_list_cat %}
+                            <div>
+                                <select onchange="change(this, {{ parkcat.cat.id }})" type="text" name="food" class="feedselect">
+                                <option value="alternative">I like this cat!</option>
+                                {% for mystore in master_store %}
+                                <option value={{ mystore.food }}>{{ mystore.food }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                            {% else %}
+                                <div>
+                                <select onchange="change(this)" type="text" name="food" class="feedselect">
+                                <option value="alternative">I like this cat!</option>
+                                {% for mystore in master_store %}
+                                <option value={{ mystore.food }}>{{ mystore.food }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                            {% endif %}
+                            {% else %}
+                                <div>I wanna eat, buy for me</div>
+                            <input type="hidden" name="cat" value='{{parkcat.cat.id}}'  style="display: inline-block">
+                            {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>        
+        </div>
+        {% else %}
+            <h3 style="margin-left: 90px;font-size: 35px;color: crimson">OOOOPS! <br> It seems that no cat is here; <br> Or no cat matches your request!</h3>
+        {% endif %}
+    </div>
+
+    <div class="rightbox-small">
+        <div class="search-box-contain " style="position: fixed;right: 15px;left:80%">
+            <div class="search-box mdc-card animated bounceInRight">             
+                <form action="{% url 'games:park_detail' master.id  park.id%}" method="post">
+                
+                  {% csrf_token %}
+                  <h1 class="filter shake-slow">Cat Filter</h1>
+                  <div class="filter">
+                      <input type="text" id="my-text-field" type="text" placeholder="catname" name="catname" method="post">
+                    </div> 
+                  <div class="filter">
+                      <input type="text" id="my-text-field" type="text" placeholder="catage" name="catage" method="post">
+                  </div> <br>
+                  <div class="filter">
+                      <label>Sex</label>
+                      <select id="sexselect" name="catsex">
+                        <option value="All">All</option>
+                        <option value="♂">Male</option>
+                        <option value="♀">Female</option>
+                      </select>
+                  </div><br>
+              
+                  <div class="filter">
+                      <label>Status</label>
+                      <select id="healthselect" name="cathealth">
+                        <option value="All">All</option>
+                        <option value="s">Starving</option>
+                        <option value="p">Pretty Hungry</option>
+                        <option value="h">A Little Hungry</option>
+                      </select>
+                    </div><br>
+                
+                    <input type="submit" class="btn submit_button button is-secondary" value="Go!">
+                </form>
+            </div>
+            <div class="search-box mdc-card animated bounceInRight">             
+                <table class="filter" style="width:80%">
+                    <thead>
+                        <tr>
+                            <th>Your Food</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if master_store %}
+                        {% for food in master_store %}
+                        <tr>
+                          <td>{{food.food.name}}</td>
+                          <td>{{food.num}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td>...</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<br>
+<br>
+{% endblock %}

@@ -34,9 +34,8 @@
     }
 </style>
 <script>
-    function change(obj, cat, id) {
+    function change(obj, id) {
         $(obj).parents('form').submit();
-        localStorage.setItem("intimacy", parseInt(cat.innerHTML, 10));
         localStorage.setItem("id", parseInt(id, 10));
     }
 
@@ -49,16 +48,18 @@
     function closeModal() {
       // Get the modal
         var modal = document.getElementById('myModal');
-      modal.style.display = "none";
+        localStorage.setItem("id", null);
+        modal.style.display = "none";
     }
 
     function Adopt(obj) {
       // Get the modal
         var modal = document.getElementById('myModal');
         modal.style.display = "none";
-        localStorage.setItem("intimacy", 0);
         $('input[name=id]').val(localStorage.getItem("id"));
+        localStorage.setItem("id", null);
         $(obj).parents('form').submit();
+        $('input[name=id]').val(localStorage.getItem("id"));
     }
 
     // When the user clicks anywhere outside of the modal, close it
@@ -71,11 +72,15 @@
     }
 
     window.onload=function() {
-        intimacy = localStorage.getItem("intimacy");
         // Get the modal
-        var modal = document.getElementById('myModal');
-        if (localStorage.intimacy >= 80){
-            openModal(modal);
+        id = localStorage.getItem("id");
+        id = document.getElementById(id)
+        if (id) {
+           intimacy = parseInt(id.innerHTML, 10);
+           var modal = document.getElementById('myModal');
+           if (intimacy >= 100){
+               openModal(modal);
+        }
         }
     }
 </script>
@@ -90,18 +95,19 @@
       <div class="mdc-dialog__content" id="my-dialog-content">
         Please adopt me.
       </div>
+      <form style="margin: 0" action="{% url 'games:park_detail' master.id  park.id%}" method="post">
+              {% csrf_token %}
+      <input type="text" placeholder="Give the name, please" name="adoptname" min="0" style="height:35px;font-size: 15px;margin-right: 24px; margin-left: 20px; width: 60%">
       <footer class="mdc-dialog__actions">
         <button onclick="closeModal()" type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
-          <span class="mdc-button__label">Sorry</span>
+          <span class="mdc-button__label">Sorry, I can't afford you</span>
         </button>
-        <form style="margin: 0" action="{% url 'games:park_detail' master.id  park.id%}" method="post">
-        {% csrf_token %}
             <button onclick="Adopt(this)" type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes">
-            <span class="mdc-button__label">Adopt</span>
+            <span class="mdc-button__label">Adopt and give me the name</span>
             </button>
             <input type="hidden" name="id" value="edit">
-        </form>
       </footer>
+      </form>
     </div>
 </div>
 </div>
@@ -121,7 +127,7 @@
                             {% if feed_list %}
                             {% for feed in feed_list %}
                             {% ifequal feed.cat parkcat.cat %}
-                            <div id={{parkcat.cat}} hidden>{{feed.intimacy}}</div>
+                            <div id={{parkcat.cat.id}} hidden>{{feed.intimacy}}</div>
                             {% endifequal %}
                             {% endfor %}
                             {% endif %}
@@ -157,7 +163,7 @@
                             {% if master_store %}
                             {% if parkcat.cat in feed_list_cat %}
                             <div>
-                                <select onchange="change(this, {{ parkcat.cat }}, {{ parkcat.cat.id }})" type="text" name="food" class="feedselect">
+                                <select onchange="change(this, {{ parkcat.cat.id }})" type="text" name="food" class="feedselect">
                                 <option value="alternative">I like this cat!</option>
                                 {% for mystore in master_store %}
                                 <option value={{ mystore.food }}>{{ mystore.food }}</option>
@@ -174,6 +180,8 @@
                                 </select>
                             </div>
                             {% endif %}
+                            {% else %}
+                                <div>I wanna eat, buy for me</div>
                             <input type="hidden" name="cat" value='{{parkcat.cat.id}}'  style="display: inline-block">
                             {% endif %}
                             </form>

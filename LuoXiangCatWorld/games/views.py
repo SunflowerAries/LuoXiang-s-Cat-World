@@ -133,21 +133,27 @@ def park_detail(request,master_id,park_id):
     food = request.POST.get('food')
     cat = request.POST.get('cat')
     id = request.POST.get('id')
+    adopt_name = request.POST.get('adoptname')
+    print(id)
     park = get_object_or_404(Park, pk = park_id)
+
     if id:
         id = int(id)
-        print(id)
-        cat = Cat.objects.get(id = id)
-        adopt_new=Adopt.objects.create(master=master,cat = cat,park=park)
-        adopt_new.save()
-
-        wild_delete=Wild.objects.get(park=park,cat=cat)
-        print(wild_delete.cat.name)
-        wild_delete.delete()
-        cat.master=master
-        cat.save()
-        feed = Feed.objects.get(master = master, cat = cat)
-        feed.delete()
+        adopt_cat = Cat.objects.get(id = id)
+        try:
+            wild_delete=Wild.objects.get(park=park,cat=adopt_cat)
+        except Wild.DoesNotExist:
+            wild_delete = None
+        if adopt_cat and wild_delete:
+            adopt_cat.name = adopt_name
+            adopt_cat.save()
+            adopt_new=Adopt.objects.create(master=master,cat = adopt_cat,park=park)
+            adopt_new.save()
+            wild_delete.delete()
+            adopt_cat.master=master
+            adopt_cat.save()
+            feed = Feed.objects.get(master = master, cat = adopt_cat)
+            feed.delete()
     # adopt
 
     catname=request.POST.get('catname')

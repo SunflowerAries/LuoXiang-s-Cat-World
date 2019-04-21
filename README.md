@@ -12,6 +12,6 @@ In this game, you can buy food from the market and feed the stray cats in park. 
   - PRETTY HUNGRY NOW!
   - STARVING TO DEATH!
 
-  The cat will become hungrier with the passage of time, and if you pet cat is "STARVING TO DEATH!", it may run away from home. So you should think carefully about your raising, since you budget is limited. A good news is The hungrier the cat is, the better effect your feeding will get.
+  The cat will become hungrier with the passage of time, and if your pet cat is "STARVING TO DEATH!", it may run away from home. So you should think carefully about your raising, since you budget is limited. A good news is the hungrier the cat is, the better effect your feeding will achieve.
 
 Hope you have fun with it

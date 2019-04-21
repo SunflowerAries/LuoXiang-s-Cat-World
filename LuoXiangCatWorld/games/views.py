@@ -8,7 +8,7 @@ import time
 # path('', views.login, name='login'),
 
 def login(request):
-    print("inlogin")
+    #print("inlogin")
     return render(request, 'games/login.html')
 
 # path('<int:master_id>/', views.detail, name='detail'),
@@ -32,7 +32,7 @@ def detail(request,master_id):
                 cat_now.hunger='s'
                 cat_now.save()
             else:
-                print("in this call")
+                #print("in this call")
                 length=len(Park.objects.all())
                 wild_ran=int(time.time()*10000*cat_now.id)%length+1
                 wildpark=Park.objects.get(id=wild_ran)

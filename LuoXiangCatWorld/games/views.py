@@ -44,27 +44,27 @@ def detail(request,master_id):
                 mastercat.delete()
 
     if catname:
-        print("in catname")
+        #print("in catname")
         cat_list = cat_list.filter(cat__name=catname)
     
     if catsex and catsex!='All':
-        print("in catsex")
-        print(catsex)
+        #print("in catsex")
+        #print(catsex)
         cat_list = cat_list.filter(cat__sex=catsex)
     
     if cathealth and cathealth!='All':
-        print("in cathealth")
+        #print("in cathealth")
         cat_list = cat_list.filter(cat__hunger=cathealth)
 
     if catage:
-        print("in catage")
+        #print("in catage")
         cat_list = cat_list.filter(cat__age=catage)
     
     # for the feed control
     food = request.POST.get('food')
     cat = request.POST.get('cat')
     if cat and food:
-        print(cat, food)
+        #print(cat, food)
         food = Food.objects.get(name = food)
         cat = Cat.objects.get(id = cat)
         if Store.objects.filter(master = master, food = food):
@@ -103,7 +103,7 @@ def cats(request,master_id):
     
     if cathealth and cathealth!='All':
         cat_list = cat_list.filter(hunger=cathealth)
-        print(cat_list)
+        #print(cat_list)
 
     if catage:
         cat_list = cat_list.filter(age=catage)
@@ -134,7 +134,7 @@ def park_detail(request,master_id,park_id):
     cat = request.POST.get('cat')
     id = request.POST.get('id')
     adopt_name = request.POST.get('adoptname')
-    print(id)
+    #print(id)
     park = get_object_or_404(Park, pk = park_id)
 
     if id:
@@ -145,8 +145,9 @@ def park_detail(request,master_id,park_id):
         except Wild.DoesNotExist:
             wild_delete = None
         if adopt_cat and wild_delete:
-            adopt_cat.name = adopt_name
-            adopt_cat.save()
+            if adopt_name:
+                adopt_cat.name = adopt_name
+                adopt_cat.save()
             adopt_new=Adopt.objects.create(master=master,cat = adopt_cat,park=park)
             adopt_new.save()
             wild_delete.delete()
@@ -189,7 +190,7 @@ def park_detail(request,master_id,park_id):
         cat_create.save()
         wild_create = Wild.objects.create(park=park,cat=cat_create)
         wild_create.save()
-        print('finished!')
+        #print('finished!')
     
     for parkcat in cat_list:
         hunger_ran=int(time.time()*10000*parkcat.id)
@@ -224,8 +225,8 @@ def park_detail(request,master_id,park_id):
         food = Food.objects.get(name = food)
         cat = Cat.objects.get(id = cat)
         if not cat.master or cat.master.name=='Admin':
-            feed,created = Feed.objects.get_or_create(master = master, cat = cat)
-            print(feed)
+            feed, created = Feed.objects.get_or_create(master = master, cat = cat)
+            #print(feed)
             if Store.objects.filter(master = master, food = food):
                 store = Store.objects.get(master = master, food = food)
                 if store.num == 1:
@@ -246,10 +247,10 @@ def park_detail(request,master_id,park_id):
                     feed.intimacy += food.effect
             feed.save()
 
-            print('Feed Success')
+            #print('Feed Success')
     feed_list = Feed.objects.filter(master = master)
     feed_list_cat = Cat.objects.filter(id__in = feed_list.values('cat'))
-    print(feed_list_cat)
+    #print(feed_list_cat)
     master_store = Store.objects.filter(master = master)
     context = {'park': park, 'master': master,'master_store': master_store, 'cat_list': cat_list, 'feed_list':feed_list, 'feed_list_cat': feed_list_cat}
     return render(request, 'games/park_detail.html', context)
@@ -262,11 +263,11 @@ def markets(request,master_id):
     return render(request, 'games/markets.html',context)
 
 def register(request):
-    print("inregister")
+    #print("inregister")
     return render(request, 'games/register.html')
 
 def register_func(request):
-    print("in register func")
+    #print("in register func")
     username=request.POST['username']
     password=request.POST['password']
     sex=request.POST['sex']
@@ -277,7 +278,7 @@ def register_func(request):
             sex = "♀"
         master = Master.objects.create(name=username,password=password,sex=sex)
         master.save()
-        print(sex)
+        #print(sex)
         return render(request,'games/detail.html',{'master':master})
     else:
         msg='Oh, sorry. Someone else has taken this name.'
@@ -295,23 +296,23 @@ def login_func(request):
         catage=request.POST.get('catage')
         cat_list=Adopt.objects.filter(master__name=master.name)
         food_list=Store.objects.filter(master__name=master.name)
-        for cat_all in cat_list:
-            print(cat_all.cat.name)
+        #for cat_all in cat_list:
+        #    print(cat_all.cat.name)
         if catname:
-            print("in catname")
+            #print("in catname")
             cat_list = cat_list.filter(cat__name=catname)
         if catname and catsex!='All':
-            print("in catsex")
+            #print("in catsex")
             cat_list = cat_list.filter(cat__sex=catsex)
         if cathealth and cathealth!='All':
-            print("in cathealth")
+            #print("in cathealth")
             cat_list = cat_list.filter(cat__health=cathealth)
         if catage:
-            print("in catage")
+            #print("in catage")
             cat_list = cat_list.filter(cat__age=catage)
         food_list_in=[]
         for food_all in food_list:
-            print(food_all.food.name)
+            #print(food_all.food.name)
             food_list_in.append(food_all.food)
         context={'master':master,'cat_list':cat_list,'food_list':food_list_in}
         return render(request,'games/detail.html',context)
@@ -371,19 +372,19 @@ def market_detail(request, master_id, market_id):
         elif stock.price<30:
             stock.price+=5
         else:
-            print(int(time.time()*1000)%13-6)
+            #print(int(time.time()*1000)%13-6)
             
             stock.price+=(int(time.time()*1000)%13-6)
         
         stock.save()
 
     #food_list =
-    print(food, num)
+    #print(food, num)
     if (buy or sell) and food and num:
-        print('I\'m in buying/selling process')
+        #print('I\'m in buying/selling process')
         if buy:#buy
             for i in range(len(food)):
-                print('I\m buying!')
+                #print('I\m buying!')
                 if not num[i]:
                     num[i]=1
                 if food[i] and num[i]:
@@ -447,7 +448,7 @@ def market_detail(request, master_id, market_id):
                             context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food, 'msg': "Sorry, We don't buy" + myfood}
                             return render(request, 'games/market_detail.html', context)
     else:
-        print('not in here')
+        #print('not in here')
         pass
 
     mystore = Store.objects.filter(master = master)

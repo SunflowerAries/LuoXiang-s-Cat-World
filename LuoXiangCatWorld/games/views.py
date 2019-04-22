@@ -1,11 +1,17 @@
 from django.shortcuts import get_object_or_404,render
+from django.core.files import File
 from .models import *
 from django.urls import reverse
 # Create your views here.
 from django.http import Http404
 from django.http import HttpResponse, HttpResponseRedirect
 import time
+import os
 # path('', views.login, name='login'),
+name_list=['小乖','香香','靓靓','小奇','MM', '安安','小兜','臭臭','凶凶','咪咪','猫咪','豆豆','恺撒','道格','查理','威廉王子','馒头','豆儿','小白','公爵','王子','乐乐','球球','圆圆','花花','胡豆','叮叮','当当','爱米','豆豆','爱贝','狗蛋','大款']
+name_length=len(name_list)
+HERE = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+Cataddress = os.path.join(HERE, "LuoXiangCatWorld/games/templates/Cat")
 
 def login(request):
     #print("inlogin")
@@ -20,7 +26,8 @@ def detail(request,master_id):
     catage=request.POST.get('catage')
     cat_list=Adopt.objects.filter(master__name=master.name)
     food_list=Store.objects.filter(master__name=master.name)
-    
+    #print(cat_list)
+
     for mastercat in cat_list:
         hunger_ran=int(time.time()*10000*mastercat.id)
         cat_now=mastercat.cat
@@ -128,7 +135,7 @@ def parks(request,master_id):
 
 # path('<int:master_id>/parks/<int:park_id>/', views.park_detail, name='park_detail'),
 def park_detail(request,master_id,park_id):
-    
+    print(HERE, Cataddress)
     master = get_object_or_404(Master, pk = master_id)
     food = request.POST.get('food')
     cat = request.POST.get('cat')
@@ -147,7 +154,6 @@ def park_detail(request,master_id,park_id):
         if adopt_cat and wild_delete:
             if adopt_name:
                 adopt_cat.name = adopt_name
-                adopt_cat.save()
             adopt_new=Adopt.objects.create(master=master,cat = adopt_cat,park=park)
             adopt_new.save()
             wild_delete.delete()
@@ -168,9 +174,6 @@ def park_detail(request,master_id,park_id):
     # print(time_now)
     now_time=time_now%4
 
-    name_list=['小乖','香香','靓靓','小奇','MM', '安安','小兜','臭臭','凶凶','咪咪','猫咪','豆豆','恺撒','道格','查理','威廉王子','馒头','豆儿','小白','公爵','王子','乐乐','球球','圆圆','花花','胡豆','叮叮','当当','爱米','豆豆','爱贝','狗蛋','大款']
-    name_length=len(name_list)
-
     if park and len(cat_list)<30 and now_time<1:
         sex_ran=(time_now%37)%2
         if sex_ran==0:
@@ -179,14 +182,20 @@ def park_detail(request,master_id,park_id):
             sex_create='♀'
         # age=1
         hunger_ran=(time_now%131)%3
+
         if hunger_ran==0:
             hunger_new='s'
         elif hunger_ran==1:
             hunger_new='p'
         else:
             hunger_new='h'
-        
+
+        catpicture = (time_now%1009)%18
+        catpicture = os.path.join(Cataddress, catpicture.__str__() + ".jpg").replace('\\','/')
+
+        print(catpicture)
         cat_create = Cat.objects.create(name=name_list[time_now%name_length],sex=sex_create,hunger=hunger_new,age=1)
+        cat_create.picture.save(os.path.basename(cat_create.name), File(open(catpicture, 'rb')))
         cat_create.save()
         wild_create = Wild.objects.create(park=park,cat=cat_create)
         wild_create.save()
@@ -277,6 +286,8 @@ def register_func(request):
         msg = 'Please do not leave the password empty.'
     elif sex == "":
         msg = 'Please do not leave the sex empty.'
+    elif sex not in {"Male", "Female"}:
+        msg = 'Please ensure your sex is valid.'
     elif not Master.objects.filter(name__exact=username):
         if sex == "Male":
             sex = "♂"

@@ -25,12 +25,8 @@
 
     /* Modal Content */
     .modal-content {
-      background-color: #fefefe;
       margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 50%;
-      height: 40%;
+      width: 30%;
     }
 </style>
 <script>
@@ -84,33 +80,29 @@
         }
     }
 </script>
-    <div id="myModal" class="modal">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <div>
-      <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
-      <h2 class="mdc-dialog__title" id="my-dialog-title"><!--
-     -->Your Master:<!--
-   --></h2>
-      <div class="mdc-dialog__content" id="my-dialog-content">
-        Please adopt me.
-      </div>
-      <form style="margin: 0" action="{% url 'games:park_detail' master.id  park.id%}" method="post">
-              {% csrf_token %}
-      <input type="text" placeholder="Give the name, please" name="adoptname" min="0" style="height:35px;font-size: 15px;margin-right: 24px; margin-left: 22px; width: 60%">
-      <footer class="mdc-dialog__actions">
-        <button onclick="closeModal()" type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
-          <span class="mdc-button__label">Sorry, I can't afford you</span>
-        </button>
-            <button onclick="Adopt(this)" type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes">
-            <span class="mdc-button__label">Adopt and give me the name</span>
+<div id="myModal" class="modal">
+    <div class="modal-content mdc-card">
+        <div  class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../static/games/images/adopt.jpg);">
+        </div>
+        <div class="mdc-dialog__content" id="my-dialog-content" style="margin-left:5%;">
+            Oh!!I like your food. Please adopt me.
+        </div>
+        <form style="margin-bottom: 20px" action="{% url 'games:park_detail' master.id  park.id%}" method="post">
+            {% csrf_token %}
+            <input type="text" placeholder="Give the name, please" name="adoptname" min="0" style="margin-left:10%;width:50%">
+            <br>
+            <button onclick="closeModal()" type="button" class="mdc-button mdc-dialog__button" style="margin-left:10%" data-mdc-dialog-action="no">
+              <span class="mdc-button__label">Sorry, I can't afford you</span>
+            </button>
+            <br>
+            <button onclick="Adopt(this)" type="button" class="mdc-button mdc-dialog__button" style="margin-left:10%" data-mdc-dialog-action="yes">
+                <span class="mdc-button__label">Adopt and give me the name</span>
             </button>
             <input type="hidden" name="id" value="edit">
-      </footer>
-      </form>
+        </form>
     </div>
 </div>
-</div>
+<div>
     <div class="leftbox-large">
         <div class="animated animated bounceInDown" style="height:150px;width: auto;margin-top: 40px;margin-left: 10%">
             <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
@@ -122,16 +114,16 @@
                 {% for parkcat in cat_list %}
                 <div class="mdc-layout-grid__cell--span-3 mdc-card  animated bounceInUp" style="width:100%;">
                     <div  class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ parkcat.cat.picture }});">
-                    <div style="background-color:salmon;margin-bottom:0px; opacity: 0.5;height:100%">
-                        <h2 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{parkcat.cat.name}}  {{parkcat.cat.sex}}</h2>
-                            {% if feed_list %}
-                            {% for feed in feed_list %}
-                            {% ifequal feed.cat parkcat.cat %}
-                            <div id={{parkcat.cat.id}} hidden>{{feed.intimacy}}</div>
-                            {% endifequal %}
-                            {% endfor %}
-                            {% endif %}
-                    </div>
+                        <div style="background-color:salmon;margin-bottom:0px; opacity: 0.5;height:100%">
+                            <h2 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{parkcat.cat.name}}  {{parkcat.cat.sex}}</h2>
+                                {% if feed_list %}
+                                {% for feed in feed_list %}
+                                {% ifequal feed.cat parkcat.cat %}
+                                <div id={{parkcat.cat.id}} hidden>{{feed.intimacy}}</div>
+                                {% endifequal %}
+                                {% endfor %}
+                                {% endif %}
+                        </div>
                     </div>
                     {% ifequal parkcat.cat.sex '♂' %}
                     <div style="background: #e5ffff">

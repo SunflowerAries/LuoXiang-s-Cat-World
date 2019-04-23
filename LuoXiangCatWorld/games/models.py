@@ -43,6 +43,7 @@ class Master(models.Model):
     sex = models.CharField(max_length=1, choices=sex_option, blank=True)
     money = models.IntegerField(default=500)
     password = models.CharField(max_length=20)
+    catnum = models.IntegerField(default=0)
     class Meta:
         ordering = ["name"]
 
@@ -51,6 +52,26 @@ class Master(models.Model):
 
     def __str__(self):
         return self.name
+
+class Manager(models.Model):
+    name = models.CharField(max_length=20, help_text="Explore with a lovely name")
+    # user_id = models.UUIDField(primary_key=True, default=uuid.uuid4())
+    sex_option = (
+        ('♂', '♂'),
+        ('♀', '♀'),
+    )
+    sex = models.CharField(max_length=1, choices=sex_option, blank=True)
+    password = models.CharField(max_length=20)
+    market = models.ForeignKey('Market', on_delete=models.CASCADE)
+    class Meta:
+        ordering = ["name"]
+
+    def get_absolute_url(self):
+        return reverse('model-detail-view', args=[str(self.id)])
+
+    def __str__(self):
+        return self.name
+
 
 class Food(models.Model):
     # food_id = models.UUIDField(primary_key=True, default=uuid.uuid4())

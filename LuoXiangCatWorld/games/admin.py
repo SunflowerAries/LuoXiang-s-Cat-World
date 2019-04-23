@@ -7,6 +7,7 @@ from .models import *
 #admin.site.register(Master)
 #admin.site.register(Food)
 admin.site.register(Market)
+admin.site.register(Manager)
 admin.site.register(Park)
 admin.site.register(Adopt)
 admin.site.register(Wild)

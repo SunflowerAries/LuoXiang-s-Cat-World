@@ -48,6 +48,8 @@ def detail(request,master_id):
                 cat_now.master=admin
                 cat_now.save()
                 mastercat.delete()
+                master.catnum-=1
+                master.save()
 
     if catname:
         #print("in catname")
@@ -153,6 +155,8 @@ def park_detail(request,master_id,park_id):
             if adopt_name:
                 adopt_cat.name = adopt_name
             adopt_new=Adopt.objects.create(master=master,cat = adopt_cat,park=park)
+            master.catnum+=1
+            master.save()
             adopt_new.save()
             wild_delete.delete()
             adopt_cat.master=master
@@ -284,10 +288,8 @@ def register_func(request):
         msg = 'Please do not leave the password empty.'
     elif sex == "":
         msg = 'Please do not leave the sex empty.'
-    elif sex not in {"Male", "Female"}:
-        msg = 'Please ensure your sex is valid.'
     elif not Master.objects.filter(name__exact=username):
-        if sex == "Male":
+        if sex == "♂":
             sex = "♂"
         else:
             sex = "♀"
@@ -303,38 +305,51 @@ def register_func(request):
 def login_func(request):
     username=request.POST['username']
     password=request.POST['password']
-    if Master.objects.filter(name__exact=username,password__exact=password):
-        master = Master.objects.get(name__exact=username,password__exact=password)
-        catname=request.POST.get('catname')
-        catsex=request.POST.get('catsex')
-        cathealth=request.POST.get('cathealth')
-        catage=request.POST.get('catage')
-        cat_list=Adopt.objects.filter(master__name=master.name)
-        food_list=Store.objects.filter(master__name=master.name)
-        #for cat_all in cat_list:
-        #    print(cat_all.cat.name)
-        if catname:
-            #print("in catname")
-            cat_list = cat_list.filter(cat__name=catname)
-        if catname and catsex!='All':
-            #print("in catsex")
-            cat_list = cat_list.filter(cat__sex=catsex)
-        if cathealth and cathealth!='All':
-            #print("in cathealth")
-            cat_list = cat_list.filter(cat__health=cathealth)
-        if catage:
-            #print("in catage")
-            cat_list = cat_list.filter(cat__age=catage)
-        food_list_in=[]
-        for food_all in food_list:
-            #print(food_all.food.name)
-            food_list_in.append(food_all.food)
-        context={'master':master,'cat_list':cat_list,'food_list':food_list_in}
-        return render(request,'games/detail.html',context)
+    role=request.POST['role']
+    if role=='P':
+        if Master.objects.filter(name__exact=username,password__exact=password):
+            master = Master.objects.get(name__exact=username,password__exact=password)
+            catname=request.POST.get('catname')
+            catsex=request.POST.get('catsex')
+            cathealth=request.POST.get('cathealth')
+            catage=request.POST.get('catage')
+            cat_list=Adopt.objects.filter(master__name=master.name)
+            food_list=Store.objects.filter(master__name=master.name)
+            #for cat_all in cat_list:
+            #    print(cat_all.cat.name)
+            if catname:
+                #print("in catname")
+                cat_list = cat_list.filter(cat__name=catname)
+            if catname and catsex!='All':
+                #print("in catsex")
+                cat_list = cat_list.filter(cat__sex=catsex)
+            if cathealth and cathealth!='All':
+                #print("in cathealth")
+                cat_list = cat_list.filter(cat__health=cathealth)
+            if catage:
+                #print("in catage")
+                cat_list = cat_list.filter(cat__age=catage)
+            food_list_in=[]
+            for food_all in food_list:
+                #print(food_all.food.name)
+                food_list_in.append(food_all.food)
+            context={'master':master,'cat_list':cat_list,'food_list':food_list_in}
+            return render(request,'games/detail.html',context)
+        else:
+            msg='No such id. Please sign up first!'
+            context={'msg':msg}
+            return render(request,'games/register.html',context)
     else:
-        msg='No such id. Please sign up first!'
-        context={'msg':msg}
-        return render(request,'games/register.html',context)
+        if Manager.objects.filter(name__exact=username,password__exact=password):
+            manager = Manager.objects.get(name__exact=username,password__exact=password)
+            market=manager.market
+            market_food = Sell.objects.filter(market = market)
+            context={'manager':manager,'market':market,'market_food':market_food}
+            return render(request,'games/market_manage.html',context)
+        else:
+            msg='Wrong. Try again please!'
+            context={'msg':msg}
+            return render(request,'games/register.html',context)
 
 def park_cat(request, master_id, park_id, cat_id):
     park = get_object_or_404(Park, pk = park_id)
@@ -483,3 +498,50 @@ def adopt(request, master_id, park_id, cat_id):
     master_store = Store.objects.filter(master = master)
     context = {'park': park, 'master': master,'master_store': master_store, 'cat_list': cat_list}
     return render(request, 'games/park_detail.html', context)
+
+def market_manage(request,manager_id):
+    manager = get_object_or_404(Manager, pk = manager_id)
+    market=manager.market
+    all_food = Food.objects.all()
+
+    change = request.POST.get('change')
+    food_id = request.POST.get('food_select')
+    price = request.POST.get('food_price')
+    
+    buy = request.POST.get('buy')
+    sell = request.POST.get('sell')
+    num = request.POST.get('num')
+    food___id = request.POST.get('food_id')
+    if Food.objects.filter(id=food___id):
+        food = Food.objects.get(id=food___id)
+
+    if change:
+        sell=Sell.objects.get(market=market,food__id=food_id)
+        sell.price=price
+        sell.save()
+    
+    market_food = Sell.objects.filter(market = market)
+
+    if (buy or sell) and food and num:
+        judge=market_food.filter(food=food)
+        if buy:#buy
+            print(int(num))
+            if judge:
+                sell=market_food.get(food=food)
+                sell.num+=int(num)
+            else:
+                sell=Sell.objects.create(price=food.baseprice,market=market,num=num,food=food)
+            sell.save()
+        else:#sell
+            if judge:
+                food_buy=market_food.get(food=food)
+                if food_buy.num<int(num):
+                    pass
+                else:
+                    food_buy.num-=int(num)
+                food_buy.save()
+            else:
+                pass
+                    
+    context={'manager':manager,'market':market,'market_food':market_food,'all_food':all_food}
+    return render(request,'games/market_manage.html',context)

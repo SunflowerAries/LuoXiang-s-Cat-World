@@ -22,7 +22,7 @@ class Cat(models.Model):
     )
     master = models.ForeignKey('Master',on_delete=models.CASCADE,null=True)
     hunger = models.CharField(max_length=1, choices=hunger_status, blank=True, default='h')
-    picture = models.ImageField(upload_to='Cat',blank=True)
+    picture = models.CharField(max_length=100)
 
     class Meta:
         ordering = ["name"]
@@ -41,7 +41,7 @@ class Master(models.Model):
         ('♀', '♀'),
     )
     sex = models.CharField(max_length=1, choices=sex_option, blank=True)
-    money = models.IntegerField(default=200)
+    money = models.IntegerField(default=500)
     password = models.CharField(max_length=20)
     class Meta:
         ordering = ["name"]

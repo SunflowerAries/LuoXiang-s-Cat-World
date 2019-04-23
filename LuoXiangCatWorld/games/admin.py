@@ -21,12 +21,12 @@ admin.site.register(Master, MasterAdmin)
 
 @admin.register(Cat)
 class CatAdmin(admin.ModelAdmin):
-    list_display = ('name', 'breed', 'sex', 'age', 'hunger')
+    list_display = ('name', 'master', 'sex', 'age', 'hunger', 'picture')
     #fields = ['name', 'breed', 'sex', 'age', 'birth', 'hunger']
     list_filter = ('hunger', 'birth')
 
 class FoodAdmin(admin.ModelAdmin):
-    list_display = ('name', 'effect')
+    list_display = ('name', 'baseprice', 'effect')
 
 admin.site.register(Food, FoodAdmin)
 

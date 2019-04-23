@@ -10,8 +10,7 @@ import os
 # path('', views.login, name='login'),
 name_list=['小乖','香香','靓靓','小奇','MM', '安安','小兜','臭臭','凶凶','咪咪','猫咪','豆豆','恺撒','道格','查理','威廉王子','馒头','豆儿','小白','公爵','王子','乐乐','球球','圆圆','花花','胡豆','叮叮','当当','爱米','豆豆','爱贝','狗蛋','大款']
 name_length=len(name_list)
-HERE = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-Cataddress = os.path.join(HERE, "LuoXiangCatWorld/games/templates/Cat")
+Cataddress = "Cat"
 
 def login(request):
     #print("inlogin")
@@ -135,7 +134,6 @@ def parks(request,master_id):
 
 # path('<int:master_id>/parks/<int:park_id>/', views.park_detail, name='park_detail'),
 def park_detail(request,master_id,park_id):
-    print(HERE, Cataddress)
     master = get_object_or_404(Master, pk = master_id)
     food = request.POST.get('food')
     cat = request.POST.get('cat')
@@ -190,12 +188,12 @@ def park_detail(request,master_id,park_id):
         else:
             hunger_new='h'
 
-        catpicture = (time_now%1009)%18
+        catpicture = time_now%18
         catpicture = os.path.join(Cataddress, catpicture.__str__() + ".jpg").replace('\\','/')
 
         print(catpicture)
-        cat_create = Cat.objects.create(name=name_list[time_now%name_length],sex=sex_create,hunger=hunger_new,age=1)
-        cat_create.picture.save(os.path.basename(cat_create.name), File(open(catpicture, 'rb')))
+        cat_create = Cat.objects.create(name=name_list[time_now%name_length],sex=sex_create,hunger=hunger_new,age=1,picture=catpicture)
+        #cat_create.picture.save(os.path.basename(cat_create.name), File(open(catpicture, 'rb')))
         cat_create.save()
         wild_create = Wild.objects.create(park=park,cat=cat_create)
         wild_create.save()

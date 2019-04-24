@@ -85,8 +85,8 @@
             <div class="leftbox-middle">
                 <div class="animated bounceInDown" style="height:200px;width: 500px;margin-top: 40px;margin-left: 10%">
                     <div style="font-size:30px;height: 30px;margin: auto">^_^ {{manager.name}}!</div><br>
-                    <div style="font-size:50px;margin:auto"> 你好！欢迎回来。</div>
-                    <div style="font-size:30px;margin:auto"> 这是您可以购买的食物</div>
+                    <div style="font-size:40px;margin:auto"> Welcome back, your Lord</div>
+                    <div style="font-size:20px;margin:auto"> Here is the list of available stocks </div>
                 </div>
                 <div>
                 {% if msg %}
@@ -98,7 +98,7 @@
                     <div class="mdc-layout-grid__inner">
                     {% for food in all_food %}
                         <div class="mdc-layout-grid__cell--span-4 mdc-card animated bounceInUp" style="width:100%;">
-                            <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ sell.food.picture }});">
+                            <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ food.picture }});">
                                 <div style="background-color:peru;margin-bottom:0px; opacity: 0.7;height:100%">
                                     <h1 style="margin-left: 6px;margin-bottom: 6px;color: honeydew;">{{ food.name }}</h1>
                                 </div>
@@ -131,7 +131,7 @@
             
             <div class="rightbox-middle">
                 <div class="animated bounceInDown" style="height:50px;width: 300px;margin-top: 40px;margin-left: 10%">
-                    <div style="font-size:30px;margin:auto"> 这是{{market.name}}的仓库</div>
+                    <div style="font-size:20px;margin:auto"> Here is {{market.name}}'s warehouse</div>
                 </div>
                 {% if msg %}
                 <div>
@@ -155,11 +155,11 @@
                                 <td>{{food.num}}</td>
                                 <form name="price_changer" action="{% url 'games:market_manage' manager.id %}" method="post">
                                     {% csrf_token %}
-                                    <td>
+                                    <td style="padding-right: 20px">
                                         <input type="hidden" value={{food.id}} name="food_select">
-                                        <input type="number" placeholder="{{food.price}}" name="food_price" style="height:25px;">
+                                        <input type="number" placeholder="{{food.price}}" name="food_price" style="height:25px; width: 60px">
                                     </td>
-                                    <td>    
+                                    <td style="margin-left: 0px;padding-left:0px">
                                         <button type="submit" name="change" value = "change" class="mdc-button mdc-button--dense" style="height:25px;font-size: 75%">
                                             Alter
                                         </button>

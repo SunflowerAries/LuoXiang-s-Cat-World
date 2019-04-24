@@ -99,6 +99,6 @@ venv.bak/
 .mypy_cache/
 
 # LuoXiangCatWorld/games/templates/Cat/*
-LuoXiangCatWorld/games/templates/Food/*
-LuoXiangCatWorld/games/templates/Market/*
+#LuoXiangCatWorld/games/templates/Food/*
+#LuoXiangCatWorld/games/templates/Market/*
 LuoXiangCatWorld/games/templates/Park/*

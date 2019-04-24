@@ -109,7 +109,7 @@
                                     <input type="hidden" name="food_id" value={{ food.id }}>
                                     {% csrf_token %}
                                     <div class="mdc-card__actions" style="margin-top:0px;margin-bottom:0px">
-                                        <input type="number" placeholder="How Many?" name="num" min="0" style="height:35px;font-size: 15px;margin-right: 24px">
+                                        <input type="number" placeholder="How Many?" name="num" min="0" style="height:25px;font-size: 15px;margin-right: 10px">
                                         <button type="submit" name="buy" value = "buy" class="mdc-icon-button material-icons" name="buy" value="buy">
                                             add_shopping_cart
                                         </button>
@@ -130,17 +130,16 @@
             </div>
             
             <div class="rightbox-middle">
-                <div class="animated bounceInDown" style="height:50px;width: 500px;margin-top: 40px;margin-left: 10%">
+                <div class="animated bounceInDown" style="height:50px;width: 300px;margin-top: 40px;margin-left: 10%">
                     <div style="font-size:30px;margin:auto"> 这是{{market.name}}的仓库</div>
                 </div>
-                <div>
                 {% if msg %}
+                <div>
                     <h1 style="margin: auto;font-size:20px;color: crimson; margin-left: 10%">{{ msg }}</h1>
-                {% endif %}
                 </div>
-                {% if market_food %}
-                <div class="mdc-card animated bounceInRight" style="width:90%;margin-top:20px">
-                    <table class="filter" style="width:80%">
+                {% endif %}
+                <div class="mdc-card animated bounceInRight" style="width:95%;margin-top:20px">
+                    <table class="filter" style="width:90%">
                         <thead>
                             <tr>
                                 <th>Food</th>
@@ -176,11 +175,64 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="mdc-card animated bounceInRight" style="width:95%;margin-top:20px">
+                    <table class="filter" style="width:90%">
+                        <thead>
+                            <tr>
+                                <th>Content</th>
+                                <th>Master</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if conver_list %}
+                            {% for conver in conver_list %}
+                            <tr>
+                                {% ifequal conver.direct 1 %}
+                                    <tr>
+                                        <td style="color:darkgoldenrod">{{conver.words}}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td style="color:deepskyblue">{{conver.words}}</td>
+                                    </tr>  
+                                {% endifequal %}
+                                <td>{{conver.master.name}}</td>
+                                <form name="myForm" action="{% url 'games:market_manage' manager.id %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value={{conver.id}} name="conver_delete_id">
+                                    <td>    
+                                        <button type="submit" name="conver_delete" value = "conver_delete" class="mdc-button mdc-button--dense" style="height:25px;font-size: 75%">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </form>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td>...</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
                 </div>
-                    
-                {% else %}
-                    <h1 style="margin-left: 10%;font-size: 30px;color: crimson" class="animated bounceInDown">SELL OUT</h1>
-                {% endif %}
+                <div class="search-box mdc-card animated bounceInRight" style="width:95%;margin-top:20px">
+                    <form action="{% url 'games:market_manage' manager.id%}" method="post">
+                    {% csrf_token %}
+                        <div class="filter" style="margin-top:20px">
+                            <input type="text" placeholder="Leave a word to master!" name="conver_context" method="post">
+                        </div> 
+                        <div class="filter" style="margin-bottom: 10px">
+                            <select id="sexselect" name="catsex">
+                                <option value="All">All</option>
+                                {% for conver in conver_list %}
+                                    <option value={{conver.master}}>{{conver.master.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="submit" class="btn submit_button button is-secondary" value="Submit!" name="conver_flag" style="bottom-top:20px">
+                    </form>
+                </div>
             </div>
         </div>
     </div>

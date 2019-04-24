@@ -186,3 +186,18 @@ class Feed(models.Model):
 
     def __str__(self):
         return self.master.name + "and" + self.cat.name + "'s interaction"
+
+class Conversition(models.Model):
+    master = models.ForeignKey('Master', on_delete=models.CASCADE)
+    market = models.ForeignKey('Market', on_delete=models.CASCADE)
+    words = models.CharField(max_length=50, blank=True, null=True)
+    CHOICES = [(i,i) for i in range(1, 3)]
+    direct = models.IntegerField(choices=CHOICES)
+    class Meta:
+        ordering = ["master", "market"]
+
+    def get_absolute_url(self):
+        return reverse('model-detail-view', args=[str(self.id)])
+
+    def __str__(self):
+        return self.master.name + "and" + self.market.name + "'s interaction"

@@ -14,6 +14,9 @@ admin.site.register(Wild)
 admin.site.register(Store)
 admin.site.register(Sell)
 admin.site.register(Feed)
+admin.site.register(Conversition)
+
+
 
 class MasterAdmin(admin.ModelAdmin):
     list_display = ('name', 'sex', 'money')

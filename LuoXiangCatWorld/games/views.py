@@ -374,6 +374,7 @@ def market_detail(request, master_id, market_id):
     food = request.POST.getlist('food')
     num = request.POST.getlist('num')
     
+
     time_now1 = int(time.time()*10000)
     epoch = time_now1 % 5
     delicious = Food.objects.order_by('-name')
@@ -481,9 +482,24 @@ def market_detail(request, master_id, market_id):
         #print('not in here')
         pass
 
+    conver_flag = request.POST.get('conver_flag')
+    conver_context = request.POST.get('conver_context')
+    if conver_flag:
+        conver=Conversition.objects.create(master=master,market=market,words=conver_context,direct=1)
+        conver.save()
+
+
+    conver_delete = request.POST.get('conver_delete')
+    conver_delete_id = request.POST.get('conver_delete_id')
+    if conver_delete:
+        conver=Conversition.objects.get(id=conver_delete_id)
+        conver.delete()
+
+    conver_list=Conversition.objects.filter(master=master,market=market)
+
     mystore = Store.objects.filter(master = master)
     market_food = Sell.objects.filter(market = market)
-    context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food}
+    context={'master': master, 'food_list': mystore, 'market': market, 'market_food': market_food,'conver_list':conver_list}
     return render(request, 'games/market_detail.html', context)
 
 def adopt(request, master_id, park_id, cat_id):
@@ -511,37 +527,57 @@ def market_manage(request,manager_id):
     buy = request.POST.get('buy')
     sell = request.POST.get('sell')
     num = request.POST.get('num')
-    food___id = request.POST.get('food_id')
+    food___id = request.POST.get('food_id') 
+
     if Food.objects.filter(id=food___id):
         food = Food.objects.get(id=food___id)
 
     if change:
+        print(food_id)
+        print(market.name)
         sell=Sell.objects.get(market=market,food__id=food_id)
         sell.price=price
         sell.save()
     
     market_food = Sell.objects.filter(market = market)
 
-    if (buy or sell) and food and num:
-        judge=market_food.filter(food=food)
-        if buy:#buy
-            print(int(num))
-            if judge:
-                sell=market_food.get(food=food)
-                sell.num+=int(num)
-            else:
-                sell=Sell.objects.create(price=food.baseprice,market=market,num=num,food=food)
-            sell.save()
-        else:#sell
-            if judge:
-                food_buy=market_food.get(food=food)
-                if food_buy.num<int(num):
-                    pass
+    if Food.objects.filter(id=food___id):
+        food = Food.objects.get(id=food___id)
+        if (buy or sell) and food and num:
+            judge=market_food.filter(food=food)
+            if buy:#buy
+                print(int(num))
+                if judge:
+                    sell=market_food.get(food=food)
+                    sell.num+=int(num)
                 else:
-                    food_buy.num-=int(num)
-                food_buy.save()
-            else:
-                pass
-                    
-    context={'manager':manager,'market':market,'market_food':market_food,'all_food':all_food}
+                    sell=Sell.objects.create(price=food.baseprice,market=market,num=num,food=food)
+                sell.save()
+            else:#sell
+                if judge:
+                    food_buy=market_food.get(food=food)
+                    if food_buy.num<int(num):
+                        pass
+                    else:
+                        food_buy.num-=int(num)
+                    food_buy.save()
+                else:
+                    pass
+    conver_flag = request.POST.get('conver_flag')
+    conver_context = request.POST.get('conver_context')
+    conver_master = request.POST.get('conver_master')
+    
+    if conver_flag:
+        conver=Conversition.objects.create(master=conver_master,market=market,words=conver_context,direct=2)
+        conver.save()
+    
+    conver_delete = request.POST.get('conver_delete')
+    conver_delete_id = request.POST.get('conver_delete_id')
+    if conver_delete:
+        conver=Conversition.objects.get(id=conver_delete_id)
+        conver.delete()
+    
+    conver_list=Conversition.objects.filter(market=market)
+
+    context={'manager':manager,'market':market,'market_food':market_food,'all_food':all_food,'conver_list':conver_list}
     return render(request,'games/market_manage.html',context)

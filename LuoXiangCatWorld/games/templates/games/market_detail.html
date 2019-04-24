@@ -83,6 +83,52 @@
                 </tbody>
             </table>
         </div>
+        <div class="search-box mdc-card animated bounceInRight">
+            <table class="filter" style="width:80%">
+                <thead>
+                    <tr>
+                        <th>Conver</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if conver_list %}
+                    {% for conver in conver_list %}
+                        {% ifequal conver.direct 1 %}
+                            <tr>
+                                <td style="color:darkgoldenrod">{{conver.words}}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td style="color:deepskyblue">{{conver.words}}</td>
+                            </tr>  
+                        {% endifequal %}
+                        <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" value={{conver.id}} name="conver_delete_id">
+                            <td>    
+                                <button type="submit" name="conver_delete" value = "conver_delete" class="mdc-button mdc-button--dense" style="height:25px;font-size: 75%">
+                                    Delete
+                                </button>
+                            </td>
+                        </form>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td>...</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <div class="search-box mdc-card animated bounceInRight">
+            <form action="{% url 'games:market_detail' master.id  market.id%}" method="post">
+            {% csrf_token %}
+                <div class="filter" style="margin-top:20px">
+                    <input type="text" placeholder="Leave a word to market!" name="conver_context" method="post">
+                </div> 
+                <input type="submit" class="btn submit_button button is-secondary" value="Submit!" name="conver_flag">
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

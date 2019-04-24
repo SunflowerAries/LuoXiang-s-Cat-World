@@ -198,7 +198,7 @@ def park_detail(request,master_id,park_id):
     cat_list = Wild.objects.filter(park__id= park_id)
     time_now=int(time.time()*10000)
     # print(time_now)
-    now_time=time_now%3
+    now_time=time_now%2
 
     if park and len(cat_list)<30 and now_time<1:
         sex_ran=(time_now%37)%2
@@ -216,7 +216,7 @@ def park_detail(request,master_id,park_id):
         else:
             hunger_new='h'
 
-        catpicture = time_now%1009%18
+        catpicture = time_now%23
         catpicture = os.path.join(Cataddress, catpicture.__str__() + ".jpg").replace('\\','/')
 
         print(catpicture)

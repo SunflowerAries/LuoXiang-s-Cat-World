@@ -24,7 +24,7 @@
     <div class="mdc-layout-grid ">
         <div class="mdc-layout-grid__inner">
         {% for sell in market_food %}
-            <div class="mdc-layout-grid__cell--span-4 mdc-card animated bounceInUp" style="width:100%;">
+            <div class="mdc-layout-grid__cell--span-3 mdc-card animated bounceInUp" style="width:100%;">
                 <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ sell.food.picture }});">
                     <div style="background-color:peru;margin-bottom:0px; opacity: 0.7;height:100%">
                         <h1 style="margin-left: 6px;margin-bottom: 6px;color: honeydew;">{{ sell.food.name }}</h1>
@@ -87,30 +87,28 @@
             <table class="filter" style="width:80%">
                 <thead>
                     <tr>
-                        <th>Conver</th>
+                        <th>Conversation</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if conver_list %}
                     {% for conver in conver_list %}
+                        <tr>
                         {% ifequal conver.direct 1 %}
-                            <tr>
-                                <td style="color:darkgoldenrod">{{conver.words}}</td>
-                            </tr>
+                            <td style="color:darkgoldenrod">{{conver.words}}</td>
                         {% else %}
-                            <tr>
-                                <td style="color:deepskyblue">{{conver.words}}</td>
-                            </tr>  
+                            <td style="color:deepskyblue">{{conver.words}}</td>  
                         {% endifequal %}
-                        <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" value={{conver.id}} name="conver_delete_id">
-                            <td>    
-                                <button type="submit" name="conver_delete" value = "conver_delete" class="mdc-button mdc-button--dense" style="height:25px;font-size: 75%">
-                                    Delete
-                                </button>
-                            </td>
-                        </form>
+                            <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" value={{conver.id}} name="conver_delete_id">
+                                <td>    
+                                    <button type="submit" name="conver_delete" value = "conver_delete" class="mdc-button mdc-button--dense" style="height:25px;font-size: 75%">
+                                        Delete
+                                    </button>
+                                </td>
+                            </form>
+                        </tr>
                     {% endfor %}
                     {% else %}
                     <tr>
@@ -121,12 +119,14 @@
             </table>
         </div>
         <div class="search-box mdc-card animated bounceInRight">
+            <h4 style="margin-top: 20px;margin-left: 10%;margin-bottom: 10px">Leave a word to this market!</h4>
             <form action="{% url 'games:market_detail' master.id  market.id%}" method="post">
             {% csrf_token %}
-                <div class="filter" style="margin-top:20px">
-                    <input type="text" placeholder="Leave a word to market!" name="conver_context" method="post">
-                </div> 
-                <input type="submit" class="btn submit_button button is-secondary" value="Submit!" name="conver_flag">
+                <div class="filter" style="margin-top:0px;margin-bottom: 30px">
+                    <label>Write something</label>
+                    <input type="text" placeholder="Leave a word to the market!" name="conver_context" method="post">
+                </div>
+                <input type="submit" class="filter btn submit_button button is-secondary" value="Submit!" name="conver_flag">
             </form>
         </div>
     </div>

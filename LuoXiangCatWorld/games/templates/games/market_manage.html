@@ -175,6 +175,25 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="search-box mdc-card animated bounceInRight" style="width:95%;margin-top:20px">
+                    <h4 style="margin-top: 20px;margin-left: 10%;margin-bottom: 0px">Leave a word to a master!</h4>                
+                    <form action="{% url 'games:market_manage' manager.id%}" method="post">
+                    {% csrf_token %}
+                        <div class="filter" style="margin-top:20px">
+                            <input type="text" placeholder="---" name="conver_context" method="post">
+                        </div> 
+                        <div class="filter" style="margin-bottom: 30px;margin-top: 0px">
+                            <label>To whom?</label>
+                            <select name="conver_master">
+                                <option value="All">All</option>
+                                {% for conver in conver_list %}
+                                    <option value={{conver.master.name}}>{{conver.master.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="submit" class="btn submit_button button is-secondary" value="Submit!" name="conver_flag" style="bottom-top:20px">
+                    </form>
+                </div>
                 <div class="mdc-card animated bounceInRight" style="width:95%;margin-top:20px">
                     <table class="filter" style="width:90%">
                         <thead>
@@ -186,27 +205,23 @@
                         <tbody>
                             {% if conver_list %}
                             {% for conver in conver_list %}
-                            <tr>
-                                {% ifequal conver.direct 1 %}
-                                    <tr>
-                                        <td style="color:darkgoldenrod">{{conver.words}}</td>
-                                    </tr>
-                                {% else %}
-                                    <tr>
-                                        <td style="color:deepskyblue">{{conver.words}}</td>
-                                    </tr>  
-                                {% endifequal %}
-                                <td>{{conver.master.name}}</td>
-                                <form name="myForm" action="{% url 'games:market_manage' manager.id %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" value={{conver.id}} name="conver_delete_id">
-                                    <td>    
-                                        <button type="submit" name="conver_delete" value = "conver_delete" class="mdc-button mdc-button--dense" style="height:25px;font-size: 75%">
-                                            Delete
-                                        </button>
-                                    </td>
-                                </form>
-                            </tr>
+                                <tr>    
+                                    {% ifequal conver.direct 1 %}
+                                    <td style="color:darkgoldenrod">{{conver.words}}</td>
+                                    {% else %}
+                                    <td style="color:deepskyblue">{{conver.words}}</td>
+                                    {% endifequal %}
+                                    <td>{{conver.master.name}}</td>
+                                    <form name="myForm" action="{% url 'games:market_manage' manager.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" value={{conver.id}} name="conver_delete_id">
+                                        <td>    
+                                            <button type="submit" name="conver_delete" value = "conver_delete" class="mdc-button mdc-button--dense" style="height:25px;font-size: 75%">
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </form>
+                                </tr>
                             {% endfor %}
                             {% else %}
                             <tr>
@@ -215,23 +230,6 @@
                             {% endif %}
                         </tbody>
                     </table>
-                </div>
-                <div class="search-box mdc-card animated bounceInRight" style="width:95%;margin-top:20px">
-                    <form action="{% url 'games:market_manage' manager.id%}" method="post">
-                    {% csrf_token %}
-                        <div class="filter" style="margin-top:20px">
-                            <input type="text" placeholder="Leave a word to master!" name="conver_context" method="post">
-                        </div> 
-                        <div class="filter" style="margin-bottom: 10px">
-                            <select id="sexselect" name="catsex">
-                                <option value="All">All</option>
-                                {% for conver in conver_list %}
-                                    <option value={{conver.master}}>{{conver.master.name}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <input type="submit" class="btn submit_button button is-secondary" value="Submit!" name="conver_flag" style="bottom-top:20px">
-                    </form>
                 </div>
             </div>
         </div>

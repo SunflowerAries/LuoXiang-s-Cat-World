@@ -20,12 +20,11 @@
     <div class="search-box-contain" style="position: fixed;right: 15px;left:80%">
         <div class="search-box mdc-card animated bounceInRight">             
             <form action="{% url 'games:detail' master.id %}" method="post">
-            
               {% csrf_token %}
               <h1 class="filter shake-slow">Cat Filter</h1>
               <div class="filter">
                   <input type="text" id="my-text-field" type="text" placeholder="catname" name="catname" method="post">
-                </div> 
+              </div> 
               <div class="filter">
                   <input type="text" id="my-text-field" type="text" placeholder="catage" name="catage" method="post">
               </div> <br>
@@ -48,7 +47,7 @@
                   </select>
                 </div><br>
             
-                <input type="submit" class="btn submit_button button is-secondary" value="Go!">
+              <input type="submit" class="btn submit_button button is-secondary" value="Go!">
             </form>
         </div>
         <div class="search-box mdc-card animated bounceInRight">             

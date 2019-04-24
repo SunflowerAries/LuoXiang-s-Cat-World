@@ -23,6 +23,28 @@ def detail(request,master_id):
     catsex=request.POST.get('catsex')
     cathealth=request.POST.get('cathealth')
     catage=request.POST.get('catage')
+
+    food = request.POST.get('food')
+    cat = request.POST.get('cat')
+    if cat and food:
+        #print(cat, food)
+        food = Food.objects.get(name = food)
+        cat = Cat.objects.get(id = cat)
+        if Store.objects.filter(master = master, food = food):
+            store = Store.objects.get(master = master, food = food)
+            if store.num == 1:
+                store.delete()
+            else:
+                store.num = store.num - 1
+                store.save()
+
+            if cat.hunger=='s':
+                cat.hunger='p'
+                cat.save()        
+            elif cat.hunger=='p':
+                cat.hunger='h'
+                cat.save()
+
     cat_list=Adopt.objects.filter(master__name=master.name)
     food_list=Store.objects.filter(master__name=master.name)
     #print(cat_list)
@@ -50,7 +72,6 @@ def detail(request,master_id):
                 mastercat.delete()
                 master.catnum-=1
                 master.save()
-
     if catname:
         #print("in catname")
         cat_list = cat_list.filter(cat__name=catname)
@@ -68,27 +89,6 @@ def detail(request,master_id):
         #print("in catage")
         cat_list = cat_list.filter(cat__age=catage)
     
-    # for the feed control
-    food = request.POST.get('food')
-    cat = request.POST.get('cat')
-    if cat and food:
-        #print(cat, food)
-        food = Food.objects.get(name = food)
-        cat = Cat.objects.get(id = cat)
-        if Store.objects.filter(master = master, food = food):
-            store = Store.objects.get(master = master, food = food)
-            if store.num == 1:
-                store.delete()
-            else:
-                store.num = store.num - 1
-                store.save()
-
-            if cat.hunger=='s':
-                cat.hunger='p'
-                cat.save()        
-            elif cat.hunger=='p':
-                cat.hunger='h'
-                cat.save()
 
     master_store = Store.objects.filter(master = master)
     context={'master':master,'cat_list':cat_list,'food_list':food_list, 'master_store':master_store}
@@ -165,16 +165,38 @@ def park_detail(request,master_id,park_id):
             feed.delete()
     # adopt
 
-    catname=request.POST.get('catname')
-    catsex=request.POST.get('catsex')
-    cathealth=request.POST.get('cathealth')
-    catage=request.POST.get('catage')
+    if cat and food:
+        #print(cat, food)
+        food = Food.objects.get(name = food)
+        cat = Cat.objects.get(id = cat)
+        if not cat.master or cat.master.name=='Admin':
+            feed, created = Feed.objects.get_or_create(master = master, cat = cat)
+            #print(feed)
+            if Store.objects.filter(master = master, food = food):
+                store = Store.objects.get(master = master, food = food)
+                if store.num == 1:
+                    store.delete()
+                else:
+                    store.num = store.num - 1
+                    store.save()
+
+                if cat.hunger=='s':
+                    feed.intimacy += food.effect*3
+                    cat.hunger='p'
+                    cat.save()        
+                elif cat.hunger=='p':
+                    feed.intimacy += food.effect*2
+                    cat.hunger='h'
+                    cat.save()
+                else:
+                    feed.intimacy += food.effect
+            feed.save()
 
     # print(time.time())
     cat_list = Wild.objects.filter(park__id= park_id)
     time_now=int(time.time()*10000)
     # print(time_now)
-    now_time=time_now%4
+    now_time=time_now%3
 
     if park and len(cat_list)<30 and now_time<1:
         sex_ran=(time_now%37)%2
@@ -203,6 +225,12 @@ def park_detail(request,master_id,park_id):
         wild_create.save()
         #print('finished!')
     
+    
+    catname=request.POST.get('catname')
+    catsex=request.POST.get('catsex')
+    cathealth=request.POST.get('cathealth')
+    catage=request.POST.get('catage')
+
     for parkcat in cat_list:
         hunger_ran=int(time.time()*10000*parkcat.id)
         if hunger_ran%5==0:
@@ -231,32 +259,6 @@ def park_detail(request,master_id,park_id):
     
     master = get_object_or_404(Master, pk=master_id)
 
-    if cat and food:
-        #print(cat, food)
-        food = Food.objects.get(name = food)
-        cat = Cat.objects.get(id = cat)
-        if not cat.master or cat.master.name=='Admin':
-            feed, created = Feed.objects.get_or_create(master = master, cat = cat)
-            #print(feed)
-            if Store.objects.filter(master = master, food = food):
-                store = Store.objects.get(master = master, food = food)
-                if store.num == 1:
-                    store.delete()
-                else:
-                    store.num = store.num - 1
-                    store.save()
-
-                if cat.hunger=='s':
-                    feed.intimacy += food.effect*3
-                    cat.hunger='p'
-                    cat.save()        
-                elif cat.hunger=='p':
-                    feed.intimacy += food.effect*2
-                    cat.hunger='h'
-                    cat.save()
-                else:
-                    feed.intimacy += food.effect
-            feed.save()
 
             #print('Feed Success')
     feed_list = Feed.objects.filter(master = master)
@@ -267,10 +269,27 @@ def park_detail(request,master_id,park_id):
     return render(request, 'games/park_detail.html', context)
 
 def markets(request,master_id):
-    market_list = Market.objects.order_by('-name')[:5]
+    market_list = Market.objects.all()
     master = get_object_or_404(Master, pk = master_id)
     food_list = Store.objects.filter(master = master)
-    context = {'market_list': market_list,'master':master,'food_list':food_list}
+    
+    conver_flag = request.POST.get('conver_flag')
+    conver_context = request.POST.get('conver_context')
+    conver_market_id = request.POST.get('conver_market')
+    if conver_flag and conver_market_id:
+        market=Market.objects.get(id=conver_market_id)
+        conver=Conversition.objects.create(master=master,market=market,words=conver_context,direct=1)
+        conver.save()
+    
+    conver_delete = request.POST.get('conver_delete')
+    conver_delete_id = request.POST.get('conver_delete_id')
+    if  conver_delete and conver_delete_id and Conversition.objects.filter(id=conver_delete_id):
+        conver=Conversition.objects.get(id=conver_delete_id)
+        conver.delete()
+    
+    conver_list=Conversition.objects.filter(master=master)
+    
+    context = {'market_list': market_list,'master':master,'food_list':food_list,'conver_list':conver_list}
     return render(request, 'games/markets.html',context)
 
 def register(request):
@@ -491,7 +510,7 @@ def market_detail(request, master_id, market_id):
 
     conver_delete = request.POST.get('conver_delete')
     conver_delete_id = request.POST.get('conver_delete_id')
-    if conver_delete:
+    if conver_delete and Conversition.objects.filter(id=conver_delete_id):
         conver=Conversition.objects.get(id=conver_delete_id)
         conver.delete()
 
@@ -568,7 +587,8 @@ def market_manage(request,manager_id):
     conver_master = request.POST.get('conver_master')
     
     if conver_flag:
-        conver=Conversition.objects.create(master=conver_master,market=market,words=conver_context,direct=2)
+        master=Master.objects.get(name=conver_master)
+        conver=Conversition.objects.create(master=master,market=market,words=conver_context,direct=2)
         conver.save()
     
     conver_delete = request.POST.get('conver_delete')

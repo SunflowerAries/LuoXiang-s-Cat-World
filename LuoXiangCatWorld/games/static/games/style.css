@@ -123,6 +123,19 @@
   margin: 0px;
 }
   
+.leftbox-middle-large {
+  width: 60%;
+  height: 100%;
+  float: left;
+}     
+.rightbox-middle-small {
+  width: 40%;
+  height: 100%;
+  float: right;
+  margin: 0px;
+}
+  
+
 .search-box{
   background-color: #ffffff;
   height: auto; 

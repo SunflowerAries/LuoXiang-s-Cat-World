@@ -8,8 +8,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 import time
 import os
 # path('', views.login, name='login'),
-name_list=['小乖','香香','靓靓','小奇','MM', '安安','小兜','臭臭','凶凶','咪咪','猫咪','豆豆','恺撒','道格','查理','威廉王子','馒头','豆儿','小白','公爵','王子','乐乐','球球','圆圆','花花','胡豆','叮叮','当当','爱米','豆豆','爱贝','狗蛋','大款']
-name_length=len(name_list)
+name_list_male=['Oscar','Max','Tiger','Sam', 'Simba','Chloe', 'Tigger','Smokey', 'Cleo','Sooty','Monty','Puss', 'Felix','Bella','Jack', 'Lucky', 'Thomas','Toby','Ginger','Oliver','Daisy','Gizmo','Muffin']
+name_list_female=['Misty', 'Coco', 'Missy','Molly', 'Lucy', 'Milo', 'Kitty', 'Lucky', 'Casper','Charlie', 'Jessie', 'Sophie', 'Sasha', 'Lilly']
+name_length_male=len(name_list_male)
+name_length_female=len(name_list_female)
 Cataddress = "Cat"
 
 def login(request):
@@ -214,11 +216,14 @@ def park_detail(request,master_id,park_id):
         else:
             hunger_new='h'
 
-        catpicture = time_now%18
+        catpicture = time_now%1009%18
         catpicture = os.path.join(Cataddress, catpicture.__str__() + ".jpg").replace('\\','/')
 
         print(catpicture)
-        cat_create = Cat.objects.create(name=name_list[time_now%name_length],sex=sex_create,hunger=hunger_new,age=1,picture=catpicture)
+        if sex_ran==0:
+            cat_create = Cat.objects.create(name=name_list_male[time_now%name_length_male],sex=sex_create,hunger=hunger_new,age=1,picture=catpicture)
+        else:
+            cat_create = Cat.objects.create(name=name_list_female[time_now%name_length_female],sex=sex_create,hunger=hunger_new,age=1,picture=catpicture)
         #cat_create.picture.save(os.path.basename(cat_create.name), File(open(catpicture, 'rb')))
         cat_create.save()
         wild_create = Wild.objects.create(park=park,cat=cat_create)

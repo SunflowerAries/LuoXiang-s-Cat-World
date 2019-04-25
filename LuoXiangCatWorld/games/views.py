@@ -436,7 +436,7 @@ def market_detail(request, master_id, market_id):
         stock.save()
 
     #food_list =
-    #print(food, num)
+    print(num)
     if (buy or sell) and food and num:
         #print('I\'m in buying/selling process')
         if buy:#buy

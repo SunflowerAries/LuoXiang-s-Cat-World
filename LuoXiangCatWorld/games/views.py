@@ -368,7 +368,9 @@ def login_func(request):
             manager = Manager.objects.get(name__exact=username,password__exact=password)
             market=manager.market
             market_food = Sell.objects.filter(market = market)
-            context={'manager':manager,'market':market,'market_food':market_food}
+            all_food = Food.objects.all()
+            conver_list=Conversition.objects.filter(market=market)
+            context={'manager':manager,'market':market,'market_food':market_food,'all_food':all_food,'conver_list':conver_list}
             return render(request,'games/market_manage.html',context)
         else:
             msg='Wrong. Try again please!'

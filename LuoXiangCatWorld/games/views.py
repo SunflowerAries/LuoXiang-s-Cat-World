@@ -200,7 +200,7 @@ def park_detail(request,master_id,park_id):
     # print(time_now)
     now_time=time_now%2
 
-    if park and len(cat_list)<30 and now_time<1:
+    if park and len(cat_list)<16 and now_time<1:
         sex_ran=(time_now%37)%2
         if sex_ran==0:
             sex_create='♂'

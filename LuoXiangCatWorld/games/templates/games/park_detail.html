@@ -114,8 +114,8 @@
                 {% for parkcat in cat_list %}
                 <div class="mdc-layout-grid__cell--span-3 mdc-card  animated bounceInUp" style="width:100%;">
                     <div  class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ parkcat.cat.picture }});">
-                        <div style="background-color:salmon;margin-bottom:0px; opacity: 0.5;height:100%">
-                            <h2 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{parkcat.cat.name}}  {{parkcat.cat.sex}}</h2>
+                        <div style="background-color:coral;margin-bottom:0px; opacity: 0.87;height:100%">
+                            <h4 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{parkcat.cat.name}}  {{parkcat.cat.sex}}</h4>
                                 {% if feed_list %}
                                 {% for feed in feed_list %}
                                 {% ifequal feed.cat parkcat.cat %}

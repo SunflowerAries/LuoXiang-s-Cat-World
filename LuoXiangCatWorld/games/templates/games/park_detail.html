@@ -112,7 +112,7 @@
         <div class="mdc-layout-grid">
             <div class="mdc-layout-grid__inner">
                 {% for parkcat in cat_list %}
-                <div class="mdc-layout-grid__cell--span-3 mdc-card  animated bounceInUp" style="width:100%;">
+                <div class="mdc-layout-grid__cell--span-3 mdc-card shake-slow shake-freeze shake-freeze--hover" style="width:100%;">
                     <div  class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ parkcat.cat.picture }});">
                         <div style="background-color:salmon;margin-bottom:0px; opacity: 0.5;height:100%">
                             <h2 style="margin-left: 6px;margin-bottom: 6px;color: honeydew">{{parkcat.cat.name}}  {{parkcat.cat.sex}}</h2>
@@ -198,9 +198,9 @@
                   <div class="filter">
                       <input type="text" id="my-text-field" type="text" placeholder="catname" name="catname" method="post">
                     </div> 
-                  <div class="filter">
+                  <!--<div class="filter">
                       <input type="text" id="my-text-field" type="text" placeholder="catage" name="catage" method="post">
-                  </div> <br>
+                  </div> <br>-->
                   <div class="filter">
                       <label>Sex</label>
                       <select id="sexselect" name="catsex">

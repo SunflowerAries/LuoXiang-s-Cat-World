@@ -9,7 +9,7 @@ import time
 import os
 # path('', views.login, name='login'),
 name_list_male=['Oscar','Max','Tiger','Sam', 'Simba','Chloe', 'Tigger','Smokey', 'Cleo','Sooty','Monty','Puss', 'Felix','Bella','Jack', 'Lucky', 'Thomas','Toby','Ginger','Oliver','Daisy','Gizmo','Muffin']
-name_list_female=['Misty', 'Coco', 'Missy','Molly', 'Lucy', 'Milo', 'Kitty', 'Lucky', 'Casper','Charlie', 'Jessie', 'Sophie', 'Sasha', 'Lilly']
+name_list_female=['Misty', 'Coco', 'Missy', 'Molly', 'Lucy', 'Milo', 'Kitty', 'Lucky', 'Casper','Charlie', 'Jessie', 'Sophie', 'Sasha', 'Lilly', 'Sebastian', 'Jasper', 'Jasmine']
 name_length_male=len(name_list_male)
 name_length_female=len(name_list_female)
 Cataddress = "Cat"
@@ -24,7 +24,7 @@ def detail(request,master_id):
     catname=request.POST.get('catname')
     catsex=request.POST.get('catsex')
     cathealth=request.POST.get('cathealth')
-    catage=request.POST.get('catage')
+    #catage=request.POST.get('catage')
 
     food = request.POST.get('food')
     cat = request.POST.get('cat')
@@ -87,9 +87,9 @@ def detail(request,master_id):
         #print("in cathealth")
         cat_list = cat_list.filter(cat__hunger=cathealth)
 
-    if catage:
-        #print("in catage")
-        cat_list = cat_list.filter(cat__age=catage)
+    #if catage:
+    #    #print("in catage")
+    #    cat_list = cat_list.filter(cat__age=catage)
     
 
     master_store = Store.objects.filter(master = master)
@@ -102,7 +102,7 @@ def cats(request,master_id):
     catsex=request.POST.get('catsex')
     catmaster = request.POST.get('catmaster')
     cathealth=request.POST.get('cathealth')
-    catage=request.POST.get('catage')
+    #catage=request.POST.get('catage')
     if catname:
         cat_list = Cat.objects.filter(name=catname)
     else:
@@ -115,8 +115,8 @@ def cats(request,master_id):
         cat_list = cat_list.filter(hunger=cathealth)
         #print(cat_list)
 
-    if catage:
-        cat_list = cat_list.filter(age=catage)
+    #if catage:
+    #    cat_list = cat_list.filter(age=catage)
 
     master = get_object_or_404(Master, pk=master_id)
 
@@ -216,14 +216,14 @@ def park_detail(request,master_id,park_id):
         else:
             hunger_new='h'
 
-        catpicture = time_now%23
+        catpicture = (time_now%1009)%23
         catpicture = os.path.join(Cataddress, catpicture.__str__() + ".jpg").replace('\\','/')
 
         print(catpicture)
         if sex_ran==0:
-            cat_create = Cat.objects.create(name=name_list_male[time_now%name_length_male],sex=sex_create,hunger=hunger_new,age=1,picture=catpicture)
+            cat_create = Cat.objects.create(name=name_list_male[(time_now%1009)%name_length_male],sex=sex_create,hunger=hunger_new,age=1,picture=catpicture)
         else:
-            cat_create = Cat.objects.create(name=name_list_female[time_now%name_length_female],sex=sex_create,hunger=hunger_new,age=1,picture=catpicture)
+            cat_create = Cat.objects.create(name=name_list_female[(time_now%809)%name_length_female],sex=sex_create,hunger=hunger_new,age=1,picture=catpicture)
         #cat_create.picture.save(os.path.basename(cat_create.name), File(open(catpicture, 'rb')))
         cat_create.save()
         wild_create = Wild.objects.create(park=park,cat=cat_create)
@@ -234,7 +234,7 @@ def park_detail(request,master_id,park_id):
     catname=request.POST.get('catname')
     catsex=request.POST.get('catsex')
     cathealth=request.POST.get('cathealth')
-    catage=request.POST.get('catage')
+    #catage=request.POST.get('catage')
 
     for parkcat in cat_list:
         hunger_ran=int(time.time()*10000*parkcat.id)
@@ -259,8 +259,8 @@ def park_detail(request,master_id,park_id):
     if cathealth and cathealth!='All':
         cat_list = cat_list.filter(cat__hunger=cathealth)
 
-    if catage:
-        cat_list = cat_list.filter(cat__age=catage)
+    #if catage:
+    #    cat_list = cat_list.filter(cat__age=catage)
     
     master = get_object_or_404(Master, pk=master_id)
 
@@ -336,7 +336,7 @@ def login_func(request):
             catname=request.POST.get('catname')
             catsex=request.POST.get('catsex')
             cathealth=request.POST.get('cathealth')
-            catage=request.POST.get('catage')
+            #catage=request.POST.get('catage')
             cat_list=Adopt.objects.filter(master__name=master.name)
             food_list=Store.objects.filter(master__name=master.name)
             #for cat_all in cat_list:
@@ -350,9 +350,9 @@ def login_func(request):
             if cathealth and cathealth!='All':
                 #print("in cathealth")
                 cat_list = cat_list.filter(cat__health=cathealth)
-            if catage:
-                #print("in catage")
-                cat_list = cat_list.filter(cat__age=catage)
+            #if catage:
+            #    #print("in catage")
+            #    cat_list = cat_list.filter(cat__age=catage)
             food_list_in=[]
             for food_all in food_list:
                 #print(food_all.food.name)

@@ -101,4 +101,4 @@ venv.bak/
 # LuoXiangCatWorld/games/templates/Cat/*
 #LuoXiangCatWorld/games/templates/Food/*
 #LuoXiangCatWorld/games/templates/Market/*
-LuoXiangCatWorld/games/templates/Park/*
+#LuoXiangCatWorld/games/templates/Park/*

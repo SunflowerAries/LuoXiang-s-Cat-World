@@ -34,16 +34,15 @@
                     <h1 class="shrine-title">Luo Xiang's Cat World</h1>
                 </div>
                 <div class="mdc-drawer__content info">
-                    <nav class="mdc-list">
-                        <div class="mdc-list-item info_item">
+                        <div class="mdc-list-item info_item" style="margin-top: 0;margin-bottom: 0;">
                             <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" title="Attach Money">face</button>     
-                            <span class="mdc-list-item__text font_control">{{master.name}}</span>
+                            <span class="mdc-list-item__text font_control">{{master.name}}  {{master.sex}}</span>
                         </div>
-                        <div class="mdc-list-item info_item">
+                        <div class="mdc-list-item info_item" style="margin-top: 0;margin-bottom: 0;">
                             <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" title="Attach Money">star</button>
-                            <span class="mdc-list-item__text font_control">Your Cats</span>
+                            <span class="mdc-list-item__text font_control">Your Cats:  {{master.catnum}}</span>
                         </div>
-                        <div class="mdc-list-item info_item">
+                        <div class="mdc-list-item info_item" style="margin-top: 0;margin-bottom: 0;">
                             <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" title="Attach Money">monetization_on</button>
                             <span class="mdc-list-item__text font_control">{{master.money}}</span>
                         </div>
@@ -73,6 +72,15 @@
                             <span class="mdc-list-item__text font_control">Log out</span>
                         </a>
                     </nav>
+                    
+                </div>
+                <div style="font-size: 12px;margin-bottom:15px;margin-left: 25px;">
+                    <div style="margin-left: auto;margin-right: auto">
+                        Produced by
+                    </div>
+                    <div style="margin-left: auto;margin-right: auto">
+                        @Sunflower and @Joseph
+                    </div>
                 </div>
             </aside>
             <div class="rightbox">

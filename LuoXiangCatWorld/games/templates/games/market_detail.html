@@ -13,7 +13,7 @@
 <div class="leftbox-large">
     <div class="animated bounceInDown" style="height:150px;width: 500px;margin-top: 40px;margin-left: 10%">
             <div style="font-size:30px;height: 30px;margin: auto">^_^ {{master.name}}!</div><br>
-            <div style="font-size:50px;margin:auto"> 看看我们有哪些好吃的</div>
+            <div style="font-size:30px;margin:auto"> All tHe fOod is cats like</div>
     </div>
     <div>
     {% if msg %}
@@ -24,10 +24,10 @@
     <div class="mdc-layout-grid ">
         <div class="mdc-layout-grid__inner">
         {% for sell in market_food %}
-            <div class="mdc-layout-grid__cell--span-4 mdc-card animated bounceInUp" style="width:100%;">
+            <div class="mdc-layout-grid__cell--span-3 mdc-card animated bounceInUp" style="width:100%;">
                 <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ sell.food.picture }});">
-                    <div style="background-color:peru;margin-bottom:0px; opacity: 0.7;height:100%">
-                        <h1 style="margin-left: 6px;margin-bottom: 6px;color: honeydew;">{{ sell.food.name }}</h1>
+                    <div style="background-color:crimson;margin-bottom:0px; opacity: 0.87;height:100%">
+                        <h4 style="margin-left: 6px;margin-bottom: 6px;color: honeydew;">{{ sell.food.name }}</h4>
                     </div>
                 </div>
                 <div  style="margin-left:14px;margin-top: 14px">
@@ -58,29 +58,77 @@
     {% endif %}
 </div>
 <div class="rightbox-small">
-    <div class="search-box mdc-card animated bounceInRight">
-        <table class="filter" style="width:80%">
-            <thead>
-                <tr>
-                    <th>Your Food</th>
-                    <th>Count</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if food_list %}
-                {% for food in food_list %}
-                <tr>
-                  <td>{{food.food.name}}</td>
-                  <td>{{food.num}}</td>
-                </tr>
-                {% endfor %}
-                {% else %}
-                <tr>
-                    <td>...</td>
-                </tr>
-                {% endif %}
-            </tbody>
-        </table>
+    <div class="search-box-contain " style="position: fixed;right: 15px;left:80%">
+        <div class="search-box mdc-card animated bounceInRight">
+            <table class="filter" style="width:80%">
+                <thead>
+                    <tr>
+                        <th>Your Food</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if food_list %}
+                    {% for food in food_list %}
+                    <tr>
+                      <td>{{food.food.name}}</td>
+                      <td>{{food.num}}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td>...</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <div class="search-box mdc-card animated bounceInRight">
+            <table class="filter" style="width:80%">
+                <thead>
+                    <tr>
+                        <th>Conversation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if conver_list %}
+                    {% for conver in conver_list %}
+                        <tr>
+                        {% ifequal conver.direct 1 %}
+                            <td style="color:darkgoldenrod">{{conver.words}}</td>
+                        {% else %}
+                            <td style="color:deepskyblue">{{conver.words}}</td>  
+                        {% endifequal %}
+                            <form name="myForm" action="{% url 'games:market_detail' master.id market.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" value={{conver.id}} name="conver_delete_id">
+                                <td>    
+                                    <button type="submit" name="conver_delete" value = "conver_delete" class="mdc-button mdc-button--dense" style="height:20px;font-size: 75%">
+                                        Delete
+                                    </button>
+                                </td>
+                            </form>
+                        </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td>...</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <div class="search-box mdc-card animated bounceInRight">
+            <h4 style="margin-top: 20px;margin-left: 10%;margin-bottom: 10px">Leave a word to this market!</h4>
+            <form action="{% url 'games:market_detail' master.id  market.id%}" method="post">
+            {% csrf_token %}
+                <div class="filter" style="margin-top:0px;margin-bottom: 30px">
+                    <label>Write something</label>
+                    <input type="text" placeholder="Leave a word to the market!" name="conver_context" method="post">
+                </div>
+                <input type="submit" class="filter btn submit_button button is-secondary" value="Submit!" name="conver_flag" style="height: 20px;">
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

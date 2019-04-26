@@ -60,12 +60,6 @@
   margin: 0 auto;
 }
 
-
-
-
-
-
-
 .animation-target {
     -webkit-animation: animation 750ms linear both;
     animation: animation 750ms linear both;
@@ -129,6 +123,19 @@
   margin: 0px;
 }
   
+.leftbox-middle-large {
+  width: 60%;
+  height: 100%;
+  float: left;
+}     
+.rightbox-middle-small {
+  width: 40%;
+  height: 100%;
+  float: right;
+  margin: 0px;
+}
+  
+
 .search-box{
   background-color: #ffffff;
   height: auto; 
@@ -163,4 +170,17 @@
   margin-bottom: 5px;
   margin-top: 5px;
   height:25px;
+}
+
+.leftbox-middle{
+  width: 50%;
+  height: 100%;
+  float: left;
+  margin: 0px;
+}
+.rightbox-middle{
+  width: 50%;
+  height: 100%;
+  float: right;
+  margin: 0px;
 }

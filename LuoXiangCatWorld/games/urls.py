@@ -16,4 +16,5 @@ urlpatterns = [
     path('<int:master_id>/cats/<int:cat_id>/', views.cat_detail, name='cat_detail'),
     path('<int:master_id>/markets/<int:market_id>/', views.market_detail, name='market_detail'),
     path('<int:master_id>/parks/<int:park_id>/<int:cat_id>/', views.adopt, name='park_detail'),
+    path('<int:manager_id>/manage/', views.market_manage, name='market_manage'),
 ]

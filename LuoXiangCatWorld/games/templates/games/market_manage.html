@@ -1,0 +1,240 @@
+{% load static %}
+<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="{% static 'games/logo.ico' %}">
+    <!-- <link rel="shortcut icon" href="https://material.io/favicon.ico"> -->
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- <link rel="stylesheet" type="text/css" href="https://csshake.surge.sh/csshake.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'games/css/kube.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'games/js/kube.min.js' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'games/Animate.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'games/slowshake.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'games/style.css' %}">
+</head>
+<style>
+    body{
+        margin:0;
+        padding:0;
+        background-color: #ffebee;
+    }
+
+</style>
+<script>
+    </script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js"></script>
+<body>
+    <div>
+        <aside class="mdc-drawer shrine-drawer leftbox" style="height: 100vh;position: fixed;">
+                <div class="logo delay-0.7s">
+                <img src="https://nbviewer.jupyter.org/github/Josep-h/LuoXiang-s-Cat-World/blob/master/LuoXiangCatWorld/games/logo.png" style="height:100% ;width:100%; zoom:60%" class="shake-slow shake-freeze shake-freeze--hover">
+            </div>
+            <div class="mdc-drawer__header font_control shake-slow shake-freeze shake-freeze--hover">
+                <h1 class="shrine-title">Luo Xiang's Cat World</h1>
+            </div>
+            <div class="mdc-drawer__content info">
+                <nav class="mdc-list">
+                    <div class="mdc-list-item info_item">
+                        <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" >face</button>     
+                        <span class="mdc-list-item__text font_control">{{manager.name}}  {{manager.sex}}</span>
+                    </div>
+                    <div class="mdc-list-item info_item">
+                        <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" >monetization_on</button>
+                        <span class="mdc-list-item__text font_control">{{market.name}}</span>
+                    </div>
+                </nav>
+            </div>
+            <div class="shrine-select-item-divider mdc-list-divider" role="separator"></div>
+            <div class="mdc-drawer__content">
+                <nav class="mdc-list">
+                    <a class="mdc-list-item" href="/games/{{manager.id}}/manage/">
+                        <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" >home</button>
+                        <span class="mdc-list-item__text font_control">Home</span>
+                    </a>
+                    <a class="mdc-list-item" href="/games/">
+                        <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon shake-slow shake-freeze shake-freeze--hover" >arrow_back</button>
+                        <span class="mdc-list-item__text font_control">Log out</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+        <div class="rightbox">
+            <style>
+                .labelstyle{
+                    display: inline-block;
+                    margin-top:3px;
+                    margin-bottom:3px;
+                    margin-left:3px;
+                    margin-right:3px;
+                }
+                .leftbox-middle{
+                  width: 65%;
+                  height: 100%;
+                  float: left;
+                  margin: 0px;
+                }
+                .rightbox-middle{
+                  width: 35%;
+                  height: 100%;
+                  float: right;
+                  margin: 0px;
+                }
+            </style>
+            <div class="leftbox-middle">
+                <div class="animated bounceInDown" style="height:200px;width: 500px;margin-top: 40px;margin-left: 10%">
+                    <div style="font-size:30px;height: 30px;margin: auto">^_^ {{manager.name}}!</div><br>
+                    <div style="font-size:40px;margin:auto"> Welcome back, your Lord</div>
+                    <div style="font-size:20px;margin:auto"> Here is the list of available stocks </div>
+                </div>
+                <div>
+                {% if msg %}
+                    <h1 style="margin: auto;font-size:20px;color: crimson; margin-left: 10%">{{ msg }}</h1>
+                {% endif %}
+                </div>
+                {% if all_food %}
+                <div class="mdc-layout-grid ">
+                    <div class="mdc-layout-grid__inner">
+                    {% for food in all_food %}
+                        <div class="mdc-layout-grid__cell--span-4 mdc-card animated bounceInUp" style="width:100%;">
+                            <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(../../../../media/{{ food.picture }});">
+                                <div style="background-color:crimson;margin-bottom:0px; opacity: 0.87;height:100%">
+                                    <h4 style="margin-left: 6px;margin-bottom: 6px;color: honeydew;">{{ food.name }}</h4>
+                                </div>
+                            </div>
+                            <div  style="margin-left:14px;margin-top: 14px;margin-bottom: 14px">
+                                <div><div class="labelstyle"><button class="label is-warning">Price</button></div> <div style="display: inline-block">{{ food.baseprice }}</div></div>
+                                <form name="myForm" action="{% url 'games:market_manage' manager.id %}" method="post" style="margin-bottom: 0px;margin-top: 0px;">
+                                    <input type="hidden" name="food_id" value={{ food.id }}>
+                                    {% csrf_token %}
+                                    <div class="mdc-card__actions" style="margin-top:0px;margin-bottom:0px">
+                                        <input type="number" placeholder="How Many?" name="num" min="0" style="height:25px;font-size: 15px;margin-right: 10px">
+                                        <button type="submit" name="buy" value = "buy" class="mdc-icon-button material-icons" name="buy" value="buy">
+                                            add_shopping_cart
+                                        </button>
+                                        <button type="submit" name="sell" value="sell" class="mdc-icon-button material-icons" name = "sell" value = "sell">
+                                            attach_money
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                    
+                {% else %}
+                    <h1 style="margin-left: 10%;font-size: 30px;color: crimson" class="animated bounceInDown">SELL OUT</h1>
+                {% endif %}
+            </div>
+            
+            <div class="rightbox-middle">
+                <div class="animated bounceInDown" style="height:50px;width: 300px;margin-top: 40px;margin-left: 10%">
+                    <div style="font-size:20px;margin:auto"> Here is {{market.name}}'s warehouse</div>
+                </div>
+                {% if msg %}
+                <div>
+                    <h1 style="margin: auto;font-size:20px;color: crimson; margin-left: 10%">{{ msg }}</h1>
+                </div>
+                {% endif %}
+                <div class="mdc-card animated bounceInRight" style="width:95%;margin-top:20px">
+                    <table class="filter" style="width:90%">
+                        <thead>
+                            <tr>
+                                <th>Food</th>
+                                <th>Count</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if market_food %}
+                            {% for food in market_food %}
+                            <tr>
+                                <td>{{food.food.name}}</td>
+                                <td>{{food.num}}</td>
+                                <form name="price_changer" action="{% url 'games:market_manage' manager.id %}" method="post">
+                                    {% csrf_token %}
+                                    <td style="padding-right: 20px">
+                                        <input type="hidden" value={{food.id}} name="food_select">
+                                        <input type="number" placeholder="{{food.price}}" name="food_price" style="height:25px; width: 60px">
+                                    </td>
+                                    <td style="margin-left: 0px;padding-left:0px">
+                                        <button type="submit" name="change" value = "change" class="mdc-button mdc-button--dense" style="height:25px;font-size: 75%">
+                                            Alter
+                                        </button>
+                                    </td>
+                                </form>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td>...</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="search-box mdc-card animated bounceInRight" style="width:95%;margin-top:20px">
+                    <h4 style="margin-top: 20px;margin-left: 10%;margin-bottom: 0px">Leave a word to a master!</h4>                
+                    <form action="{% url 'games:market_manage' manager.id%}" method="post">
+                    {% csrf_token %}
+                        <div class="filter" style="margin-top:20px">
+                            <input type="text" placeholder="---" name="conver_context" method="post">
+                        </div> 
+                        <div class="filter" style="margin-bottom: 30px;margin-top: 0px">
+                            <label>To whom?</label>
+                            <select name="conver_master">
+                                <option value="All">All</option>
+                                {% for conver in conver_list %}
+                                    <option value={{conver.master.name}}>{{conver.master.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="submit" class="btn submit_button button is-secondary" value="Submit!" name="conver_flag" style="bottom-top:20px">
+                    </form>
+                </div>
+                <div class="mdc-card animated bounceInRight" style="width:95%;margin-top:20px">
+                    <table class="filter" style="width:90%">
+                        <thead>
+                            <tr>
+                                <th>Content</th>
+                                <th>Master</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if conver_list %}
+                            {% for conver in conver_list %}
+                                <tr>    
+                                    {% ifequal conver.direct 1 %}
+                                    <td style="color:darkgoldenrod">{{conver.words}}</td>
+                                    {% else %}
+                                    <td style="color:deepskyblue">{{conver.words}}</td>
+                                    {% endifequal %}
+                                    <td>{{conver.master.name}}</td>
+                                    <form name="myForm" action="{% url 'games:market_manage' manager.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" value={{conver.id}} name="conver_delete_id">
+                                        <td>    
+                                            <button type="submit" name="conver_delete" value = "conver_delete" class="mdc-button mdc-button--dense" style="height:25px;font-size: 75%">
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </form>
+                                </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td>...</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+</html>

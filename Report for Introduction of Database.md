@@ -23,7 +23,7 @@ $ pip install pillow		   //Django中涉及到图片的使用，需要一个第�
 $ python manage.py runserver   //启动服务器
 ```
 
-在浏览器中输入http://127.0.0.1:8000/即可访问。
+在浏览器中输入http://127.0.0.1:8000/ 即可访问。
 
 ### 1.4 Django简介
 

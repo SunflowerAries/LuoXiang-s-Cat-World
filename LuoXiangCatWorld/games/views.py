@@ -430,7 +430,7 @@ def market_detail(request, master_id, market_id):
             stock.price+=5
         else:
             #print(int(time.time()*1000)%13-6)
-            
+
             stock.price+=(int(time.time()*1000)%13-6)
         
         stock.save()

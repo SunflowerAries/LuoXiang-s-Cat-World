@@ -42,6 +42,8 @@ $ python manage.py runserver   //启动服务器
 
 ### 2.1 概述——游戏核心机制
 
+Cat-World是为所以喜欢撸猫的人设计的一个猫咪养成类网页小游戏。以Django框架来实现整体功能。游戏中有两类角色，主人和商店管理者。主人可以在商店中购买食物并在公园里给野生的猫咪喂食，当好感度达到一定值时就可以领养小猫；商店管理者则主要是管理商店的货物，可以调整货物价格以及进货情况。
+
 ### 2.2 主人视角
 
 在这一个部分，我们主要从主人的视角理解Cat-World中主人可以执行的操作。我们功能的讲解同时会对整个界面分布也做一个简单地介绍。
@@ -174,6 +176,8 @@ $ python manage.py runserver   //启动服务器
 - 7：管理员特有的功能面板，可以用于修改在该市场中的食物的价格。
 - 8，9，10，11：聊天系统，大致功能与符号表示与主人界面一致。不一样的是这里选择的对话对象是与该店铺发生交流的主人。
 
+
+
 ## 3 数据库简介
 
 ### 3.1 数据库设计
@@ -184,55 +188,668 @@ $ python manage.py runserver   //启动服务器
 
 #### 3.1.2 模型设计（表格，实体，主键、外键等等）
 
+数据库中的表都定义在了models.py中，并可以提供相应的操作，需要指出的Django的model一些特性：
+
+- 如果在models.py中没有显式出定义主键的话，Django会自动添加一个ID作为主键。
+- Django支持已定义的模型作为外键。
+- on_delete=models.CASCADE用在外键中，是指当删除主键时，将与主键相关的外键也同时删除，避免出现外键为NULL。
+- 除了常规的属性外，Django也支持图片属性，但需要在settings中设置图片的存放路径，并在图片属性中指明(**upload = X**)，则添加的图片都放在了<http://127.0.0.1:8000/media/X/> 。
+
+
+
+我们的模型定义如下：
+
+- **主人**信息包括：主人的ID(Django提供)、名字、性别、金钱、登陆密码、收养的猫咪数目，主键为主人的ID。
+
+```
+class Master(models.Model):
+    name = models.CharField(max_length=20, help_text="Explore with a lovely name")
+    sex_option = (
+        ('♂', '♂'),
+        ('♀', '♀'),
+    )
+    sex = models.CharField(max_length=1, choices=sex_option, blank=True)
+    money = models.IntegerField(default=500)
+    password = models.CharField(max_length=20)
+    catnum = models.IntegerField(default=0)
+    class Meta:
+        ordering = ["name"]
+```
+
+
+
+- **猫咪**信息包括：猫咪的ID、名字、性别、年龄、饥饿程度、图片链接、主人，主键为猫咪的ID，外键为主人。
+
+```
+class Cat(models.Model):
+    name = models.CharField(max_length=20, help_text="Enter this cat's name")
+    sex_option = (
+        ('♂', '♂'),
+        ('♀', '♀'),
+    )
+    sex = models.CharField(max_length=1, choices=sex_option, blank=True)
+    age = models.IntegerField()
+    hunger_status = (
+        ('s', 'I\'m Starving!'),
+        ('p', 'Pretty Hungry'),
+        ('h', 'Hungry'),
+    )
+    master = models.ForeignKey('Master',on_delete=models.CASCADE,null=True)
+    hunger = models.CharField(max_length=1, choices=hunger_status, blank=True, default='h')
+    picture = models.CharField(max_length=100)
+```
+
+
+
+- **管理员**信息包括：管理员的ID、名字、性别、登录密码、管理的市场，主键为管理员的ID，外键为管理的市场。
+
+```
+class Manager(models.Model):
+    name = models.CharField(max_length=20, help_text="Explore with a lovely name")
+    sex_option = (
+        ('♂', '♂'),
+        ('♀', '♀'),
+    )
+    sex = models.CharField(max_length=1, choices=sex_option, blank=True)
+    password = models.CharField(max_length=20)
+    market = models.ForeignKey('Market', on_delete=models.CASCADE)
+```
+
+
+
+- **食物**信息包括：食物的ID、名字、效果(给猫咪喂食后所能提高的好感度的基准值)、图片以及基准价格，主键为食物的ID。
+
+```
+class Food(models.Model):
+    name = models.CharField(max_length=20)
+    CHOICES = [(i,i) for i in range(1, 20)]
+    effect = models.IntegerField(choices=CHOICES)
+    picture = models.ImageField(upload_to='Food')
+    baseprice = models.IntegerField(default=30)
+```
+
+
+
+- **商店**信息包括：商店的ID、名字、图片，主键为商店的ID。
+
+```
+class Market(models.Model):
+    name = models.CharField(max_length=20)
+    picture = models.ImageField(upload_to='Market')
+```
+
+
+
+- **公园**信息包括：公园的ID、名字、图片，主键为公园的ID。
+
+```
+class Park(models.Model):
+    name = models.CharField(max_length=20)
+    picture = models.ImageField(upload_to='Park')
+```
+
+
+
+- **主人收养的猫咪**信息包括：主人、收养的猫咪、收养的地点（公园）以及时间，这是一个1:M:1的三元联系，所以只有外键，外键为主人、猫咪、公园。
+
+```
+class Adopt(models.Model):
+    cat = models.ForeignKey('Cat', on_delete=models.CASCADE)
+    master = models.ForeignKey('Master', on_delete=models.CASCADE)
+    park = models.ForeignKey('Park', on_delete=models.CASCADE)
+    time = models.DateField(null=True, blank=True)
+```
+
+
+
+- **野生的猫咪**信息包括：猫咪以及猫咪所在的公园，这是一个1:M的二元联系，外键为猫咪和公园。
+
+```
+class Wild(models.Model):
+    cat = models.ForeignKey('Cat',on_delete=models.CASCADE)
+    park = models.ForeignKey('Park',on_delete=models.CASCADE)
+```
+
+
+
+- **主人拥有的食物**信息包括：主人、食物以及数目，这是一个M:N的二元联系，外键为主人和食物。
+
+```
+class Store(models.Model):
+    food = models.ForeignKey('Food', on_delete=models.CASCADE)
+    master = models.ForeignKey('Master', on_delete=models.CASCADE)
+    num = models.IntegerField(default=0)
+```
+
+
+
+- **商店买卖的食物**信息包括：食物、商店、数量以及加个，这是一个M:N的二元联系，外键为食物和商店。
+
+```
+class Sell(models.Model):
+    food = models.ForeignKey('Food', on_delete=models.CASCADE)
+    market = models.ForeignKey('Market', on_delete=models.CASCADE)
+    num = models.IntegerField(default=1)
+    price = models.IntegerField(default=1)
+```
+
+
+
+- **主人喂养的猫咪**信息包括：主人、喂养的猫咪、好感度，这是一个M:N的二元联系，外键为主人和猫咪。
+
+```
+class Feed(models.Model):
+    cat = models.ForeignKey('Cat', on_delete=models.CASCADE)
+    master = models.ForeignKey('Master', on_delete=models.CASCADE)
+    intimacy = models.IntegerField(default=50)
+```
+
+
+
+- **留言**信息包括：主人、商店、留言内容以及留言的方向，这是一个M:N的二元关系，外键为主人和商店。
+
+```
+class Conversition(models.Model):
+    master = models.ForeignKey('Master', on_delete=models.CASCADE)
+    market = models.ForeignKey('Market', on_delete=models.CASCADE)
+    words = models.CharField(max_length=50, blank=True, null=True)
+    CHOICES = [(i,i) for i in range(1, 3)]
+    direct = models.IntegerField(choices=CHOICES)
+```
+
+
+
 ### 3.2 涉及数据库的操作
+
+Django通过URL映射器(urls.py)将前端的请求都重定向到相应的Views视图(views.py)中处理。视图中通过模型来访问数据库中的相关表，并将结果返回给前端。以下通过实例简要说明：
+
+```
+// urls.py
+urlpatterns = [
+    path('<int:master_id>/cats/', views.cats),
+]
+
+// views.py
+class cats(request, master_id):
+	do something
+	...
+	context = {'cat_list':cat_list...}
+	return render(request, 'games/cats.html', context)
+```
+
+当在“<http://127.0.0.1:8000/int:master_id>/cats/”界面发出请求时，通过urlpatterns重定向到views.py中的cats函数，同时传入一个int类型的参数master_id。cats函数中，对数据库进行增、删、查、改操作，然后将前端显示的内容(context)通过return函数将内容显示在"games/cats.html"模板中。
+
+需要指出的Django的views的一些特点：
+
+- views.py中可以通过request.POST['X']获得前端输入的相关内容。
+
+- views.py中筛选有两种方式
+
+  - Model.objects.filter()
+  - Model.objects.get()
+
+  其中filter返回一个元组，get返回一个元素。
+
+- views.py同时也支持通过外键的部分属性来获得关系，下面通过一个实例来讲解。
+
+```
+cat_list=Adopt.objects.filter(master__name=master.name)
+```
+
+这里Adopt是模型Master和Cat之间的一个M:N的二元联系，Master和Cat为它的外键。在上例中，我们想查找一个主人收养的猫，可以直接通过外键Master中name元素来筛选。
+
+
 
 #### 3.2.1 面向主人的操作
 
 - 注册账号
+
+```
+//通过request.POST获得新建账户的 username, password, sex
+//判定新建账户是否合法：username,password,sex均不准为空，且username不准与数据库中已有的账户重复
+username, password, sex = request.POST['XXX']
+if the newly created account is legal
+	master = Master.objects.create(name=username,password=password,sex=sex)
+	master.save()
+	return render(request,'games/detail.html',{'master':master})
+else:
+	balabala
+```
+
+
+
 - 登陆账号
+
+```
+//通过request.POST获得用户的 username, password, role，并根据用户的类型role进行相关操作
+username, password, role = request.POST['XXX']
+if role is master:
+	//当用户类型为master时，检索数据库中是否有对应的用户如果有，则进入用户界面
+	if Master.objects.filter(name__exact=username,password__exact=password):
+		//通过外键，将主人拥有的食物和收养的猫从数据库中筛选出来
+    	master = Master.objects.get(name__exact=username,password__exact=password)
+        cat_list=Adopt.objects.filter(master__name=master.name)
+        food_list=Store.objects.filter(master__name=master.name)
+	else:
+        No such id. Please sign up first!
+```
+
+
+
 - 个人信息
+
   - 查看背包
+
+  ```
+  //查看一个主人拥有的食物
+  food_list=Store.objects.filter(master__name=master.name)
+  ```
+
   - 查看基本信息
+
+  ```
+  //根据传入的master_id查找对应的master，在主键中相应显示master的属性
+  master = get_object_or_404(Master, pk=master_id)
+  ```
+
   - 查看拥有猫咪
+
+  ```
+  //查找一个主人收养的猫
+  cat_list=Adopt.objects.filter(master__name=master.name)
+  ```
+
   - 喂食家中猫咪
+
+  ```
+  //获得喂食的信息，哪一只猫咪(ID)，哪一种食物(name)
+  food, cat = request.POST.get('X')
+  food = Food.objects.get(name = food)
+  cat = Cat.objects.get(id = cat)
+  if Store.objects.filter(master = master, food = food):
+  //根据master, food筛选出主人现在所拥有的食物
+  	store = Store.objects.get(master = master, food = food)
+      //如果数量为1，则喂食以后就没有了，需要从数据库中删除，否则只是改变数据库中的值
+  	if store.num == 1:
+      	store.delete()
+      else:
+          store.num = store.num - 1
+          store.save()
+      //喂食完以后，调整猫咪的饥饿状态
+      if cat.hunger=='s':
+          cat.hunger='p'
+          cat.save()        
+      elif cat.hunger=='p':
+          cat.hunger='h'
+          cat.save()
+  ```
+
+
+
 - 查看所有猫咪信息
+
+```
+//根据猫咪的名字对所有猫咪进行排序
+cat_list = Cat.objects.order_by('-name')
+```
+
+
+
 - 猫咪筛选器
+
+```
+catname, catsex, catmaster, cathealth=request.POST.get('X')
+//当有多个关键字时则逐级筛选
+if catname:
+	cat_list = Cat.objects.filter(name=catname)
+else:
+	cat_list = Cat.objects.order_by('-name')
+if catsex and catsex!='All':
+	cat_list = cat_list.filter(sex=catsex)
+if cathealth and cathealth!='All':
+	cat_list = cat_list.filter(hunger=cathealth)
+if catmaster and catmaster!='All':
+	cat_list = cat_list.filter(master__name=catmaster)
+```
+
+
+
 - 公园相关
+
   - 查看公园列表
+
+  ```
+  //根据名字排序并取出前五个
+  park_list = Park.objects.order_by('-name')[:5]
+  ```
+
   - 查看公园中猫咪情况
+
+  ```
+  cat_list = Wild.objects.filter(park__id= park_id)
+  ```
+
   - 喂食公园中猫咪
+
+  ```
+  //获得喂食的信息，哪一只猫咪(ID)，哪一种食物(name)
+  food, cat = request.POST.get('X')
+  if cat and food:
+  	food = Food.objects.get(name = food)
+  	cat = Cat.objects.get(id = cat)
+  	//根据主人和猫咪获得喂食的猫咪这个关系，如果这个主人以前没有喂食过这只猫咪则数据库中没有这个数据，那么就直接建立一个关系
+  	feed, created = Feed.objects.get_or_create(master = master, cat = cat)
+      if Store.objects.filter(master = master, food = food):
+          do as what we do in feeding cats home
+          ...
+          //根据猫咪的饥饿情况以及食物的效果增加好感度
+          if cat.hunger=='s':
+              feed.intimacy += food.effect*3
+              cat.hunger='p'  
+          elif cat.hunger=='p':
+              feed.intimacy += food.effect*2
+              cat.hunger='h'
+          else:
+              feed.intimacy += food.effect
+  	cat.save()
+  	feed.save()
+  ```
+
   - 领养猫咪
+
+  ```
+  //当喂食的好感度达到100时，猫咪会询问你是否能收养它，如果收养的话，还可以重新给他命名
+  id, adopt_name = request.POST.get('X')
+  //获得将要收养的猫咪
+  adopt_cat = Cat.objects.get(id = id)
+  try:
+  	wild_delete=Wild.objects.get(park=park,cat=adopt_cat)
+  except Wild.DoesNotExist:
+  	wild_delete = None
+  if adopt_cat and wild_delete:
+  	//如果有改名的话则对猫咪的名字修改，收养猫咪则需要创建一个Adopt
+      if adopt_name:
+      	adopt_cat.name = adopt_name
+      adopt_new=Adopt.objects.create(master=master,cat = adopt_cat,park=park)
+      //更新主人领养的猫的数目等一些信息，并且因为不再是野猫，则需要将对应的Wild删除
+      master.catnum+=1
+      master.save()
+      adopt_new.save()
+      wild_delete.delete()
+      adopt_cat.master=master
+      adopt_cat.save()
+  ```
+
+
+
 - 市场相关
+
   - 查看市场列表
+
+  ```
+  market_list = Market.objects.all()
+  ```
+
   - 查看市场售卖食物
-  - 买食物
-  - 卖食物
+
+  ```
+  market_food = Sell.objects.filter(market = market)
+  ```
+
+  - 买/卖食物
+
+  ```
+  buy, sell, food, num = request.POST.get('X')
+  if (buy or sell) and food and num:
+  	if buy:#buy
+      	for i in range(len(food)):
+      		//找到主人要买的食物
+              if food[i] and num[i]:
+              	myfood = Food.objects.get(id = int(food[i]))
+              //找到商店中对应提供的食物
+              if Sell.objects.filter(market = market, food = myfood):
+              	buy = Sell.objects.get(market = market, food = myfood)
+                  Num = int(num[i])
+              //当主人想要购买的食物的数量大于商店所有时，
+              if Num > buy.num:
+  				Don't have enough food
+              //当主人的钱不够时，
+              elif master.money < Num * buy.price:
+              	Don't have enough money
+              //交易达成，更新主人背包，主人的金钱，以及商店中的食物
+              else:
+              	store, created = Store.objects.get_or_create(master = master, food = myfood)
+                  master.money -= Num * buy.price
+                  master.save()
+                  if buy.num == Num:
+                  	buy.delete()
+                  else:
+                  	buy.num -= Num
+                      buy.save()
+                      store.num += Num
+                      store.save()
+  	else:#sell
+      	just reverse
+  ```
+
   - 查看与商店管理员的对话
+
+  ```
+  conver_list=Conversition.objects.filter(master=master,market=market)
+  ```
+
   - 创建与商店管理员的对话
+
+  ```
+  conver_flag, conver_context = request.POST.get('conver_flag')
+  //如果检测到有人创建了对话，则在数据库中加入相关信息
+  if conver_flag:
+  	conver=Conversition.objects.create(master=master, market=market, words=conver_context, direct=1)
+  	conver.save()
+  ```
+
   - 删除与商店管理员的对话
+
+  ```
+  conver_delete, conver_delete_id = request.POST.get('conver_delete')
+  //如果检测到有人删除了对话，则在数据库中删除相关内容
+  if conver_delete and Conversition.objects.filter(id=conver_delete_id):
+  	conver=Conversition.objects.get(id=conver_delete_id)
+      conver.delete()
+  ```
+
+
 
 #### 3.2.2 面向管理者的操作
 
 - 登入管理员界面
+
+```
+if the role is manager:
+	//当用户类型为manager时，检索数据库中是否有对应的用户如果有，则进入管理员界面
+	if Manager.objects.filter(name__exact=username,password__exact=password):
+		//通过外键，找到属于管理员的商点，并将商店中的食物以及商店参与的对话筛选出来
+        manager = Manager.objects.get(name__exact=username,password__exact=password)
+        market=manager.market
+        market_food = Sell.objects.filter(market = market)
+        all_food = Food.objects.all()
+        conver_list=Conversition.objects.filter(market=market)
+	else:
+        No such id. Please sign up first!
+```
+
+
+
 - 查看个人信息
+
+```
+manager = get_object_or_404(Manager, pk = manager_id)
+market=manager.market
+```
+
+
+
 - 查看仓库情况
+
+```
+market_food = Sell.objects.filter(market = market)
+```
+
+
+
 - 查看所有食物情况
+
+```
+all_food = Food.objects.all()
+```
+
+
+
 - 调整食物价格
+
+```
+change, price, food_id = request.POST.get('X')
+if change:
+	sell=Sell.objects.get(market=market,food__id=food_id)
+	sell.price=price
+	sell.save()
+```
+
+
+
 - 调整进货情况
-  - 买入货物
-  - 卖出货物
+
+```
+buy, sell, food, num = request.POST.get('X')
+if (buy or sell) and food and num:
+	judge=market_food.filter(food=food)
+    if buy:#buy
+    	//进货时如果商店中已经有货物则只改变num，否则创建一个对应的Sell
+    	if judge:
+        	sell=market_food.get(food=food)
+            sell.num+=int(num)
+        else:          
+        	sell=Sell.objects.create(price=food.baseprice, market=market, num=num, food=food)
+        sell.save()
+	else:#sell
+    	just reverse
+```
+
+
+
 - 与买家对话系统
-  - 查看对话
-  - 创建对话
-  - 删除对话
+
+  与主人的对话系统相对应。
+
+
 
 #### 3.2.3 一些潜在的操作
 
+这个游戏同时通过随机数来实现一些随机变化，包括：商店食物种类和数目变化、公园中的猫咪随机出现、以及家中的猫咪因为饥饿而逃离
+
 - 食物的随即生成
+
+```
+lenth = len(delicious)  //lenth为食物种类
+type = random1 % lenth	//随机挑选出挑选出一种食物
+stock_list=Sell.objects.filter(market = market, food = delicious[type])
+if stock_list:			//如果商店中有的话则直接更新
+	stock=stock_list[0]
+else:					//没有的话，则需要创建一个Sell
+	stock = Sell.objects.create(market = market, food = delicious[type], price=delicious[type].baseprice)
+takein = random2 % 4
+//商品数目和价格的浮动规则，数目必须<=100
+if stock.num + takein < 100:
+	stock.num += takein
+else:
+	stock.num = 100
+```
+
+
+
 - 食物价格的随机波动
+
+```
+//价格超过给定区间[30, 300]时需要向中心靠拢，其他时候保证浮动<=6
+if stock.price>300:
+	stock.price-=20
+elif stock.price<30:
+	stock.price+=5
+else:
+	stock.price+=(random3%13-6)
+stock.save()
+```
+
+
+
 - 猫的随机生成
+
+```
+／／如果公园中猫咪的数目<=16，则有1/2的几率出现一只新的猫咪
+if len(cat_list)<16 and now_time<1:
+	sex_ran=(random)%2
+	//决定一只新出现的猫咪的性别以及饥饿程度并设置图片链接
+    if sex_ran==0:
+        sex_create='♂'
+    else:
+        sex_create='♀'
+    hunger_ran=(random2)%3
+    if hunger_ran==0:
+        hunger_new='s'
+    elif hunger_ran==1:
+        hunger_new='p'
+    else:
+        hunger_new='h'
+    catpicture = (random3)%23
+	catpicture = os.path.join(Cataddress, catpicture.__str__() + ".jpg").replace('\\','/')
+	//根据性别在不同的名字集合(for male and female)里创建相应的猫咪
+	if sex_ran==0:
+		cat_create = Cat.objects.create(name=name_list_male[(random4)%name_length_male],sex=sex_create,hunger=hunger_new,age=1,picture=catpicture)
+	else:
+		cat_create = Cat.objects.create(name=name_list_female[(random5)%name_length_female],sex=sex_create,hunger=hunger_new,age=1,picture=catpicture)
+    cat_create.save()
+    wild_create = Wild.objects.create(park=park,cat=cat_create)
+    wild_create.save()
+```
+
+
+
 - 猫的饥饿机制
+
+```
+//猫咪有1/17的几率变饿
+for mastercat in cat_list:
+    cat_now=mastercat.cat
+    if random[mastercat]%17==0:
+    	if cat_now.hunger=='h':
+        	cat_now.hunger='p'
+            cat_now.save()
+        elif cat_now.hunger=='p':
+        	cat_now.hunger='s'
+            cat_now.save()
+```
+
+
+
 - 猫的逃离机制
+
+```
+//当猫咪非常饥饿时，他就会逃离
+if cat_now.hunger=='s':
+    length=len(Park.objects.all())
+    wild_ran=int(time.time()*10000*cat_now.id)%length+1
+    wildpark=Park.objects.get(id=wild_ran)
+    wild_new=Wild.objects.create(park=wildpark,cat=cat_now)
+    wild_new.save()
+    admin=Master.objects.get(name__exact='Admin')
+    cat_now.master=admin
+    cat_now.save()
+    mastercat.delete()
+    master.catnum-=1
+    master.save()
+```
+
+
 
 ## 4 web界面介绍
 
@@ -281,6 +898,8 @@ Cat-World的设计理念中“简单”毫无疑问是最为重要的。我们�
 **交互**
 
 交互相当的简单。用户通过点击界面上的按钮实现不同的功能，通过界面呈现的信息获取反馈。部分信息会通过中部的上栏提示语句，或者通过弹窗的模式得到。我们希望，重要的信息，用户是应当知道的。除此之外，我们采用了一点点有意思的潜在交互。当用户移动到某些特殊的区域时，相应的组件会以意想不到的方式开始简单地抖动。当这个特效使用在猫咪卡片的时候，它的效果是非常棒的。当然一些文字的抖动使得这个游戏更加亲切、自由。
+
+
 
 
 ## 5 参考

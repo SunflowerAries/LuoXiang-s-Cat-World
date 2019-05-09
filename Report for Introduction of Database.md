@@ -55,6 +55,7 @@ Cat-World是为所以喜欢撸猫的人设计的一个猫咪养成类网页小�
 <div>
     <img src="Pics/home.jpg">
 </div>
+
 | 标号 | 信息/功能      | 标号 | 信息/功能 | 标号 | 信息/功能 |
 | ---- | -------------- | ---- | --------- | ---- | --------- |
 | 1    | 主人名字及性别 | 7    | 链接：到达Markets界面 | 13   | 填写猫咪姓名 |
@@ -81,6 +82,7 @@ Cat-World是为所以喜欢撸猫的人设计的一个猫咪养成类网页小�
 <div>
     <img src="Pics/catwiki.jpg">
 </div>
+
 1. 猫咪卡片流：所有的猫咪。
 2. 猫咪的名字和性别。
 3. 猫咪目前的主人是谁，如果没有，显示wild。
@@ -102,6 +104,7 @@ Cat-World是为所以喜欢撸猫的人设计的一个猫咪养成类网页小�
 <div align="center">
     <img src="Pics/adopt.png" style="zoom:40%">
 </div>
+
 上图是在主人喂食了猫咪足够的食物时弹出的界面。主人可以给猫咪起一个新的名字，并且收养它；或者拒绝收养这只猫咪。
 
 [相应的代码实现](#parkscode)
@@ -115,6 +118,7 @@ Cat-World是为所以喜欢撸猫的人设计的一个猫咪养成类网页小�
 <div>
     <img src="Pics/markets.jpg">
 </div>
+
 
 | 标号 | 信息/功能    | 标号 | 信息/功能    |
 | ---- | ------------ | ---- | ------------ |
@@ -136,6 +140,7 @@ Cat-World是为所以喜欢撸猫的人设计的一个猫咪养成类网页小�
 <div>
     <img src="Pics/market.jpg">
 </div>
+
 
 | 标号 | 信息/功能    | 标号 | 信息/功能    |
 | ---- | ------------ | ---- | ------------ |
@@ -173,6 +178,7 @@ Cat-World是为所以喜欢撸猫的人设计的一个猫咪养成类网页小�
     <img src="Pics/manage.jpg" style="zoom:20%">
     <img src="Pics/manage2.jpg" style="zoom:20%">
 </div>
+
 
 | 标号 | 信息/功能    | 标号 | 信息/功能    |
 | ---- | ------------ | ---- | ------------ |
@@ -944,6 +950,7 @@ Cat-World的设计理念中“简单”毫无疑问是最为重要的。我们�
 [9]. [响应式的账号登录界面模板](http://www.17sucai.com/pins/32010.html)
 
 ### 5.2 参考教程以及文献
+
 \[1\]. [Django文档](https://docs.djangoproject.com/zh-hans/2.2/intro/tutorial01/)
 
 \[2\]. [MDN web docs on Django Tutorial Part](https://developer.mozilla.org/zh-CN/docs/Learn/Server-side/Django)

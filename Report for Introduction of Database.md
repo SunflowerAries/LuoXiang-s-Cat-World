@@ -97,6 +97,12 @@ Cat-World是为所以喜欢撸猫的人设计的一个猫咪养成类网页小�
 
 这是主人与野生小天使交互的地方。你可以选择喂食猫咪，并且赢得猫咪的青睐。亲密度到达一定程度时，猫咪会请求加入你的猫咪大家庭。这个界面布局和Home界面几乎完全一样，故不再赘述。
 
+<div align="center">
+    <img src="Pics/adopt.png" style="zoom:40%">
+</div>
+
+上图是在主人喂食了猫咪足够的食物时弹出的界面。主人可以给猫咪起一个新的名字，并且收养它；或者拒绝收养这只猫咪。
+
 #### 2.2.4 Markets & market
 
 **markets**
@@ -905,8 +911,34 @@ Cat-World的设计理念中“简单”毫无疑问是最为重要的。我们�
 ## 5 参考
 
 ### 5.1 web模块连链接
+\[1\]. [Material Design设计简易组件框架](https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css)
+
+\[2\]. [Material Design图标](https://fonts.googleapis.com/icon?family=Material+Icons)
+
+\[3\]. [Kube UI Framework](https://imperavi.com/kube/)
+
+\[4\]. [bounce.js](http://bouncejs.com/)
+
+\[5\]. [Animate.css](https://daneden.github.io/animate.css/)
+
+\[6\]. [Shake css](https://elrumordelaluz.github.io/csshake/)
+
+\[7\]. [Material Design Color Tool](https://material.io/tools/color/#!/?view.left=0&view.right=0)
+
+\[8\]. [neoteric字体](https://www.dafont.com/neoteric.font?psize=s)
+
+[9]. [响应式的账号登录界面模板](http://www.17sucai.com/pins/32010.html)
 
 ### 5.2 参考教程以及文献
+\[1\]. [Django文档](https://docs.djangoproject.com/zh-hans/2.2/intro/tutorial01/)
 
+\[2\]. [MDN web docs on Django Tutorial Part](https://developer.mozilla.org/zh-CN/docs/learn/Server-side/Django/主页构建)
 
+\[3\]. [Material Design设计规范](https://material.io/)
+
+\[4\]. [Material Design Lite](https://getmdl.io/)
+
+\[5\]. [W3School](http://www.w3school.com.cn/)
+
+[6]. [菜鸟教程](https://www.runoob.com/html/html-tutorial.html)
 

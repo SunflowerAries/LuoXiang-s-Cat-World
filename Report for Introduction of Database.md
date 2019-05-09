@@ -48,7 +48,7 @@ Cat-World是为所以喜欢撸猫的人设计的一个猫咪养成类网页小�
 
 在这一个部分，我们主要介绍Cat-World中主人可以执行的操作。我们讲解功能的同时也会对整个界面设计做一个简单地介绍。
 
-#### 2.2.1   <span id="home">Home</span>
+#### 2.2.1 <span id="home">Home</span>
 
 这是用户的初始界面，里面记录了主人的基本信息，比如金钱等，同时有一些相对复杂的信息，比如主人有哪些食物、有哪些猫，等等。下面按照编号依次讲解。
 
@@ -74,7 +74,7 @@ Cat-World是为所以喜欢撸猫的人设计的一个猫咪养成类网页小�
 - 17：主人的背包，里面的食物从商店购买，会因为喂猫而消耗。
 - [相应的代码实现](#homecode)
 
-#### 2.2.2   <span id="cats">Cats Wiki</span>
+#### 2.2.2 <span id="cats">Cats Wiki</span>
 
 这个界面可以查看到所有猫咪的信息，以及进行简单搜索。
 
@@ -676,7 +676,7 @@ if catmaster and catmaster!='All':
 
 
 
-#### 3.2.2   <span id="managecode">面向管理者的操作</span>
+#### 3.2.2  <span id="managecode">面向管理者的操作</span>
 
 
 [对应功能的界面展示](#manage)
@@ -923,7 +923,8 @@ Cat-World的设计理念中“简单”毫无疑问是最为重要的。我们�
 
 ## 5 参考
 
-### 5.1 web模块连链接
+### 5.1 web模块链接
+
 \[1\]. [Material Design设计简易组件框架](https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css)
 
 \[2\]. [Material Design图标](https://fonts.googleapis.com/icon?family=Material+Icons)
@@ -945,7 +946,7 @@ Cat-World的设计理念中“简单”毫无疑问是最为重要的。我们�
 ### 5.2 参考教程以及文献
 \[1\]. [Django文档](https://docs.djangoproject.com/zh-hans/2.2/intro/tutorial01/)
 
-\[2\]. [MDN web docs on Django Tutorial Part](https://developer.mozilla.org/zh-CN/docs/learn/Server-side/Django/主页构建)
+\[2\]. [MDN web docs on Django Tutorial Part](https://developer.mozilla.org/zh-CN/docs/Learn/Server-side/Django)
 
 \[3\]. [Material Design设计规范](https://material.io/)
 
